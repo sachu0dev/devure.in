@@ -14,13 +14,13 @@ interface ImageProps {
 
 
 const images: ImageProps[] = [
-    { src: 'https://placehold.co/600x400/000000/FFFFFF/png', alt: 'Image 1',   rotation: -2,
+    { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 1',   rotation: -2,
         offsetX: 120,
         offsetY: 2, },
-    { src: 'https://placehold.co/600x400/000000/FFFFFF/png', alt: 'Image 2',  rotation: 0,
+    { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 2',  rotation: 0,
         offsetX: 0,
         offsetY: -2, },
-    { src: 'https://placehold.co/600x400/000000/FFFFFF/png', alt: 'Image 3',  rotation: 2,
+    { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 3',  rotation: 2,
         offsetX: -120,
         offsetY: 2, },
   ];
@@ -41,7 +41,7 @@ export default function ImageStack() {
   
 
       <div className="flex-1 flex justify-center items-center">
-        <div className="relative w-96 h-120">
+        <div className="relative w-[500px] h-[700px]">
           {images.map((image, index) => {
             const isActive = index === currentIndex
             // Calculate stack position relative to current active image
@@ -50,13 +50,28 @@ export default function ImageStack() {
             return (
               <motion.div
                 key={index}
+                initial={isActive ? {
+                  opacity: 0,
+                  x: image.offsetX + (image.offsetX > 0 ? -30 : 30),
+                  y: image.offsetY + 30,
+                  rotate: image.rotation,
+                  scale: 0.8
+                } : {}}
                 animate={{
-                  scale: isActive ? 1 : 0.85 - stackPosition * 0.03,
-                  x: image.offsetX + (isActive ? 0 : stackPosition * 3),
-                  y: image.offsetY + (isActive ? 0 : stackPosition * 5),
-                  rotate: image.rotation, // Keep original rotation always
+                  scale: isActive ? 1 : 0.9,
+                  x: image.offsetX,
+                  y: image.offsetY,
+                  rotate: isActive ? 0 : image.rotation,
                   z: isActive ? 0 : -stackPosition * 15,
+                  opacity: 1,
                 }}
+                exit={isActive ? {
+                  opacity: 0,
+                  x: image.offsetX + (image.offsetX > 0 ? 30 : -30),
+                  y: image.offsetY + 30,
+                  rotate: -image.rotation,
+                  scale: 0.8
+                } : {}}
                 transition={{
                   duration: 0.8,
                   ease: [0.25, 0.46, 0.45, 0.94],
@@ -73,7 +88,7 @@ export default function ImageStack() {
                       src={image.src || "/placeholder.svg"}
                       alt={image.alt}
                       fill
-                      className="object-cover  rounded-3xl overflow-hidden"
+                      className="object-cover"
                       sizes="(max-width: 768px) 100vw, 320px"
                     />
 

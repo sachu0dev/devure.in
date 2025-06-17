@@ -23,6 +23,15 @@ const images: ImageProps[] = [
     { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 3',  rotation: 2,
         offsetX: -120,
         offsetY: 2, },
+    { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 4',  rotation: -5,
+        offsetX: 100,
+        offsetY: 5, },
+    { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 5',  rotation: 3,
+        offsetX: -100,
+        offsetY: -5, },
+    { src: 'https://placehold.co/500x700/618C70/FFFFFF/png', alt: 'Image 6',  rotation: -1,
+        offsetX: 50,
+        offsetY: 10, },
   ];
   
 
@@ -73,7 +82,7 @@ export default function ImageStack() {
                   scale: 0.8
                 } : {}}
                 transition={{
-                  duration: 0.8,
+                  duration: 0.6,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
                 className="absolute inset-0 rounded-3xl overflow-hidden"

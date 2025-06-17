@@ -137,7 +137,7 @@ const Header = () => {
       }}
     >
       <div className='w-full max-w-[110rem] flex justify-between items-center px-5'>
-        <Link href="/" className="text-3xl font-bold flex items-center gap-2 justify-center">
+        <Link href="/" className="text-3xl font-bold flex items-center  gap-2 justify-center">
           <motion.span
             ref={duLogoRef}
             className="text-2xl font-extrabold border-2 bg-foreground text-accent-foreground px-3 py-1 rounded-md mr-2"

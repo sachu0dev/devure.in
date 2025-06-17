@@ -16,7 +16,7 @@ interface ImageProps {
 const images: ImageProps[] = [
     { src: 'https://placehold.co/600x400/000000/FFFFFF/png', alt: 'Image 1',   rotation: -2,
         offsetX: 120,
-        offsetY: 2, }, // Replace with your actual image paths
+        offsetY: 2, },
     { src: 'https://placehold.co/600x400/000000/FFFFFF/png', alt: 'Image 2',  rotation: 0,
         offsetX: 0,
         offsetY: -2, },

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/themeProvider";
 import { ScrollProvider } from "@/components/scrollProvider";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { ModeToggle } from "@/components/modeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +58,9 @@ export default function RootLayout({
             </main>
           </ScrollProvider>
         </ThemeProvider>
+        <div className="fixed bottom-4 right-4 z-[1002]">
+          <ModeToggle />
+        </div>
       </body>
     </html>
   );

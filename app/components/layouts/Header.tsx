@@ -257,7 +257,7 @@ const Header = () => {
           <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Blogs</Link></li>
           <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Technology</Link></li>
           <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Experince</Link></li>
-          <li><Link href="#" className="text-3xl text-center border-background font-bold block w-full  py-3 text-primary">Let's talk →</Link></li>
+          <li><Link href="#" className="text-3xl text-center border-background font-bold block w-full  py-3 text-primary">Let&apos;s talk →</Link></li>
         </ul>
       </motion.nav>
     </>

@@ -62,7 +62,8 @@
   --muted: #A0A0A0;                /* Muted gray */
   --muted-foreground: #5F6368;    /* Darker text on muted */
   --accent: #B0D939;              /* Bright green accent */
-  --accent-foreground: ##334238;
+  --accent-foreground: #EFEAE2;   /* Contrasting with accent */
+
   --destructive: #EF4444;         /* Standard red for destructive actions */
   --border: #D0CDBB;              /* Lighter gray/beige for borders */
   --input: #D0CDBB;
@@ -101,7 +102,8 @@
   --muted: #5F6B68;                /* Darker, more subtle gray */
   --muted-foreground: #9BA4A2;    /* Lighter muted text */
   --accent: #B0D939;              /* Bright green accent */
-  --accent-foreground: #1A2320;   /* Contrasting with accent */
+  --accent-foreground: #334238;
+  /* Contrasting with accent */
   --destructive: #EF4444;         /* Standard red for destructive actions */
   --border: #384744;              /* Very dark, subtle green-gray for borders */
   --input: #384744;

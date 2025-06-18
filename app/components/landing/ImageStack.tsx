@@ -47,86 +47,81 @@ export default function ImageStack() {
   }, [])
 
   return (
-  
+    <div className="flex-1 flex justify-center items-center">
+      <div className="relative aspect-[5/7] w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[500px]">
+        {images.map((image, index) => {
+          const isActive = index === currentIndex
+          const stackPosition = (index - currentIndex + images.length) % images.length
 
-      <div className="flex-1 flex justify-center items-center">
-        <div className="relative w-[500px] h-[700px]">
-          {images.map((image, index) => {
-            const isActive = index === currentIndex
-            // Calculate stack position relative to current active image
-            const stackPosition = (index - currentIndex + images.length) % images.length
+          return (
+            <motion.div
+              key={index}
+              initial={isActive ? {
+                opacity: 0,
+                x: image.offsetX * 0.35 + (image.offsetX > 0 ? -20 : 20),
+                y: image.offsetY * 0.35 + 20,
+                rotate: image.rotation,
+                scale: 0.8
+              } : {}}
+              animate={{
+                scale: isActive ? 1 : 0.9,
+                x: image.offsetX * 0.35,
+                y: image.offsetY * 0.35,
+                rotate: isActive ? 0 : image.rotation,
+                z: isActive ? 0 : -stackPosition * 15,
+                opacity: 1,
+              }}
+              exit={isActive ? {
+                opacity: 0,
+                x: image.offsetX * 0.35 + (image.offsetX > 0 ? 20 : -20),
+                y: image.offsetY * 0.35 + 20,
+                rotate: -image.rotation,
+                scale: 0.8
+              } : {}}
+              transition={{
+                duration: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="absolute inset-0 rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden"
+              style={{
+                transformStyle: "preserve-3d",
+                zIndex: isActive ? 40 : 30 - stackPosition,
+              }}
+            >
+              <div className="relative w-full h-full">
+                <div className="bg-white rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden shadow-md md:shadow-xl lg:shadow-2xl w-full h-full">
+                  <Image
+                    src={image.src || "/placeholder.svg"}
+                    alt={image.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
 
-            return (
-              <motion.div
-                key={index}
-                initial={isActive ? {
-                  opacity: 0,
-                  x: image.offsetX + (image.offsetX > 0 ? -30 : 30),
-                  y: image.offsetY + 30,
-                  rotate: image.rotation,
-                  scale: 0.8
-                } : {}}
-                animate={{
-                  scale: isActive ? 1 : 0.9,
-                  x: image.offsetX,
-                  y: image.offsetY,
-                  rotate: isActive ? 0 : image.rotation,
-                  z: isActive ? 0 : -stackPosition * 15,
-                  opacity: 1,
-                }}
-                exit={isActive ? {
-                  opacity: 0,
-                  x: image.offsetX + (image.offsetX > 0 ? 30 : -30),
-                  y: image.offsetY + 30,
-                  rotate: -image.rotation,
-                  scale: 0.8
-                } : {}}
-                transition={{
-                  duration: 0.6,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                className="absolute inset-0 rounded-3xl overflow-hidden"
-                style={{
-                  transformStyle: "preserve-3d",
-                  zIndex: isActive ? 40 : 30 - stackPosition,
-                }}
-              >
-                <div className="relative w-full h-full">
-                  <div className="bg-white rounded-3xl overflow-hidden shadow-2xl w-full h-full">
-                    <Image
-                      src={image.src || "/placeholder.svg"}
-                      alt={image.alt}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 320px"
+                  {!isActive && (
+                    <motion.div
+                      animate={{ opacity: 0.6 }}
+                      className="absolute inset-0 bg-black"
                     />
-
-                    {/* Overlay for non-active images */}
-                    {!isActive && (
-                      <motion.div
-                        animate={{ opacity: 0.6 }}
-                        className="absolute inset-0 bg-black"
-                      />
-                    )}                   
-                  </div>
+                  )}                   
                 </div>
-              </motion.div>
-            )
-          })}
+              </div>
+            </motion.div>
+          )
+        })}
 
-          {/* Navigation indicators */}
-          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "bg-white w-6" : "bg-white/40 hover:bg-white/60"
-                }`}
-              />
-            ))}
-          </div>
+        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex ? "bg-white w-6" : "bg-white/40 hover:bg-white/60"
+              }`}
+            />
+          ))}
         </div>
       </div>
+    </div>
   )
 }

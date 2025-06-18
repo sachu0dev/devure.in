@@ -55,12 +55,13 @@ export default function RootLayout({
             <main className="">
             <Header/>
             {children}
+            <div className="fixed bottom-4 right-4 z-[1002]">
+          <ModeToggle />
+        </div>
             </main>
           </ScrollProvider>
         </ThemeProvider>
-        <div className="fixed bottom-4 right-4 z-[1002]">
-          <ModeToggle />
-        </div>
+        
       </body>
     </html>
   );

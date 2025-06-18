@@ -9,6 +9,7 @@ const Header = () => {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
   const [atTop, setAtTop] = useState(true); // State to track if at the top of the page
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const duLogoRef = useRef<HTMLSpanElement>(null);
   const devureTextRef = useRef<HTMLSpanElement>(null);
@@ -122,81 +123,144 @@ const Header = () => {
 
   const buttonText = "Let's talk";
 
+  // Trap focus in mobile nav when open
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileNavOpen(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mobileNavOpen]);
+
   return (
-    <motion.header
-      variants={{
-        visible: { y: "0%" },
-        hidden: { y: "-100%" },
-      }}
-      animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.35, ease: "easeInOut" }}
-      className={`w-full fixed top-0 left-0 z-50 flex justify-center items-center font-figtree text-primary-foreground`}
-      style={{ 
-        height: atTop ? '8rem' : '4rem', 
-        transition: 'height 0.35s ease-in-out, background-color 0.35s ease-in-out, box-shadow 0.35s ease-in-out' 
-      }}
-    >
-      <div className='w-full max-w-[110rem] flex justify-between items-center px-5'>
-        <Link href="/" className="text-3xl font-bold flex items-center  gap-2 justify-center">
-          <motion.span
-            ref={duLogoRef}
-            className="text-2xl font-extrabold border-2 bg-foreground text-accent-foreground px-3 py-1 rounded-md mr-2"
-          >
-            DU
-          </motion.span>
-          <motion.span
-            ref={devureTextRef}
-            className=""
-          >
-            Devure.in
-          </motion.span>
-        </Link>
-        <div className='flex gap-4'>
-          <nav className="flex gap-8 px-4 rounded-2xl text-xl font-[400] items-center bg-foreground">
-            <Link href="#" className="relative group py-2">
-              Work
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
-            </Link>
-            <Link href="#" className="relative group py-2">
-              Services
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
-            </Link>
-            <Link href="#" className="relative group py-2">
-              Blogs
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
-            </Link>
-            <Link href="#" className="relative group py-2">
-              Technology
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
-            </Link>
-            <Link href="#" className="relative group py-2">
-              Experince
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
-            </Link>
-          </nav>
-          <Link
-            href="#"
-            className="relative overflow-hidden bg-primary font-bold px-5 py-3 text-black rounded-full flex items-center gap-2"
-            onMouseEnter={onButtonHoverEnter}
-            onMouseLeave={onButtonHoverLeave}
-          >
-            <span className="absolute inset-0 origin-bottom scale-y-0 bg-primary" ref={buttonBgRef}></span>
-            <span className="relative z-10 flex items-center gap-0.5 whitespace-nowrap">
-              {buttonText.split('').map((char, index) => (
-                <motion.span
-                  key={index}
-                  ref={addToRefs}
-                  className="inline-block"
-                >
-                  {char === ' ' ? '\u00A0' : char} {/* Render space as non-breaking space */}
-                </motion.span>
-              ))}
-              <span className="text-xl ml-1">→</span> {/* Arrow always visible */}
-            </span>
+    <>
+      <motion.header
+        variants={{
+          visible: { y: "0%" },
+          hidden: { y: "-100%" },
+        }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className={`w-full fixed top-0 left-0 z-50 flex justify-center items-center font-figtree text-accent-foreground`}
+        style={{
+          height: atTop ? '8rem' : '4rem',
+          transition: 'height 0.35s ease-in-out, background-color 0.35s ease-in-out, box-shadow 0.35s ease-in-out'
+        }}
+      >
+        <div className='w-full max-w-[110rem] flex justify-between items-center px-5'>
+          <Link href="/" className="text-3xl font-bold flex items-center  gap-2 justify-center">
+            <motion.span
+              ref={duLogoRef}
+              className="text-lg md:text-xl lg:text-2xl font-extrabold border-2 bg-foreground  px-3 py-1 rounded-md mr-2"
+            >
+              DU
+            </motion.span>
+            <motion.span
+              ref={devureTextRef}
+              className='text-lg md:text-xl lg:text-2xl'
+            >
+              Devure.in
+            </motion.span>
           </Link>
+          {/* Desktop nav: hidden on mobile */}
+          <div className='hidden lg:flex gap-4 '>
+            <nav className="flex gap-8 px-4 rounded-2xl text-xl font-[400] items-center bg-foreground">
+              <Link href="#" className="relative group py-2">
+                Work
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
+              </Link>
+              <Link href="#" className="relative group py-2">
+                Services
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
+              </Link>
+              <Link href="#" className="relative group py-2">
+                Blogs
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
+              </Link>
+              <Link href="#" className="relative group py-2">
+                Technology
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
+              </Link>
+              <Link href="#" className="relative group py-2">
+                Experince
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
+              </Link>
+            </nav>
+            <Link
+              href="#"
+              className="relative overflow-hidden bg-primary font-bold px-5 py-3 text-black rounded-full flex items-center gap-2"
+              onMouseEnter={onButtonHoverEnter}
+              onMouseLeave={onButtonHoverLeave}
+            >
+              <span className="absolute inset-0 origin-bottom scale-y-0 bg-primary" ref={buttonBgRef}></span>
+              <span className="relative z-10 flex items-center gap-0.5 whitespace-nowrap">
+                {buttonText.split('').map((char, index) => (
+                  <motion.span
+                    key={index}
+                    ref={addToRefs}
+                    className="inline-block"
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                ))}
+                <span className="text-xl ml-1">→</span>
+              </span>
+            </Link>
+          </div>
+          {/* Hamburger menu: visible on mobile only */}
+          <button
+            className="lg:hidden flex items-center justify-center w-12 h-12 rounded-lg bg-primary/80 hover:bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+            aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileNavOpen((v) => !v)}
+          >
+            {mobileNavOpen ? (
+              // Close (X) icon
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+            ) : (
+              // Hamburger icon
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+            )}
+          </button>
         </div>
-      </div>
-    </motion.header>
+      </motion.header>
+      {/* Mobile Nav Overlay */}
+      <motion.nav
+        initial={false}
+        animate={mobileNavOpen ? "open" : "closed"}
+        variants={{
+          open: { y: 0, opacity: 1, pointerEvents: 'auto', transition: { type: 'spring', stiffness: 60, damping: 18 } },
+          closed: { y: '-100%', opacity: 0, pointerEvents: 'none', transition: { type: 'spring', stiffness: 60, damping: 18 } },
+        }}
+        className="fixed text-accent-foreground inset-0 z-[100] bg-foreground flex flex-col items-center justify-center gap-10 px-9 py-8 lg:hidden"
+        style={{ willChange: 'transform, opacity' }}
+        aria-modal={mobileNavOpen}
+        role="dialog"
+      >
+        {/* Logo at the top */}
+        <div className="absolute top-6 left-9 flex items-center gap-2">
+          <span className="text-2xl font-extrabold border-2 bg-foreground text-accent-foreground px-3 py-1 rounded-md">DU</span>
+          <span className="text-accent-foreground text-3xl font-bold">Devure.in</span>
+        </div>
+        {/* Close button */}
+        <button
+          className="absolute top-6 right-9 w-12 h-12 rounded-lg bg-primary/80 hover:bg-primary flex items-center justify-center"
+          aria-label="Close menu"
+          onClick={() => setMobileNavOpen(false)}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+        </button>
+        {/* Nav links */}
+        <ul className="flex flex-col gap-8 mt-12 w-full">
+          <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Work</Link></li>
+          <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Services</Link></li>
+          <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Blogs</Link></li>
+          <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Technology</Link></li>
+          <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Experince</Link></li>
+          <li><Link href="#" className="text-3xl text-center border-background font-bold block w-full  py-3 text-primary">Let's talk →</Link></li>
+        </ul>
+      </motion.nav>
+    </>
   );
 };
 

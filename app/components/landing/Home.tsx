@@ -6,25 +6,23 @@ import ImageStack from './ImageStack'
 
 const Home = () => {
   return (
-    <div className='w-full max-w-[110rem] flex  h-full text-background pt-[8rem] px-5 pb-24'>
-        <div className=' w-[50%] h-full flex flex-col justify-between'>
-          <div className='text-[136px] font-[900] mb-12'>
-          <h1>GENUINE.</h1>
-          <h1>IMPACT.</h1>
+    <div className='w-full max-w-[110rem] flex flex-col lg:flex-row h-auto text-background px-3 md:px-6 pb-8 lg:pb-16 pt-[8rem]'>
+        <div className='w-full lg:w-[50%] flex flex-col justify-between mb-8 lg:mb-0'>
+          <div className=' text-[72px]  md:text-[90px] lg:text-[100px] xl:text-[140px] font-[900] mb-6 lg:mb-10 leading-[1.05]'>
+            <h1>GENUINE.</h1>
+            <h1>IMPACT.</h1>
           </div>
-          <div className='text-2xl font-[400] flex flex-col justify-between w-[70%]'>
-            <p className='mb-8'>At Devure.in, we help businesses build, launch, and scale custom web applications — blending design, development, and technical expertise to deliver solutions that work and grow with you.</p>
-            <div className='flex flex-col text-sm text-[#618C70] font-bold uppercase '>
-
-                <Link href={""}>Linkdin</Link>
-                <Link href={""}>Linkdin</Link>
-                <Link href={""}>Linkdin</Link>
-                <Link className='text-background' href={""}>Linkdin</Link>
-
+          <div className='text-base sm:text-lg md:text-xl lg:text-2xl font-[400] flex flex-col justify-between w-full md:w-[90%] lg:w-[85%] xl:w-[70%]'>
+            <p className='mb-6'>At Devure.in, we help businesses build, launch, and scale custom web applications — blending design, development, and technical expertise to deliver solutions that work and grow with you.</p>
+            <div className='flex flex-col text-xs sm:text-sm text-[#618C70] font-bold uppercase'>
+                <Link href={""} className="hover:text-background transition-colors duration-300">Linkdin</Link>
+                <Link href={""} className="hover:text-background transition-colors duration-300">Linkdin</Link>
+                <Link href={""} className="hover:text-background transition-colors duration-300">Linkdin</Link>
+                <Link className='text-background hover:text-[#618C70] transition-colors duration-300' href={""}>Linkdin</Link>
             </div>
           </div>
         </div>
-        <div className="w-[50%] flex-1 h-full flex items-center justify-center">
+        <div className="w-full lg:w-[50%] flex-1 flex items-center justify-center">
             <ImageStack />
         </div>
     </div>

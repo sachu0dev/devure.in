@@ -10,16 +10,22 @@ interface ComingSoonCurtainProps {
 const ComingSoonCurtain: React.FC<ComingSoonCurtainProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [peekActive, setPeekActive] = useState(false);
+  const isDev = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
 
   const handleTakeAPeek = () => {
     setPeekActive(true);
-    setIsVisible(false); // Hide the curtain
+    setIsVisible(false);
 
     setTimeout(() => {
-      setIsVisible(true); // Show the curtain again after 4 seconds
+      setIsVisible(true);
       setPeekActive(false);
     }, 4000);
   };
+
+  // If in development mode, just render children without the curtain
+  if (isDev) {
+    return <>{children}</>;
+  }
 
   return (
     <>

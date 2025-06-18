@@ -232,26 +232,26 @@ const Header = () => {
           open: { y: 0, opacity: 1, pointerEvents: 'auto', transition: { type: 'spring', stiffness: 60, damping: 18 } },
           closed: { y: '-100%', opacity: 0, pointerEvents: 'none', transition: { type: 'spring', stiffness: 60, damping: 18 } },
         }}
-        className="fixed text-accent-foreground inset-0 z-[100] bg-foreground flex flex-col items-center justify-center gap-10 px-9 py-8 lg:hidden"
+        className="fixed text-accent-foreground inset-0 z-[100] bg-foreground flex flex-col items-center justify-center gap-10 px-6 py-8 lg:hidden"
         style={{ willChange: 'transform, opacity' }}
         aria-modal={mobileNavOpen}
         role="dialog"
       >
         {/* Logo at the top */}
-        <div className="absolute top-6 left-9 flex items-center gap-2">
+        <div className="absolute top-6 left-6 flex items-center gap-2">
           <span className="text-2xl font-extrabold border-2 bg-foreground text-accent-foreground px-3 py-1 rounded-md">DU</span>
           <span className="text-accent-foreground text-3xl font-bold">Devure.in</span>
         </div>
         {/* Close button */}
         <button
-          className="absolute top-6 right-9 w-12 h-12 rounded-lg bg-primary/80 hover:bg-primary flex items-center justify-center"
+          className="absolute top-6 right-6 w-12 h-12 rounded-lg bg-primary/80 hover:bg-primary flex items-center justify-center"
           aria-label="Close menu"
           onClick={() => setMobileNavOpen(false)}
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
         </button>
         {/* Nav links */}
-        <ul className="flex flex-col gap-8 mt-12 w-full">
+        <ul className="flex flex-col gap-8 mt-18 w-full">
           <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Work</Link></li>
           <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Services</Link></li>
           <li><Link href="#" className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3">Blogs</Link></li>

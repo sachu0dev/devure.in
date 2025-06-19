@@ -136,12 +136,9 @@ const Header = () => {
   return (
     <>
       <motion.header
-        variants={{
-          visible: { y: "0%" },
-          hidden: { y: "-100%" },
-        }}
-        animate={hidden ? "hidden" : "visible"}
-        transition={{ duration: 0.35, ease: "easeInOut" }}
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: hidden ? '-100%' : 0 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={`w-full fixed top-0 left-0 z-50 flex justify-center items-center font-figtree text-accent-foreground`}
         style={{
           height: atTop ? '8rem' : '4rem',

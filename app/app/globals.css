@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
+body, html {
+  overflow-x: hidden;
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -90,7 +92,8 @@
 .dark {
   /* Dark Theme Colors (Refined to be deeper and more complementary) */
   --background: #1A2320;          /* Deeper, desaturated dark green */
-  --foreground: #F0EDE5;          /* Creamy white text */
+  --foreground: #F0EDE5; 
+  --text: #242424;         /* Creamy white text */
   --card: #202D2A;                /* Slightly lighter card for depth */
   --card-foreground: #F0EDE5;
   --popover: #202D2A;

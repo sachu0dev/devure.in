@@ -67,7 +67,10 @@ const Selected = () => {
         SELECTED PROJECTS
       </h6>
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center ">
-        <h1 className="text-text font-bold text-[2.2rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] text-center md:text-left lg:text-center  leading-[1.1]">
+        <h1 
+          ref={carouselRef}
+        
+        className="text-text font-bold text-[2.2rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] text-center md:text-left lg:text-center  leading-[1.1]">
           Creating impact in
         </h1>
         <div
@@ -84,7 +87,6 @@ const Selected = () => {
       </div>
       <div className="w-full mt-8 sm:mt-12" style={{ overflowX: "hidden" }}>
         <motion.div
-          ref={carouselRef}
           className="w-full overflow-hidden"
           initial={{ opacity: 1, x: 1000 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}

@@ -10,7 +10,8 @@ interface ComingSoonCurtainProps {
 const ComingSoonCurtain: React.FC<ComingSoonCurtainProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [peekActive, setPeekActive] = useState(false);
-  const isDev = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
+  // const isDev = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
+  const isDev = true;
 
   const handleTakeAPeek = () => {
     setPeekActive(true);

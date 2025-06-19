@@ -26,12 +26,13 @@ const Selected = () => {
 
   useEffect(() => {
     let isMounted = true;
+    const textNode = textRef.current;
     const animate = () => {
-      if (!textRef.current) return;
+      if (!textNode) return;
       // Start from below
-      gsap.set(textRef.current, { y: 80 });
+      gsap.set(textNode, { y: 80 });
       // Slide in from bottom
-      gsap.to(textRef.current, {
+      gsap.to(textNode, {
         y: 0,
         duration: 0.5,
         ease: 'power2.inOut',
@@ -39,7 +40,7 @@ const Selected = () => {
           // Hold in center
           setTimeout(() => {
             // Slide up and out
-            gsap.to(textRef.current, {
+            gsap.to(textNode, {
               y: -80,
               duration: 0.5,
               ease: 'power2.inOut',
@@ -56,7 +57,7 @@ const Selected = () => {
     animate();
     return () => {
       isMounted = false;
-      gsap.killTweensOf(textRef.current);
+      gsap.killTweensOf(textNode);
     };
   }, [current]);
 

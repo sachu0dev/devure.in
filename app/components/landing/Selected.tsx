@@ -62,12 +62,12 @@ const Selected = () => {
   }, [current]);
 
   return (
-    <div className="w-full max-w-[110rem] flex flex-col items-center px-3 md:px-6 pb-8 lg:pb-16 pt-[6rem]">
+    <div className="w-full flex flex-col items-center px-3 md:px-6 pb-8 lg:pb-16 pt-[6rem]">
       <h6 className="text-[14px] sm:text-[16px] text-center font-extrabold text-text pt-12 sm:pt-[8rem] pb-2 sm:pb-4">
         SELECTED PROJECTS
       </h6>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center w-full">
-        <h1 className="text-text font-bold text-[2.2rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] text-center md:text-left leading-[1.1]">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center ">
+        <h1 className="text-text font-bold text-[2.2rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] text-center md:text-left lg:text-center  leading-[1.1]">
           Creating impact in
         </h1>
         <div

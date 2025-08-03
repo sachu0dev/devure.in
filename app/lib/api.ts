@@ -1,0 +1,293 @@
+import api from "./axios";
+import {
+  BlogPost,
+  BlogPostSummary,
+  BlogSearchOptions,
+  BlogSearchResults,
+  BlogCategory,
+  BlogTag,
+  BlogStats,
+  BlogFrontmatter,
+} from "@/types/blog";
+
+// API Response types
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+  error?: string;
+}
+
+interface PaginatedResponse<T> {
+  success: boolean;
+  data: {
+    blogs: T[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+      hasNext: boolean;
+      hasPrev: boolean;
+    };
+  };
+}
+
+// =============================================================================
+// PUBLIC BLOG APIs
+// =============================================================================
+
+/**
+ * Get all published blogs with search and filtering
+ */
+export const getBlogs = async (
+  options: BlogSearchOptions = {}
+): Promise<BlogSearchResults> => {
+  const params = new URLSearchParams();
+
+  if (options.query) params.append("q", options.query);
+  if (options.category) params.append("category", options.category);
+  if (options.tags?.length) params.append("tags", options.tags.join(","));
+  if (options.author) params.append("author", options.author);
+  if (options.featured !== undefined)
+    params.append("featured", options.featured.toString());
+  if (options.sortBy) params.append("sortBy", options.sortBy);
+  if (options.sortOrder) params.append("sortOrder", options.sortOrder);
+  if (options.limit) params.append("limit", options.limit.toString());
+  if (options.offset) params.append("offset", options.offset.toString());
+
+  const response = await api.get<ApiResponse<BlogSearchResults>>(
+    `/blogs?${params.toString()}`
+  );
+  return response.data.data;
+};
+
+/**
+ * Get a specific blog by slug
+ */
+export const getBlogBySlug = async (slug: string): Promise<BlogPost> => {
+  const response = await api.get<ApiResponse<{ blog: BlogPost }>>(
+    `/blogs/${slug}`
+  );
+  return response.data.data.blog;
+};
+
+/**
+ * Get all categories
+ */
+export const getCategories = async (): Promise<BlogCategory[]> => {
+  const response = await api.get<ApiResponse<{ categories: BlogCategory[] }>>(
+    "/blogs/categories"
+  );
+  return response.data.data.categories;
+};
+
+/**
+ * Get all tags
+ */
+export const getTags = async (): Promise<BlogTag[]> => {
+  const response = await api.get<ApiResponse<{ tags: BlogTag[] }>>(
+    "/blogs/tags"
+  );
+  return response.data.data.tags;
+};
+
+// =============================================================================
+// ADMIN BLOG APIs
+// =============================================================================
+
+/**
+ * Get all blogs for admin (including drafts)
+ */
+export const getAdminBlogs = async (
+  params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: "all" | "published" | "draft";
+  } = {}
+): Promise<PaginatedResponse<BlogPostSummary>> => {
+  const queryParams = new URLSearchParams();
+
+  if (params.page) queryParams.append("page", params.page.toString());
+  if (params.limit) queryParams.append("limit", params.limit.toString());
+  if (params.search) queryParams.append("search", params.search);
+  if (params.status) queryParams.append("status", params.status);
+
+  const response = await api.get<PaginatedResponse<BlogPostSummary>>(
+    `/admin/blogs?${queryParams.toString()}`
+  );
+  return response.data;
+};
+
+/**
+ * Get a specific blog for admin
+ */
+export const getAdminBlogBySlug = async (slug: string): Promise<BlogPost> => {
+  const response = await api.get<ApiResponse<{ blog: BlogPost }>>(
+    `/admin/blogs/${slug}`
+  );
+  return response.data.data.blog;
+};
+
+/**
+ * Create a new blog
+ */
+export const createBlog = async (data: {
+  frontmatter: BlogFrontmatter;
+  content: string;
+  excerpt?: string;
+}): Promise<BlogPostSummary> => {
+  const response = await api.post<
+    ApiResponse<{ blog: BlogPostSummary; message: string }>
+  >("/admin/blogs", data);
+  return response.data.data.blog;
+};
+
+/**
+ * Update an existing blog
+ */
+export const updateBlog = async (
+  slug: string,
+  data: {
+    frontmatter: Partial<BlogFrontmatter>;
+    content?: string;
+    excerpt?: string;
+  }
+): Promise<BlogPostSummary> => {
+  const response = await api.put<
+    ApiResponse<{ blog: BlogPostSummary; message: string }>
+  >(`/admin/blogs/${slug}`, data);
+  return response.data.data.blog;
+};
+
+/**
+ * Delete a blog
+ */
+export const deleteBlog = async (slug: string): Promise<void> => {
+  await api.delete<ApiResponse<{ message: string }>>(`/admin/blogs/${slug}`);
+};
+
+/**
+ * Toggle blog draft status
+ */
+export const toggleBlogDraftStatus = async (
+  slug: string
+): Promise<BlogPostSummary> => {
+  const response = await api.patch<
+    ApiResponse<{ blog: BlogPostSummary; message: string }>
+  >(`/admin/blogs/${slug}`, {
+    action: "toggleDraft",
+  });
+  return response.data.data.blog;
+};
+
+/**
+ * Toggle blog featured status
+ */
+export const toggleBlogFeaturedStatus = async (
+  slug: string
+): Promise<BlogPostSummary> => {
+  const response = await api.patch<
+    ApiResponse<{ blog: BlogPostSummary; message: string }>
+  >(`/admin/blogs/${slug}`, {
+    action: "toggleFeatured",
+  });
+  return response.data.data.blog;
+};
+
+/**
+ * Get blog statistics
+ */
+export const getBlogStats = async (): Promise<BlogStats> => {
+  const response = await api.get<ApiResponse<{ stats: BlogStats }>>(
+    "/admin/stats"
+  );
+  return response.data.data.stats;
+};
+
+// =============================================================================
+// FILE UPLOAD APIs
+// =============================================================================
+
+/**
+ * Upload image to S3
+ */
+export const uploadImage = async (
+  formData: FormData
+): Promise<{
+  url: string;
+  key: string;
+  size: number;
+  type: string;
+}> => {
+  const response = await api.post<
+    ApiResponse<{
+      url: string;
+      key: string;
+      size: number;
+      type: string;
+    }>
+  >("/admin/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data.data;
+};
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/**
+ * Handle API errors
+ */
+export const handleApiError = (error: unknown): string => {
+  if (error && typeof error === "object" && "response" in error) {
+    const apiError = error as {
+      response?: { data?: { error?: string }; status?: number };
+    };
+
+    if (apiError.response?.data?.error) {
+      return apiError.response.data.error;
+    }
+
+    if (apiError.response?.status === 404) {
+      return "Resource not found";
+    }
+
+    if (apiError.response?.status === 500) {
+      return "Internal server error";
+    }
+  }
+
+  if (error && typeof error === "object" && "code" in error) {
+    const networkError = error as { code?: string; message?: string };
+    if (networkError.code === "NETWORK_ERROR") {
+      return "Network error. Please check your connection.";
+    }
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "An unexpected error occurred";
+};
+
+/**
+ * Check if response is successful
+ */
+export const isApiSuccess = (response: unknown): boolean => {
+  const responseData = response as { data?: { success?: boolean } };
+  return responseData?.data?.success === true;
+};
+
+/**
+ * Extract data from API response
+ */
+export const extractApiData = <T>(response: unknown): T => {
+  return (response as { data?: { data?: T } })?.data?.data as T;
+};

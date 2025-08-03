@@ -4,15 +4,22 @@ import { Search as SearchIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import Featured from "./Featured";
-import { BlogPost } from "@/types/blog";
+import { BlogPostSummary, BlogCategory } from "@/types/blog";
 
 interface SearchProps {
-  blogs: BlogPost[];
-  categories: string[];
+  blogs: BlogPostSummary[];
+  categories: BlogCategory[];
+  searchQuery?: string;
+  selectedCategory?: string;
 }
 
-const Search = ({ blogs, categories }: SearchProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
+const Search = ({
+  blogs,
+  categories,
+  searchQuery: initialSearchQuery,
+}: // selectedCategory,
+SearchProps) => {
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery || "");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,13 +29,9 @@ const Search = ({ blogs, categories }: SearchProps) => {
   // Filter blogs based on search query
   const filteredBlogs = blogs.filter(
     (blog) =>
-      blog.frontmatter.title
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      blog.frontmatter.description
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      blog.frontmatter.tags.some((tag) =>
+      blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.tags.some((tag) =>
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
@@ -90,11 +93,11 @@ const Search = ({ blogs, categories }: SearchProps) => {
               </TabsTrigger>
               {categories.map((category) => (
                 <TabsTrigger
-                  key={category}
-                  value={category.toLowerCase()}
+                  key={category.slug}
+                  value={category.slug}
                   className="text-xs px-2 py-1 data-[state=active]:bg-primary data-[state=active]:text-black"
                 >
-                  {category}
+                  {category.name}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -108,13 +111,13 @@ const Search = ({ blogs, categories }: SearchProps) => {
 
             {categories.map((category) => (
               <TabsContent
-                key={category}
-                value={category.toLowerCase()}
+                key={category.slug}
+                value={category.slug}
                 className="mt-0"
               >
                 <div className="text-center py-12">
                   <p className="text-foreground/60">
-                    {category} content will be displayed here
+                    {category.name} content will be displayed here
                   </p>
                 </div>
               </TabsContent>

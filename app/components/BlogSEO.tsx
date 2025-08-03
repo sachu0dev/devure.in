@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { BlogPost } from "@/types/blog";
+import { env } from "@/lib/env";
 
 interface BlogSEOProps {
   blog: BlogPost;
@@ -7,7 +8,7 @@ interface BlogSEOProps {
 
 export const BlogSEO = ({ blog }: BlogSEOProps) => {
   const { frontmatter } = blog;
-  const url = `https://devure.in/blog/${frontmatter.slug}`;
+  const url = `${env.SITE_URL}/blog/${frontmatter.slug}`;
 
   return (
     <Head>
@@ -20,7 +21,7 @@ export const BlogSEO = ({ blog }: BlogSEOProps) => {
       <meta property="og:image" content={frontmatter.ogImage} />
       <meta property="og:type" content="article" />
       <meta property="og:url" content={url} />
-      <meta property="og:site_name" content="Devure" />
+      <meta property="og:site_name" content={env.SITE_NAME} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -55,11 +56,11 @@ export const BlogSEO = ({ blog }: BlogSEOProps) => {
             },
             publisher: {
               "@type": "Organization",
-              name: "Devure",
-              url: "https://devure.in",
+              name: env.SITE_NAME,
+              url: env.SITE_URL,
               logo: {
                 "@type": "ImageObject",
-                url: "https://devure.in/logo.png",
+                url: `${env.SITE_URL}/logo.png`,
               },
             },
             mainEntityOfPage: {

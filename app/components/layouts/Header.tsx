@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import gsap from "gsap";
+import { env } from "@/lib/env";
 
 const Header = () => {
   const { scrollY } = useScroll();
@@ -17,7 +18,7 @@ const Header = () => {
   const getHeaderText = () => {
     switch (pathname) {
       case "/":
-        return "Devure.in";
+        return env.SITE_NAME;
       case "/blog":
         return "Blogs";
       case "/work":
@@ -31,7 +32,7 @@ const Header = () => {
       case "/contact":
         return "Contact";
       default:
-        return "Devure.in";
+        return env.SITE_NAME;
     }
   };
 

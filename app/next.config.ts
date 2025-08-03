@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import { env } from "./lib/env";
 
 const withMDX = createMDX({
   extension: /\.mdx?$/,
@@ -16,7 +17,15 @@ const withMDX = createMDX({
 const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "ts", "tsx", "mdx"],
   images: {
-    domains: ["placehold.co", "images.unsplash.com"],
+    domains: env.IMAGE_DOMAINS,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.s3.*.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
   experimental: {
     mdxRs: true,

@@ -1,95 +1,85 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
 import type {
-  LocalBlogPost,
   BlogPostSummary,
-  BlogFrontmatter,
+  BlogCategory,
+  BlogTag,
+  S3BlogPost,
 } from "@/types/blog";
+import { blogService } from "./blogService";
 
-const blogsDirectory = path.join(process.cwd(), "content", "blogs");
+// =============================================================================
+// SERVER-SIDE FUNCTIONS (MongoDB + S3)
+// =============================================================================
 
-export function getAllBlogs(): LocalBlogPost[] {
-  const fileNames = fs.readdirSync(blogsDirectory);
-  const allBlogsData = fileNames
-    .filter((fileName) => fileName.endsWith(".mdx"))
-    .map((fileName) => {
-      const fullPath = path.join(blogsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, "utf8");
-      const { data, content } = matter(fileContents);
-
-      return {
-        source: "local" as const,
-        filePath: fullPath,
-        fileName,
-        frontmatter: data as BlogFrontmatter,
-        content,
-      } as LocalBlogPost;
-    });
-
-  return allBlogsData.sort((a, b) => {
-    return (
-      new Date(b.frontmatter.date).getTime() -
-      new Date(a.frontmatter.date).getTime()
-    );
-  });
+/**
+ * Get all published blogs from MongoDB (summary only - no content)
+ */
+export async function getAllBlogs(): Promise<BlogPostSummary[]> {
+  try {
+    return await blogService.getAllPublishedBlogs();
+  } catch (error) {
+    console.error("Error fetching blogs from database:", error);
+    return [];
+  }
 }
 
-export function getBlogBySlug(slug: string): LocalBlogPost | null {
+/**
+ * Get a blog by slug from MongoDB (full content for rendering)
+ */
+export async function getBlogBySlug(slug: string): Promise<S3BlogPost | null> {
   try {
-    const fullPath = path.join(blogsDirectory, `${slug}.mdx`);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data, content } = matter(fileContents);
-
-    return {
-      source: "local" as const,
-      filePath: fullPath,
-      fileName: `${slug}.mdx`,
-      frontmatter: data as BlogFrontmatter,
-      content,
-    } as LocalBlogPost;
-  } catch {
+    return await blogService.getBlogBySlug(slug);
+  } catch (error) {
+    console.error("Error fetching blog from database:", error);
     return null;
   }
 }
 
-export function getBlogsByCategory(category: string): LocalBlogPost[] {
-  const blogs = getAllBlogs();
-  return blogs.filter((blog) => blog.frontmatter.category === category);
+/**
+ * Get blogs by category from MongoDB (summary only - no content)
+ */
+export async function getBlogsByCategory(
+  category: string
+): Promise<BlogPostSummary[]> {
+  try {
+    return await blogService.getBlogsByCategory(category);
+  } catch (error) {
+    console.error("Error fetching blogs by category:", error);
+    return [];
+  }
 }
 
-export function getBlogsByTag(tag: string): LocalBlogPost[] {
-  const blogs = getAllBlogs();
-  return blogs.filter((blog) => blog.frontmatter.tags.includes(tag));
+/**
+ * Get blogs by tag from MongoDB (summary only - no content)
+ */
+export async function getBlogsByTag(tag: string): Promise<BlogPostSummary[]> {
+  try {
+    return await blogService.getBlogsByTag(tag);
+  } catch (error) {
+    console.error("Error fetching blogs by tag:", error);
+    return [];
+  }
 }
 
-export function getAllCategories(): string[] {
-  const blogs = getAllBlogs();
-  const categories = blogs.map((blog) => blog.frontmatter.category);
-  return [...new Set(categories)];
+/**
+ * Get all categories from MongoDB/S3
+ */
+export async function getAllCategories(): Promise<BlogCategory[]> {
+  try {
+    return await blogService.getCategories();
+  } catch (error) {
+    console.error("Error fetching categories from database:", error);
+    return [];
+  }
 }
 
-export function getAllTags(): string[] {
-  const blogs = getAllBlogs();
-  const tags = blogs.flatMap((blog) => blog.frontmatter.tags);
-  return [...new Set(tags)];
-}
-
-// Helper function to convert BlogPost to BlogPostSummary
-export function toBlogPostSummary(blog: LocalBlogPost): BlogPostSummary {
-  return {
-    slug: blog.frontmatter.slug,
-    title: blog.frontmatter.title,
-    description: blog.frontmatter.description,
-    category: blog.frontmatter.category,
-    tags: blog.frontmatter.tags,
-    date: blog.frontmatter.date,
-    coverImage: blog.frontmatter.coverImage,
-    author: blog.frontmatter.author,
-    readTime: blog.frontmatter.readTime || "5 min read",
-    featured: blog.frontmatter.featured || false,
-    source: "local",
-    excerpt: blog.excerpt,
-    wordCount: blog.wordCount,
-  };
+/**
+ * Get all tags from MongoDB/S3
+ */
+export async function getAllTags(): Promise<BlogTag[]> {
+  try {
+    return await blogService.getTags();
+  } catch (error) {
+    console.error("Error fetching tags from database:", error);
+    return [];
+  }
 }

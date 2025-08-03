@@ -1,0 +1,75 @@
+---
+title: "Mastering React Server Components"
+slug: "react-server-components"
+description: "Deep dive into React Server Components and how they revolutionize the way we build React applications."
+tags: ["react", "server-components", "next.js", "frontend"]
+category: "React"
+date: "2024-12-12"
+coverImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=600&fit=crop&crop=center"
+ogImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&h=630&fit=crop&crop=center"
+author:
+  name: "Devure Team"
+  profileUrl: "/authors/devure-team"
+---
+
+## Introduction
+
+React Server Components represent a paradigm shift in how we build React applications. They allow us to write components that run on the server and send the rendered result to the client, reducing bundle size and improving performance.
+
+### What are Server Components?
+
+Server Components are a new type of React component that:
+
+- Run exclusively on the server
+- Can access backend resources directly
+- Don't increase the client bundle size
+- Can be rendered on the server and sent as HTML
+
+### Benefits of Server Components
+
+1. **Reduced Bundle Size**: Server components don't get included in the client bundle
+2. **Direct Database Access**: Can access databases and APIs directly
+3. **Better SEO**: Full HTML is rendered on the server
+4. **Improved Performance**: Less JavaScript to download and execute
+
+### Code Example
+
+```jsx
+// This is a Server Component
+async function BlogPosts() {
+  const posts = await fetchPosts(); // Direct database access
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <article key={post.id}>
+          <h2>{post.title}</h2>
+          <p>{post.excerpt}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+```
+
+### Client Components
+
+When you need interactivity, you can still use Client Components:
+
+```jsx
+"use client"; // This marks it as a Client Component
+
+function LikeButton({ postId }) {
+  const [likes, setLikes] = useState(0);
+
+  const handleLike = () => {
+    setLikes(likes + 1);
+  };
+
+  return <button onClick={handleLike}>❤️ {likes} likes</button>;
+}
+```
+
+### Conclusion
+
+React Server Components offer a powerful new way to build React applications with better performance and developer experience. They're particularly well-suited for content-heavy applications like blogs, e-commerce sites, and dashboards.

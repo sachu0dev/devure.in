@@ -4,23 +4,34 @@ import { Search as SearchIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import Featured from "./Featured";
+import { BlogPost } from "@/types/blog";
 
-const categories = [
-  "All",
-  "React",
-  "Backend",
-  "Linux",
-  "Frontend",
-  "Web Development",
-];
+interface SearchProps {
+  blogs: BlogPost[];
+  categories: string[];
+}
 
-const Search = () => {
+const Search = ({ blogs, categories }: SearchProps) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
   };
+
+  // Filter blogs based on search query
+  const filteredBlogs = blogs.filter(
+    (blog) =>
+      blog.frontmatter.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      blog.frontmatter.description
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      blog.frontmatter.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+  );
 
   return (
     <div className="w-full max-w-[110rem] flex flex-col h-auto text-background px-3 md:px-6 pb-8 lg:pb-16 pt-6">
@@ -92,7 +103,7 @@ const Search = () => {
           {/* Content Area */}
           <div className="w-full text-foreground mt-6">
             <TabsContent value="featured" className="mt-0">
-              <Featured />
+              <Featured blogs={filteredBlogs} />
             </TabsContent>
 
             {categories.map((category) => (

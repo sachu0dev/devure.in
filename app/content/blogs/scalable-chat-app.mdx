@@ -1,0 +1,66 @@
+---
+title: "Build a Scalable Chat App"
+slug: "scalable-chat-app"
+description: "Learn how to build a scalable Socket.io chat app with Redis and room support."
+tags: ["socket.io", "redis", "scalability", "websockets"]
+category: "fullstack"
+date: "2024-12-15"
+coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop&crop=center"
+ogImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=630&fit=crop&crop=center"
+author:
+  name: "Devure Team"
+  profileUrl: "/authors/devure-team"
+---
+
+## Introduction
+
+Building real-time applications like chat apps at scale requires careful architectural planning. In this guide, we'll explore how to create a robust chat application that can handle thousands of concurrent users.
+
+### Technologies Used
+
+- **Node.js** - Server runtime
+- **Socket.io** - Real-time communication
+- **Redis** - Session storage and pub/sub
+- **MongoDB** - Message persistence
+
+### Code Sample
+
+Here's how to set up the basic Socket.io server:
+
+```js
+const io = require("socket.io")(server, {
+  cors: { origin: "*" },
+});
+
+io.on("connection", (socket) => {
+  console.log("User connected");
+
+  socket.on("join-room", (roomId) => {
+    socket.join(roomId);
+    socket.to(roomId).emit("user-joined", socket.id);
+  });
+
+  socket.on("message", (data) => {
+    socket.to(data.roomId).emit("message", data);
+  });
+});
+```
+
+### Redis Integration
+
+For horizontal scaling, we use Redis pub/sub:
+
+```js
+const redis = require("redis");
+const subscriber = redis.createClient();
+const publisher = redis.createClient();
+
+subscriber.subscribe("chat-messages");
+subscriber.on("message", (channel, message) => {
+  io.emit("message", JSON.parse(message));
+});
+```
+
+### Conclusion
+
+You can now scale your app horizontally with Redis pub/sub and Docker orchestration. The key is to maintain stateless servers and use Redis for cross-server communication.

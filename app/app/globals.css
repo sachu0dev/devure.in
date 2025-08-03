@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-body, html {
+body,
+html {
   overflow-x: hidden;
 }
 @custom-variant dark (&:is(.dark *));
@@ -49,33 +50,33 @@ body, html {
   --radius: 0.625rem;
 
   /* Light Theme Colors (Inferred from screenshots) */
-  --background: #EFEAE2;          /* Light warm beige from 'View all work' background */
-  --foreground: #334238;   
-  --text:      #FAF2E8 ;
-  --green-text: #618C70; /* Dark green from website's main background */
-  --card: #F0EDE5;                /* Slightly lighter card background */
+  --background: #efeae2; /* Light warm beige from 'View all work' background */
+  --foreground: #334238;
+  --text: #faf2e8;
+  --green-text: #618c70; /* Dark green from website's main background */
+  --card: #f0ede5; /* Slightly lighter card background */
   --card-foreground: ##334238;
-  --popover: #F0EDE5;
+  --popover: #f0ede5;
   --popover-foreground: ##334238;
-  --primary: #ff9c94;             /* Vibrant coral for CTA */
-  --primary-foreground: #FAF2E8;  /* Creamy white text on primary */
-  --secondary: ##334238;           /* Dark green as a secondary element */
-  --secondary-foreground: #F0EDE5; /* Creamy white text on secondary */
-  --muted: #A0A0A0;                /* Muted gray */
-  --muted-foreground: #5F6368;    /* Darker text on muted */
-  --accent: #B0D939;              /* Bright green accent */
-  --accent-foreground: #EFEAE2;   /* Contrasting with accent */
+  --primary: #ff9c94; /* Vibrant coral for CTA */
+  --primary-foreground: #faf2e8; /* Creamy white text on primary */
+  --secondary: ##334238; /* Dark green as a secondary element */
+  --secondary-foreground: #f0ede5; /* Creamy white text on secondary */
+  --muted: #a0a0a0; /* Muted gray */
+  --muted-foreground: #5f6368; /* Darker text on muted */
+  --accent: #b0d939; /* Bright green accent */
+  --accent-foreground: #efeae2; /* Contrasting with accent */
 
-  --destructive: #EF4444;         /* Standard red for destructive actions */
-  --border: #D0CDBB;              /* Lighter gray/beige for borders */
-  --input: #D0CDBB;
-  --ring: #ff9c94;                /* Primary color for focus rings */
+  --destructive: #ef4444; /* Standard red for destructive actions */
+  --border: #d0cdbb; /* Lighter gray/beige for borders */
+  --input: #d0cdbb;
+  --ring: #ff9c94; /* Primary color for focus rings */
 
   /* Chart colors */
   --chart-1: #ff9c94;
-  --chart-2: #B0D939;
-  --chart-3: #D0CDBB;
-  --chart-4: #5F6368;
+  --chart-2: #b0d939;
+  --chart-3: #d0cdbb;
+  --chart-4: #5f6368;
   --chart-5: ##334238;
 
   /* Sidebar colors */
@@ -91,33 +92,33 @@ body, html {
 
 .dark {
   /* Dark Theme Colors (Refined to be deeper and more complementary) */
-  --background: #1A2320;          /* Deeper, desaturated dark green */
-  --foreground: #F0EDE5; 
-  --text: #242424;         /* Creamy white text */
-  --card: #202D2A;                /* Slightly lighter card for depth */
-  --card-foreground: #F0EDE5;
-  --popover: #202D2A;
-  --popover-foreground: #F0EDE5;
-  --primary: #ff9c94;             /* Vibrant coral for CTA */
-  --primary-foreground: #F0EDE5;  /* Creamy white text on primary */
-  --secondary: #D7CFC2;           /* Less bright, more desaturated light beige */
+  --background: #1a2320; /* Deeper, desaturated dark green */
+  --foreground: #f0ede5;
+  --text: #242424; /* Creamy white text */
+  --card: #202d2a; /* Slightly lighter card for depth */
+  --card-foreground: #f0ede5;
+  --popover: #202d2a;
+  --popover-foreground: #f0ede5;
+  --primary: #ff9c94; /* Vibrant coral for CTA */
+  --primary-foreground: #f0ede5; /* Creamy white text on primary */
+  --secondary: #d7cfc2; /* Less bright, more desaturated light beige */
   --secondary-foreground: ##334238; /* Dark text on secondary */
-  --muted: #5F6B68;                /* Darker, more subtle gray */
-  --muted-foreground: #9BA4A2;    /* Lighter muted text */
-  --accent: #B0D939;              /* Bright green accent */
+  --muted: #5f6b68; /* Darker, more subtle gray */
+  --muted-foreground: #9ba4a2; /* Lighter muted text */
+  --accent: #b0d939; /* Bright green accent */
   --accent-foreground: #334238;
   /* Contrasting with accent */
-  --destructive: #EF4444;         /* Standard red for destructive actions */
-  --border: #384744;              /* Very dark, subtle green-gray for borders */
+  --destructive: #ef4444; /* Standard red for destructive actions */
+  --border: #384744; /* Very dark, subtle green-gray for borders */
   --input: #384744;
-  --ring: #ff9c94;                /* Primary color for focus rings */
+  --ring: #ff9c94; /* Primary color for focus rings */
 
   /* Chart colors (Adjusted for new dark theme) */
   --chart-1: #ff9c94;
-  --chart-2: #B0D939;
+  --chart-2: #b0d939;
   --chart-3: #384744;
-  --chart-4: #5F6B68;
-  --chart-5: #1A2320;
+  --chart-4: #5f6b68;
+  --chart-5: #1a2320;
 
   /* Sidebar colors */
   --sidebar: var(--card);
@@ -137,4 +138,80 @@ body, html {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom prose styles for blog content */
+.prose pre {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  padding-top: 3rem !important;
+  overflow-x: auto !important;
+  margin: 1.5rem 0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  position: relative !important;
+}
+
+.prose pre code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+}
+
+.prose code {
+  background-color: var(--muted) !important;
+  color: var(--primary) !important;
+  padding: 0.125rem 0.25rem !important;
+  border-radius: 4px !important;
+  font-size: 0.875rem !important;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace !important;
+}
+
+/* Syntax highlighting colors */
+.prose pre .token.keyword {
+  color: var(--primary) !important;
+}
+
+.prose pre .token.string {
+  color: var(--accent) !important;
+}
+
+.prose pre .token.number {
+  color: var(--accent-foreground) !important;
+}
+
+.prose pre .token.function {
+  color: var(--accent) !important;
+}
+
+.prose pre .token.comment {
+  color: var(--muted-foreground) !important;
+  font-style: italic !important;
+}
+
+.prose pre .token.operator {
+  color: var(--primary) !important;
+}
+
+.prose pre .token.punctuation {
+  color: var(--background) !important;
+}
+
+/* Copy button styles */
+.prose pre .copy-button {
+  position: absolute !important;
+  top: 0.5rem !important;
+  right: 0.5rem !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+  z-index: 10 !important;
+}
+
+.prose pre:hover .copy-button {
+  opacity: 1 !important;
 }

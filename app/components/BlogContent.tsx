@@ -12,27 +12,48 @@ export const BlogContent = ({ content }: BlogContentProps) => {
   useEffect(() => {
     if (!contentRef.current) return;
 
-    // Find all pre elements and add copy buttons
     const preElements = contentRef.current.querySelectorAll("pre");
 
     preElements.forEach((pre) => {
-      // Check if copy button already exists
+      const code = pre.querySelector("code");
+      const text = code ? code.textContent || "" : pre.textContent || "";
+
+      if (!text.trim()) {
+        pre.style.display = "none";
+        return;
+      }
+
       if (pre.querySelector(".copy-button")) return;
 
-      // Create copy button
+      // Create and style the copy button
       const copyButton = document.createElement("button");
       copyButton.className =
-        "copy-button absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-foreground/20 hover:bg-foreground/30 text-background hover:text-background z-10 rounded px-2 py-1 text-xs";
+        "copy-button absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity h-8 px-2 text-xs bg-white/80 hover:bg-white text-gray-800 rounded-md border border-gray-300 hover:border-gray-400 shadow-md flex items-center justify-center";
+
       copyButton.innerHTML = `
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+        <svg class="w-4 h-4 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
         </svg>
       `;
 
-      // Add group class to pre element
-      pre.classList.add("group", "relative");
+      pre.classList.add(
+        "group",
+        "relative",
+        "bg-foreground",
+        "text-background",
+        "rounded-xl",
+        "p-6",
+        "my-6",
+        "overflow-x-auto",
+        "font-mono",
+        "text-sm",
+        "leading-relaxed",
+        "shadow-lg",
+        "border",
+        "border-border"
+      );
 
-      // Add copy functionality
       copyButton.addEventListener("click", async () => {
         const code = pre.querySelector("code");
         const text = code ? code.textContent || "" : pre.textContent || "";
@@ -40,17 +61,19 @@ export const BlogContent = ({ content }: BlogContentProps) => {
         try {
           await navigator.clipboard.writeText(text);
 
-          // Show success state
+          // Show success icon
           copyButton.innerHTML = `
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 13l4 4L19 7" />
             </svg>
           `;
 
           setTimeout(() => {
             copyButton.innerHTML = `
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              <svg class="w-4 h-4 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             `;
           }, 2000);
@@ -62,7 +85,6 @@ export const BlogContent = ({ content }: BlogContentProps) => {
       pre.appendChild(copyButton);
     });
 
-    // Cleanup function
     return () => {
       const copyButtons = contentRef.current?.querySelectorAll(".copy-button");
       copyButtons?.forEach((button) => button.remove());

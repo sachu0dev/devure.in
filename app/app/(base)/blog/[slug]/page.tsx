@@ -29,36 +29,80 @@ export async function generateMetadata({
   if (!blog) {
     return {
       title: "Blog Post Not Found",
+      description: "The requested blog post could not be found.",
     };
   }
 
   const url = `${env.SITE_URL}/blog/${blog.frontmatter.slug}`;
+  const publishedTime = new Date(blog.frontmatter.date).toISOString();
+  const modifiedTime = blog.frontmatter.updatedAt
+    ? new Date(blog.frontmatter.updatedAt).toISOString()
+    : publishedTime;
 
   return {
-    title: blog.frontmatter.title,
+    title: `${blog.frontmatter.title} | ${env.SITE_NAME}`,
     description: blog.frontmatter.description,
+    keywords: blog.frontmatter.tags.join(", "),
+    authors: [{ name: blog.frontmatter.author.name }],
+    creator: blog.frontmatter.author.name,
+    publisher: env.SITE_NAME,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    metadataBase: new URL(env.SITE_URL),
     openGraph: {
       title: blog.frontmatter.title,
       description: blog.frontmatter.description,
-      images: [blog.frontmatter.ogImage],
-      type: "article",
-      publishedTime: blog.frontmatter.date,
-      authors: [blog.frontmatter.author.name],
       url,
       siteName: env.SITE_NAME,
+      images: [
+        {
+          url: blog.frontmatter.ogImage,
+          width: 1200,
+          height: 630,
+          alt: blog.frontmatter.title,
+        },
+      ],
+      locale: "en_US",
+      type: "article",
+      publishedTime,
+      modifiedTime,
+      authors: [blog.frontmatter.author.name],
+      tags: blog.frontmatter.tags,
     },
     twitter: {
       card: "summary_large_image",
       title: blog.frontmatter.title,
       description: blog.frontmatter.description,
       images: [blog.frontmatter.ogImage],
+      creator: "@devure",
+      site: "@devure",
     },
     alternates: {
       canonical: url,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     other: {
-      "article:published_time": blog.frontmatter.date,
+      "article:published_time": publishedTime,
+      "article:modified_time": modifiedTime,
       "article:author": blog.frontmatter.author.name,
+      "article:section": blog.frontmatter.category,
+      "article:tag": blog.frontmatter.tags.join(", "),
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:image:alt": blog.frontmatter.title,
     },
   };
 }
@@ -71,8 +115,49 @@ export default async function BlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: blog.frontmatter.title,
+    description: blog.frontmatter.description,
+    image: blog.frontmatter.coverImage,
+    author: {
+      "@type": "Person",
+      name: blog.frontmatter.author.name,
+      url: blog.frontmatter.author.profileUrl,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: env.SITE_NAME,
+      url: env.SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${env.SITE_URL}/logo.png`,
+      },
+    },
+    datePublished: blog.frontmatter.date,
+    dateModified: blog.frontmatter.updatedAt || blog.frontmatter.date,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${env.SITE_URL}/blog/${blog.frontmatter.slug}`,
+    },
+    articleSection: blog.frontmatter.category,
+    keywords: blog.frontmatter.tags.join(", "),
+    wordCount: blog.wordCount || 0,
+    timeRequired: blog.frontmatter.readTime || "PT5M",
+  };
+
   return (
-    <article className="min-h-screen bg-background">
+    <article className="min-h-screen bg-background pt-[6rem]">
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
+
       {/* Back Button */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* <Link href="/blog">
@@ -84,7 +169,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       </div>
 
       {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-4 mb-12">
+      <header className="max-w-4xl mx-auto px-4 mb-12">
         <div className="space-y-6">
           {/* Category Badge */}
           <div className="flex items-center gap-2">
@@ -139,7 +224,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
             ))}
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Cover Image */}
       {blog.frontmatter.coverImage && (
@@ -156,9 +241,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto px-4 pb-16">
+      <main className="max-w-4xl mx-auto px-4 pb-16">
         <BlogContent content={blog.content} />
-      </div>
+      </main>
     </article>
   );
 }

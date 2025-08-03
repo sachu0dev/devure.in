@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>http://localhost:3000/admin</loc><lastmod>2025-08-03T16:39:14.651Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/building-an-express-app-with-typescript-and-nodemon</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/next-js-vercel-for-rapid-and-free-application-deployment-new</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/backend</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/could computing</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/express</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/node</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/nodemon</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/software development</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/tag/typescript</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/category/backend</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>http://localhost:3000/blog/category/devops</loc><lastmod>2025-08-03T16:39:14.652Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/admin</loc><lastmod>2025-08-03T18:04:52.525Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/backend</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/could computing</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/express</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/node</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/nodemon</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/software development</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/tag/typescript</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/building-an-express-app-with-typescript-and-nodemon</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/next-js-vercel-for-rapid-and-free-application-deployment-new</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/category/backend</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/blog/category/devops</loc><lastmod>2025-08-03T18:04:52.526Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

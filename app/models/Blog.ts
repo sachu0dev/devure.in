@@ -31,7 +31,7 @@ const SEOSchema = new Schema(
 const BlogFrontmatterSchema = new Schema<BlogFrontmatter>(
   {
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, required: true },
     description: { type: String, required: true },
     tags: [{ type: String }],
     category: { type: String, required: true },
@@ -101,7 +101,7 @@ const BlogSchema = new Schema<IBlog>(
 );
 
 // Indexes for better query performance
-BlogSchema.index({ "frontmatter.slug": 1 });
+BlogSchema.index({ "frontmatter.slug": 1 }, { unique: true });
 BlogSchema.index({ "frontmatter.category": 1 });
 BlogSchema.index({ "frontmatter.tags": 1 });
 BlogSchema.index({ "frontmatter.featured": 1 });

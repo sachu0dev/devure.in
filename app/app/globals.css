@@ -261,41 +261,18 @@ html {
   margin: 0;
 }
 
-/* Code blocks */
-.blog-content pre {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  overflow-x: auto;
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", monospace;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  position: relative;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.blog-content pre code {
-  background: transparent;
-  color: inherit;
-  padding: 0;
-  border-radius: 0;
-  font-size: inherit;
-  line-height: inherit;
-  font-family: inherit;
-}
+/* Code blocks - now handled by Tailwind classes */
 
 /* Inline code */
 .blog-content code {
-  background-color: hsl(var(--muted));
-  color: hsl(var(--primary));
-  padding: 0.125rem 0.25rem;
-  border-radius: 4px;
+  background-color: hsl(var(--foreground));
+  color: hsl(var(--background));
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
   font-size: 0.875rem;
   font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", monospace;
   font-weight: 500;
+  border: 1px solid hsl(var(--border));
 }
 
 /* Tables */
@@ -459,18 +436,22 @@ html {
 }
 
 /* Copy button for code blocks */
-.blog-content pre .copy-button {
+/* .blog-content pre .copy-button {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0.75rem;
+  right: 0.75rem;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
   z-index: 10;
 }
 
 .blog-content pre:hover .copy-button {
   opacity: 1;
 }
+
+.blog-content pre .copy-button:hover {
+  transform: scale(1.05);
+} */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -490,10 +471,7 @@ html {
     font-size: 1.5rem;
   }
 
-  .blog-content pre {
-    font-size: 0.75rem;
-    padding: 1rem;
-  }
+  /* Pre styling now handled by Tailwind classes */
 }
 
 /* TipTap Editor Styles */
@@ -547,19 +525,16 @@ html {
 }
 
 .ProseMirror code {
-  background-color: #f1f1f1;
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
+  background-color: hsl(var(--foreground));
+  color: hsl(var(--background));
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
   font-family: monospace;
+  border: 1px solid hsl(var(--border));
 }
 
 .ProseMirror pre {
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 1rem;
-  overflow-x: auto;
-  margin: 1em 0;
+  /* Pre styling now handled by Tailwind classes */
 }
 
 .ProseMirror pre code {
@@ -608,12 +583,13 @@ html {
   }
 
   .ProseMirror pre {
-    background-color: #2d3748;
-    border-color: #4a5568;
+    /* Pre styling now handled by Tailwind classes */
   }
 
   .ProseMirror code {
-    background-color: #2d3748;
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-color: hsl(var(--border));
   }
 
   .ProseMirror th,

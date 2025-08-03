@@ -21,7 +21,7 @@ export const CodeBlock = ({ children, className }: CodeBlockProps) => {
   };
 
   return (
-    <div className="relative group">
+    <div className="relative group bg-background">
       <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
         <Button
           size="sm"

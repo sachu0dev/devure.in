@@ -28,6 +28,48 @@ export class S3Service {
   }
 
   /**
+   * Sanitize metadata for S3 headers
+   * S3 metadata keys and values must be valid HTTP header values
+   */
+  private sanitizeMetadata(
+    metadata?: Record<string, string>
+  ): Record<string, string> | undefined {
+    if (!metadata) return undefined;
+
+    const sanitized: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(metadata)) {
+      // Sanitize key: lowercase, replace invalid chars with hyphens
+      const sanitizedKey = key
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      // Sanitize value: remove or replace invalid characters
+      const sanitizedValue = value
+        .replace(/[\x00-\x1f\x7f]/g, "") // Remove control characters
+        .replace(/[^\x20-\x7e]/g, "") // Remove non-printable ASCII
+        .trim()
+        .substring(0, 1024); // Limit length
+
+      if (sanitizedKey && sanitizedValue) {
+        sanitized[sanitizedKey] = sanitizedValue;
+      }
+    }
+
+    // Log sanitization for debugging
+    if (Object.keys(metadata).length !== Object.keys(sanitized).length) {
+      console.warn("S3 metadata sanitization removed some invalid entries:", {
+        original: Object.keys(metadata),
+        sanitized: Object.keys(sanitized),
+      });
+    }
+
+    return Object.keys(sanitized).length > 0 ? sanitized : undefined;
+  }
+
+  /**
    * Upload a file to S3
    */
   async uploadFile(
@@ -37,12 +79,14 @@ export class S3Service {
     metadata?: Record<string, string>
   ): Promise<{ url: string; key: string; etag: string }> {
     try {
+      const sanitizedMetadata = this.sanitizeMetadata(metadata);
+
       const command = new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
         Body: content,
         ContentType: contentType,
-        Metadata: metadata,
+        Metadata: sanitizedMetadata,
       });
 
       const result = await s3Client.send(command);
@@ -54,6 +98,26 @@ export class S3Service {
       };
     } catch (error) {
       console.error("S3 upload error:", error);
+
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes("Invalid character in header content")) {
+          throw new Error(
+            `S3 metadata contains invalid characters. Please check your content for special characters or emojis.`
+          );
+        }
+        if (error.message.includes("Access Denied")) {
+          throw new Error(
+            `S3 access denied. Please check your AWS credentials and bucket permissions.`
+          );
+        }
+        if (error.message.includes("NoSuchBucket")) {
+          throw new Error(
+            `S3 bucket not found. Please check your bucket configuration.`
+          );
+        }
+      }
+
       throw new Error(`Failed to upload file to S3: ${error}`);
     }
   }
@@ -67,7 +131,19 @@ export class S3Service {
     metadata?: Record<string, string>
   ): Promise<{ url: string; key: string; etag: string }> {
     const key = `${env.AWS_S3_MDX_PREFIX}/${slug}.mdx`;
-    return this.uploadFile(key, content, "text/markdown", metadata);
+
+    // Use safe metadata keys for blog content
+    const safeMetadata = metadata
+      ? {
+          "blog-title": metadata.title || "",
+          "blog-author": metadata.author || "",
+          "blog-category": metadata.category || "",
+          "blog-slug": slug,
+          "upload-date": new Date().toISOString(),
+        }
+      : undefined;
+
+    return this.uploadFile(key, content, "text/markdown", safeMetadata);
   }
 
   /**
@@ -80,7 +156,23 @@ export class S3Service {
     metadata?: Record<string, string>
   ): Promise<{ url: string; key: string; etag: string }> {
     const key = `${env.AWS_S3_IMAGES_PREFIX}/${filename}`;
-    return this.uploadFile(key, buffer, contentType, metadata);
+
+    // Use safe metadata keys for images
+    const safeMetadata = metadata
+      ? {
+          "image-filename": filename,
+          "image-type": contentType,
+          "upload-date": new Date().toISOString(),
+          ...Object.fromEntries(
+            Object.entries(metadata).map(([k, v]) => [
+              `image-${k.toLowerCase().replace(/[^a-z0-9]/g, "-")}`,
+              v,
+            ])
+          ),
+        }
+      : undefined;
+
+    return this.uploadFile(key, buffer, contentType, safeMetadata);
   }
 
   /**

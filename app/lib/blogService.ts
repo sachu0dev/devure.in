@@ -31,14 +31,25 @@ export class BlogService {
       throw new Error(`Blog with slug "${frontmatter.slug}" already exists`);
     }
 
+    // Validate and sanitize frontmatter data before S3 upload
+    const sanitizedTitle = frontmatter.title
+      .replace(/[^\x20-\x7e]/g, "")
+      .trim();
+    const sanitizedAuthor = frontmatter.author.name
+      .replace(/[^\x20-\x7e]/g, "")
+      .trim();
+    const sanitizedCategory = frontmatter.category
+      .replace(/[^\x20-\x7e]/g, "")
+      .trim();
+
     // Upload content to S3
     const s3Result = await s3Service.uploadBlogContent(
       frontmatter.slug,
       content,
       {
-        title: frontmatter.title,
-        author: frontmatter.author.name,
-        category: frontmatter.category,
+        title: sanitizedTitle,
+        author: sanitizedAuthor,
+        category: sanitizedCategory,
       }
     );
 

@@ -157,7 +157,7 @@ export default async function BlogPage() {
       url: currentDomain,
       logo: {
         "@type": "ImageObject",
-        url: `${currentDomain}/logo.png`,
+        url: `${currentDomain}/blog-og.jpg`,
       },
     },
     // Add categories and tags to structured data

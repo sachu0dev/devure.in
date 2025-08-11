@@ -144,7 +144,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       url: currentDomain,
       logo: {
         "@type": "ImageObject",
-        url: `${currentDomain}/logo.png`,
+        url: `${currentDomain}/blog-og.jpg`,
       },
     },
     datePublished: blog.frontmatter.date,

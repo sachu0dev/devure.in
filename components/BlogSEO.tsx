@@ -60,7 +60,7 @@ export const BlogSEO = ({ blog }: BlogSEOProps) => {
               url: env.SITE_URL,
               logo: {
                 "@type": "ImageObject",
-                url: `${env.SITE_URL}/logo.png`,
+                url: `${env.SITE_URL}/blog-og.jpg`,
               },
             },
             mainEntityOfPage: {

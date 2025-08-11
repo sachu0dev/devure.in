@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import React, { useRef, useEffect, useState } from 'react';
-import gsap from 'gsap';
-import { AppleCardsCarouselDemo } from './ImageSlider';
-import { motion, useInView } from 'framer-motion';
+import React, { useRef, useEffect, useState } from "react";
+import gsap from "gsap";
+import { AppleCardsCarouselDemo } from "./ImageSlider";
+import { motion, useInView } from "framer-motion";
 
 const PROJECTS = [
-  'CRM',
-  'Chat Apps',
-  'E-commerce',
-  'SaaS',
-  'Portfolio',
-  'Analytics',
-  'Social Network',
-  'API Platform',
-  'Blog/CMS',
-  'Marketplace',
+  "CRM",
+  "Chat Apps",
+  "E-commerce",
+  "SaaS",
+  "Portfolio",
+  "Analytics",
+  "Social Network",
+  "API Platform",
+  "Blog/CMS",
+  "Marketplace",
 ];
 
 const Selected = () => {
   const [current, setCurrent] = useState(0);
   const textRef = useRef<HTMLSpanElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(carouselRef, { once: true, margin: '-100px' });
+  const inView = useInView(carouselRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
     let isMounted = true;
@@ -35,7 +35,7 @@ const Selected = () => {
       gsap.to(textNode, {
         y: 0,
         duration: 0.5,
-        ease: 'power2.inOut',
+        ease: "power2.inOut",
         onComplete: () => {
           // Hold in center
           setTimeout(() => {
@@ -43,7 +43,7 @@ const Selected = () => {
             gsap.to(textNode, {
               y: -80,
               duration: 0.5,
-              ease: 'power2.inOut',
+              ease: "power2.inOut",
               onComplete: () => {
                 if (isMounted) {
                   setCurrent((prev) => (prev + 1) % PROJECTS.length);
@@ -67,15 +67,13 @@ const Selected = () => {
         SELECTED PROJECTS
       </h6>
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center ">
-        <h1 
+        <h1
           ref={carouselRef}
-        
-        className="text-text font-bold text-[2.2rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] text-center md:text-left lg:text-center  leading-[1.1]">
+          className="text-text font-bold text-[2.2rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] text-center md:text-left lg:text-center  leading-[1.1]"
+        >
           Creating impact in
         </h1>
-        <div
-          className="bg-[#cce560] text-[#242424] font-bold rounded-2xl h-[48px] sm:h-[64px] md:h-[80px] w-[200px] sm:w-[260px] md:w-[350px] flex justify-center items-center will-change-transform overflow-hidden relative mt-2 md:mt-0"
-        >
+        <div className="bg-[#cce560] text-[#242424] font-bold rounded-2xl h-[48px] sm:h-[64px] md:h-[80px] w-[200px] sm:w-[260px] md:w-[350px] flex justify-center items-center will-change-transform overflow-hidden relative mt-2 md:mt-0">
           <span
             ref={textRef}
             className="block absolute left-0 right-0 w-full text-center text-[1.1rem] sm:text-[1.5rem] md:text-[2rem]"

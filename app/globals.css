@@ -93,6 +93,7 @@ html {
   --border: #d0cdbb; /* Lighter gray/beige for borders */
   --input: #d0cdbb;
   --ring: #ff9c94; /* Primary color for focus rings */
+  --border-primary: #38564e; /* New border primary color */
 
   /* Chart colors */
   --chart-1: #ff9c94;
@@ -134,6 +135,7 @@ html {
   --border: #384744; /* Very dark, subtle green-gray for borders */
   --input: #384744;
   --ring: #ff9c94; /* Primary color for focus rings */
+  --border-primary: #38564e; /* New border primary color */
 
   /* Chart colors (Adjusted for new dark theme) */
   --chart-1: #ff9c94;

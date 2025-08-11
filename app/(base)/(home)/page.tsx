@@ -3,6 +3,7 @@ import React from "react";
 import Selected from "@/components/landing/Selected";
 import { Metadata } from "next";
 import { env } from "@/lib/env";
+import Projects from "@/components/landing/Projects";
 
 export const metadata: Metadata = {
   title: `${env.SITE_NAME} - Modern Web Development & Design Solutions`,
@@ -75,7 +76,7 @@ const page = () => {
     url: env.SITE_URL,
     logo: {
       "@type": "ImageObject",
-      url: `${env.SITE_URL}/logo.png`,
+      url: `${env.SITE_URL}/og-image.jpg`,
     },
     description:
       "Devure is a leading web development agency specializing in modern, scalable web applications, custom software solutions, and innovative digital experiences.",
@@ -86,12 +87,13 @@ const page = () => {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
-      email: "hello@devure.in",
+      email: "sushil.dev.in@gmail.com",
     },
     sameAs: [
-      "https://twitter.com/devure",
-      "https://linkedin.com/company/devure",
-      "https://github.com/devure",
+      "https://x.com/sachu0dev",
+      "https://www.linkedin.com/in/sachu0dev",
+      "https://github.com/sachu0dev",
+      "https://www.devbysushil.com",
     ],
     serviceType: [
       "Web Development",
@@ -129,14 +131,14 @@ const page = () => {
           <Selected />
         </section>
         <section
-          className="h-screen bg-foreground flex items-center justify-center text-4xl text-background"
+          className="min-h-screen bg-foreground flex items-center justify-center text-4xl text-background"
           data-scroll-section
-          aria-label="Services"
+          aria-label="Projects"
         >
-          <h1>Section 3</h1>
+          <Projects />
         </section>
         <section
-          className="h-screen bg-background flex items-center justify-center text-4xl text-foreground"
+          className="min-h-screen bg-background flex items-center justify-center text-4xl text-foreground"
           data-scroll-section
           aria-label="Contact"
         >

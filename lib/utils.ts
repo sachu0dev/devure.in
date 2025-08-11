@@ -27,7 +27,7 @@ export function getCurrentDomain(): string {
   }
 
   // Fallback to default domain
-  return "https://devure.in";
+  return "https://www.devure.in";
 }
 
 /**
@@ -42,7 +42,7 @@ export function getCurrentDomainWithoutProtocol(): string {
  * Get the canonical domain (always use https://devure.in for canonical URLs)
  */
 export function getCanonicalDomain(): string {
-  return "https://devure.in";
+  return "https://www.devure.in";
 }
 
 /**

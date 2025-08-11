@@ -5,6 +5,7 @@ import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
 export const revalidate = 21600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Get current domain dynamically
   const currentDomain = getCurrentDomain();
   const canonicalDomain = getCanonicalDomain();
 

@@ -395,14 +395,14 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
   );
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border text-foreground  border-gray-200 rounded-lg overflow-hidden">
       <MenuBar
         editor={editor}
         showImageUpload={showImageUpload}
         setShowImageUpload={setShowImageUpload}
         handleImageUploaded={handleImageUploaded}
       />
-      <div className="p-4 min-h-[400px] max-h-[600px] overflow-y-auto">
+      <div className="p-4  min-h-[400px] max-h-[600px] overflow-y-auto">
         <EditorContent editor={editor} className="prose prose-lg max-w-none" />
       </div>
 

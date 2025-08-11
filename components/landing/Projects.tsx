@@ -25,31 +25,45 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    title: "E-commerce Platform",
+    title: "PGConnect",
     description:
-      "A modern, scalable e-commerce solution built with Next.js and Node.js, featuring real-time inventory management, secure payment processing with Stripe, and advanced analytics dashboard for business insights.",
-    tags: ["Next.js", "Node.js", "MongoDB", "Stripe", "AWS"],
+      "A comprehensive SaaS platform connecting users with PG owners across India. Features include callback requests, real-time chat functionality using Socket.IO, secure OAuth-based authentication, and seamless location-based search powered by Google Maps API for accurate PG discovery.",
+    tags: [
+      "Next.js",
+      "Google Maps API",
+      "PostgreSQL",
+      "Socket.IO",
+      "OAuth",
+      "Resend",
+    ],
     color: "#cce560",
   },
   {
-    title: "CRM System",
+    title: "Atlantic Cars",
     description:
-      "Comprehensive customer relationship management platform with lead tracking, sales pipeline management, automated marketing workflows, and real-time reporting dashboard for sales teams.",
-    tags: ["React", "Express", "PostgreSQL", "Redis", "Docker"],
+      "A sophisticated multilingual car selling platform with advanced bidding support and mobile-first responsive design. Built with internationalization (i18n), optimized SEO, and server-side rendering for exceptional performance and user experience.",
+    tags: ["Next.js", "TypeScript", "Shadcn", "i18n", "SSR", "SEO"],
     color: "#ff9c94",
   },
   {
-    title: "Real-time Chat Application",
+    title: "Rebelion",
     description:
-      "Modern chat platform with real-time messaging, file sharing, video calls using WebRTC, and team collaboration features designed for remote teams and enterprise communication.",
-    tags: ["React", "Socket.io", "MongoDB", "WebRTC", "AWS S3"],
+      "An innovative fantasy gaming application where users create teams using Bitcoin and compete for real rewards. Features include gameweeks, comprehensive leaderboards, user history tracking, and a complete admin panel for seamless platform management.",
+    tags: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS", "Admin Panel"],
     color: "#b0d939",
   },
   {
-    title: "Analytics Dashboard",
+    title: "Kabutar",
     description:
-      "Data visualization platform providing real-time insights, custom reports, and predictive analytics for business intelligence with interactive charts and automated reporting.",
-    tags: ["Vue.js", "Python", "PostgreSQL", "D3.js", "AWS Lambda"],
+      "A high-performance real-time chat application designed for thousands of concurrent users. Features include secure multimedia sharing via Cloudinary, optimized frontend performance using Redux Toolkit and RTK Query, and scalable infrastructure built with modern web technologies.",
+    tags: [
+      "React",
+      "Node.js",
+      "Express",
+      "Socket.IO",
+      "Cloudinary",
+      "Redux Toolkit",
+    ],
     color: "#618c70",
   },
 ];
@@ -85,7 +99,7 @@ const Projects = () => {
       } else {
         // Other cards collapsed
         gsap.set(card, {
-          height: 100,
+          height: 150,
           opacity: 0.5,
         });
         gsap.set([content, graphic], {
@@ -105,8 +119,8 @@ const Projects = () => {
 
       ScrollTrigger.create({
         trigger: card,
-        start: "top top",
-        end: "bottom top",
+        start: "top center",
+        end: "bottom center",
         scrub: 1,
         onUpdate: (self) => {
           const progress = self.progress;
@@ -116,7 +130,7 @@ const Projects = () => {
           const currentGraphic = card.querySelector(".card-graphic");
 
           gsap.to(card, {
-            height: gsap.utils.interpolate(600, 100, progress),
+            height: gsap.utils.interpolate(450, 150, progress),
             opacity: gsap.utils.interpolate(1, 0.5, progress),
             duration: 0.1,
             ease: "none",
@@ -134,7 +148,7 @@ const Projects = () => {
           const nextGraphic = nextCard.querySelector(".card-graphic");
 
           gsap.to(nextCard, {
-            height: gsap.utils.interpolate(100, 600, progress),
+            height: gsap.utils.interpolate(150, 450, progress),
             opacity: gsap.utils.interpolate(0.5, 1, progress),
             duration: 0.1,
             ease: "none",
@@ -165,7 +179,7 @@ const Projects = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-left mb-12 lg:mb-20 w-full px-3 md:px-18 pt-[6rem] "
+        className="text-left mb-12 lg:mb-20 w-full px-3 md:px-18 pt-[6rem]"
       >
         <h6 className="text-[14px] sm:text-[16px] font-extrabold text-background/80 uppercase tracking-wider mb-4 font-figtree">
           Our Work
@@ -476,7 +490,7 @@ const Projects = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.8 }}
-        className="mt-20 lg:mt-24 text-center px-3 md:px-18"
+        className=" text-center px-3 md:px-18"
       >
         <div className="inline-flex items-center gap-3 bg-[#cce560] text-[#242424] px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-[#b8d939] transition-colors duration-300 cursor-pointer group font-figtree">
           <span>Start your project</span>

@@ -19,11 +19,18 @@ export const metadata: Metadata = {
 };
 
 import { Figtree } from "next/font/google";
+import { Playwrite_AU_QLD } from "next/font/google";
 
 const figtree = Figtree({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-figtree",
+  display: "swap",
+});
+
+const playwriteAustraliaQLD = Playwrite_AU_QLD({
+  weight: ["300", "400"],
+  variable: "--font-playwrite-australia-qld",
   display: "swap",
 });
 
@@ -35,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${figtree.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${figtree.variable} ${playwriteAustraliaQLD.variable} antialiased`}
         data-scroll-container
       >
         <QueryProvider>{children}</QueryProvider>

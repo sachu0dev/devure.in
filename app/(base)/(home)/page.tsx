@@ -4,6 +4,9 @@ import Selected from "@/components/landing/Selected";
 import { Metadata } from "next";
 import { env } from "@/lib/env";
 import Projects from "@/components/landing/Projects";
+import Technologies from "@/components/landing/Technologies";
+import Blogs from "@/components/landing/Blogs";
+import { getBlogs } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: `${env.SITE_NAME} - Modern Web Development & Design Solutions`,
@@ -67,7 +70,38 @@ export const metadata: Metadata = {
   },
 };
 
-const page = () => {
+interface BlogPost {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  tags: string[];
+  date: string;
+  coverImage: string;
+  author: {
+    name: string;
+    profileUrl: string;
+    avatar?: string;
+    bio?: string;
+  };
+  readTime: string;
+  featured: boolean;
+  excerpt?: string;
+  wordCount?: number;
+}
+
+const page = async () => {
+  // Fetch featured blogs on the server side
+  let featuredBlogs: BlogPost[] = [];
+
+  try {
+    const blogResults = await getBlogs({ featured: true, limit: 3 });
+    featuredBlogs = blogResults.posts || [];
+  } catch (error) {
+    console.error("Error fetching featured blogs:", error);
+    featuredBlogs = [];
+  }
+
   // Structured data for SEO
   const structuredData = {
     "@context": "https://schema.org",
@@ -140,9 +174,23 @@ const page = () => {
         <section
           className="min-h-screen bg-background flex items-center justify-center text-4xl text-foreground"
           data-scroll-section
+          aria-label="Technologies"
+        >
+          <Technologies />
+        </section>
+        <section
+          className="min-h-screen bg-foreground flex items-center justify-center text-4xl text-background"
+          data-scroll-section
           aria-label="Contact"
         >
           <h1>Section 4</h1>
+        </section>
+        <section
+          className="min-h-screen bg-background flex items-center justify-center text-4xl text-foreground"
+          data-scroll-section
+          aria-label="Blogs"
+        >
+          <Blogs featuredBlogs={featuredBlogs} />
         </section>
       </main>
     </>

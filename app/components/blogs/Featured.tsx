@@ -19,7 +19,9 @@ const Featured = ({ blogs }: FeaturedProps) => {
         <h3 className="text-2xl font-bold text-foreground mb-2">
           Featured Articles
         </h3>
-        <p className="text-foreground/60">Handpicked articles by Us.</p>
+        <p className="text-foreground/60 text-3xl">
+          Handpicked articles by Us.
+        </p>
       </div>
 
       <BentoGrid className="max-w-7xl mx-auto md:auto-rows-[24rem]">

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
-import { ThemeProvider } from "@/components/themeProvider";
-import { ScrollProvider } from "@/components/scrollProvider";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { ModeToggle } from "@/components/modeToggle";
+import { ScrollProvider } from "@/components/scrollProvider";
+import { ThemeProvider } from "@/components/themeProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +25,7 @@ export default function RootLayout({
       storageKey="theme"
     >
       <ScrollProvider>
-        <SmoothCursor />
+        {/* <SmoothCursor /> */}
 
         <main className="">
           <Header />

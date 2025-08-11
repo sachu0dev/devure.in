@@ -76,26 +76,30 @@ const Home = () => {
           </p>
           <div className="flex flex-col text-xs sm:text-sm text-[#618C70] font-bold uppercase">
             <Link
-              href={""}
+              href={"https://devbysushil.com"}
               className="hover:text-background transition-colors duration-300"
+              target={"_blank"}
             >
-              Linkdin
+              Portfolio
             </Link>
             <Link
-              href={""}
+              href={"https://github.com/sachu0dev"}
               className="hover:text-background transition-colors duration-300"
+              target={"_blank"}
             >
-              Linkdin
+              Github
             </Link>
             <Link
-              href={""}
+              href={"https://x.com/sachu0dev"}
               className="hover:text-background transition-colors duration-300"
+              target={"_blank"}
             >
-              Linkdin
+              Twitter
             </Link>
             <Link
               className="text-background hover:text-[#618C70] transition-colors duration-300"
-              href={""}
+              href={"https://www.linkedin.com/in/sachu0dev"}
+              target={"_blank"}
             >
               Linkdin
             </Link>

@@ -1,94 +1,181 @@
 import { Metadata } from "next";
-import { getAllBlogs, getAllCategories } from "@/lib/blog";
+import { getAllBlogs, getAllCategories, getAllTags } from "@/lib/blog";
 import Hero from "@/components/blogs/Hero";
 import Search from "@/components/blogs/Search";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Blog - Devure | Technology Insights & Tutorials",
-  description:
-    "Explore insights, tutorials, and deep dives into technology on the Devure blog. Discover web development tips, software engineering best practices, and cutting-edge technology insights.",
-  keywords:
-    "blog, technology, web development, software engineering, tutorials, insights, programming, React, Next.js, TypeScript, best practices",
-  authors: [{ name: "Devure Team" }],
-  creator: "Devure Team",
-  publisher: "Devure",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL("https://devure.in"),
-  openGraph: {
-    title: "Blog - Devure | Technology Insights & Tutorials",
-    description:
-      "Explore insights, tutorials, and deep dives into technology on the Devure blog. Discover web development tips, software engineering best practices, and cutting-edge technology insights.",
-    url: "https://devure.in/blog",
-    siteName: "Devure",
-    images: [
-      {
-        url: "https://devure.in/blog-og.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Devure Blog - Technology Insights & Tutorials",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Blog - Devure | Technology Insights & Tutorials",
-    description:
-      "Explore insights, tutorials, and deep dives into technology on the Devure blog.",
-    images: ["https://devure.in/blog-og.jpg"],
-    creator: "@devure",
-    site: "@devure",
-  },
-  alternates: {
-    canonical: "https://devure.in/blog",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  other: {
-    "og:image:width": "1200",
-    "og:image:height": "630",
-    "og:image:alt": "Devure Blog - Technology Insights & Tutorials",
-  },
-};
+// ISR: Revalidate every 6 hours
+export const revalidate = 21600; // 6 hours in seconds
 
-export default async function BlogPage() {
-  // Server-side data fetching
-  const [blogs, categories] = await Promise.all([
+// Generate metadata dynamically
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch data for metadata generation
+  const [blogs, categories, tags] = await Promise.all([
     getAllBlogs(),
     getAllCategories(),
+    getAllTags(),
   ]);
 
-  // Structured data for SEO
+  // Get current domain dynamically
+  const currentDomain = getCurrentDomain();
+  const canonicalDomain = getCanonicalDomain();
+
+  // Find the latest featured blog
+  const latestFeaturedBlog = blogs
+    .filter((blog) => blog.featured)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+
+  // Create dynamic description
+  const description = latestFeaturedBlog
+    ? `Explore insights, tutorials, and deep dives into technology on the Devure blog. Latest featured: "${latestFeaturedBlog.title}" - ${latestFeaturedBlog.description}. Discover web development tips, software engineering best practices, and cutting-edge technology insights.`
+    : "Explore insights, tutorials, and deep dives into technology on the Devure blog. Discover web development tips, software engineering best practices, and cutting-edge technology insights.";
+
+  const dynamicKeywords = [
+    "blog",
+    "technology",
+    "web development",
+    "software engineering",
+    "tutorials",
+    "insights",
+    "programming",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "best practices",
+    "coding",
+    "development",
+    "tech blog",
+    "programming tutorials",
+    "software development",
+    "web design",
+    "frontend development",
+    "backend development",
+    "full stack development",
+    // Add dynamic categories
+    ...categories.map((cat) => cat.name),
+    // Add dynamic tags
+    ...tags.map((tag) => tag.name),
+  ];
+
+  // Dynamic article tags
+  const dynamicArticleTags = [
+    "Technology",
+    "Programming",
+    "Web Development",
+    "Software Engineering",
+    // Add top categories
+    ...categories.slice(0, 5).map((cat) => cat.name),
+    // Add top tags
+    ...tags.slice(0, 5).map((tag) => tag.name),
+  ].join(", ");
+
+  return {
+    title: "Blog - Devure | Technology Insights & Tutorials",
+    description,
+    keywords: dynamicKeywords,
+    authors: [{ name: "Devure Team" }],
+    creator: "Devure Team",
+    publisher: "Devure",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    metadataBase: new URL(currentDomain),
+    openGraph: {
+      title: "Blog - Devure | Technology Insights & Tutorials",
+      description,
+      url: `${currentDomain}/blog`,
+      siteName: "Devure",
+      images: [
+        {
+          url: `${currentDomain}/blog-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "Devure Blog - Technology Insights & Tutorials",
+        },
+      ],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Blog - Devure | Technology Insights & Tutorials",
+      description,
+      images: [`${currentDomain}/blog-og.jpg`],
+      creator: "@devure",
+      site: "@devure",
+    },
+    alternates: {
+      canonical: `${canonicalDomain}/blog`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    other: {
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:image:alt": "Devure Blog - Technology Insights & Tutorials",
+      "article:section": "Technology Blog",
+      "article:tag": dynamicArticleTags,
+    },
+  };
+}
+
+export default async function BlogPage() {
+  // Server-side data fetching for blogs, categories, and tags
+  const [blogs, categories, tags] = await Promise.all([
+    getAllBlogs(),
+    getAllCategories(),
+    getAllTags(),
+  ]);
+
+  // Get current domain dynamically
+  const currentDomain = getCurrentDomain();
+  const canonicalDomain = getCanonicalDomain();
+
+  // Enhanced structured data for SEO with categories and tags
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
     name: "Devure Blog",
     description:
       "Technology insights, tutorials, and deep dives into web development and software engineering.",
-    url: "https://devure.in/blog",
+    url: `${currentDomain}/blog`,
     publisher: {
       "@type": "Organization",
       name: "Devure",
-      url: "https://devure.in",
+      url: currentDomain,
       logo: {
         "@type": "ImageObject",
-        url: "https://devure.in/logo.png",
+        url: `${currentDomain}/logo.png`,
       },
     },
+    // Add categories and tags to structured data
+    about: categories.map((category) => ({
+      "@type": "Thing",
+      name: category.name,
+      description:
+        category.description || `${category.name} articles and tutorials`,
+      url: `${canonicalDomain}/blog/category/${category.slug}`,
+    })),
+    keywords: [
+      ...categories.map((cat) => cat.name),
+      ...tags.map((tag) => tag.name),
+      "technology",
+      "programming",
+      "web development",
+      "software engineering",
+    ].join(", "),
     blogPost: blogs.map((blog) => ({
       "@type": "BlogPosting",
       headline: blog.title,
@@ -99,16 +186,41 @@ export default async function BlogPage() {
         name: blog.author.name,
       },
       datePublished: blog.date,
-      dateModified: blog.date, // BlogPostSummary doesn't have updatedAt
-      url: `https://devure.in/blog/${blog.slug}`,
+      dateModified: blog.date,
+      url: `${canonicalDomain}/blog/${blog.slug}`,
       articleSection: blog.category,
       keywords: blog.tags.join(", "),
+    })),
+    // Additional structured data for better SEO
+    mainEntity: {
+      "@type": "ItemList",
+      name: "Blog Categories",
+      description: "Available blog categories and topics",
+      numberOfItems: categories.length,
+      itemListElement: categories.map((category, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Thing",
+          name: category.name,
+          description: category.description || `${category.name} articles`,
+          url: `${canonicalDomain}/blog/category/${category.slug}`,
+          numberOfItems: category.postCount,
+        },
+      })),
+    },
+    // Tags structured data
+    additionalProperty: tags.map((tag) => ({
+      "@type": "PropertyValue",
+      name: tag.name,
+      value: tag.postCount,
+      url: `${canonicalDomain}/blog/tag/${tag.slug}`,
     })),
   };
 
   return (
     <>
-      {/* Structured Data for SEO */}
+      {/* Enhanced Structured Data for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -117,6 +229,8 @@ export default async function BlogPage() {
       />
 
       <main>
+        <SmoothCursor />
+
         <section
           className="bg-foreground flex items-center justify-center text-4xl text-foreground"
           data-scroll-section
@@ -130,7 +244,7 @@ export default async function BlogPage() {
           id="search"
           aria-label="Blog Search and Listing"
         >
-          <Search blogs={blogs} categories={categories} />
+          <Search blogs={blogs} categories={categories} tags={tags} />
         </section>
       </main>
     </>

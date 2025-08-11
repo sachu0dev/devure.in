@@ -4,14 +4,17 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { env } from "@/lib/env";
 import { BlogContent } from "@/components/BlogContent";
+import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
 
 interface BlogPageProps {
   params: Promise<{
     slug: string;
   }>;
 }
+
+// ISR: Revalidate every 6 hours
+export const revalidate = 21600; // 6 hours in seconds
 
 export async function generateStaticParams() {
   const blogs = await getAllBlogs();
@@ -33,30 +36,34 @@ export async function generateMetadata({
     };
   }
 
-  const url = `${env.SITE_URL}/blog/${blog.frontmatter.slug}`;
+  // Get current domain dynamically
+  const currentDomain = getCurrentDomain();
+  const canonicalDomain = getCanonicalDomain();
+
+  const url = `${canonicalDomain}/blog/${blog.frontmatter.slug}`;
   const publishedTime = new Date(blog.frontmatter.date).toISOString();
   const modifiedTime = blog.frontmatter.updatedAt
     ? new Date(blog.frontmatter.updatedAt).toISOString()
     : publishedTime;
 
   return {
-    title: `${blog.frontmatter.title} | ${env.SITE_NAME}`,
+    title: `${blog.frontmatter.title} | Devure`,
     description: blog.frontmatter.description,
     keywords: blog.frontmatter.tags.join(", "),
     authors: [{ name: blog.frontmatter.author.name }],
     creator: blog.frontmatter.author.name,
-    publisher: env.SITE_NAME,
+    publisher: "Devure",
     formatDetection: {
       email: false,
       address: false,
       telephone: false,
     },
-    metadataBase: new URL(env.SITE_URL),
+    metadataBase: new URL(currentDomain),
     openGraph: {
       title: blog.frontmatter.title,
       description: blog.frontmatter.description,
       url,
-      siteName: env.SITE_NAME,
+      siteName: "Devure",
       images: [
         {
           url: blog.frontmatter.ogImage,
@@ -115,6 +122,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
+  // Get current domain dynamically
+  const currentDomain = getCurrentDomain();
+  const canonicalDomain = getCanonicalDomain();
+
   // Structured data for SEO
   const structuredData = {
     "@context": "https://schema.org",
@@ -129,18 +140,18 @@ export default async function BlogPage({ params }: BlogPageProps) {
     },
     publisher: {
       "@type": "Organization",
-      name: env.SITE_NAME,
-      url: env.SITE_URL,
+      name: "Devure",
+      url: currentDomain,
       logo: {
         "@type": "ImageObject",
-        url: `${env.SITE_URL}/logo.png`,
+        url: `${currentDomain}/logo.png`,
       },
     },
     datePublished: blog.frontmatter.date,
     dateModified: blog.frontmatter.updatedAt || blog.frontmatter.date,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${env.SITE_URL}/blog/${blog.frontmatter.slug}`,
+      "@id": `${canonicalDomain}/blog/${blog.frontmatter.slug}`,
     },
     articleSection: blog.frontmatter.category,
     keywords: blog.frontmatter.tags.join(", "),

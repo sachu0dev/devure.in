@@ -1,15 +1,27 @@
 import { MetadataRoute } from "next";
-import { env } from "@/lib/env";
+import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
 
 export default function robots(): MetadataRoute.Robots {
+  const currentDomain = getCurrentDomain();
+  const canonicalDomain = getCanonicalDomain();
+
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/admin", "/api"],
+        allow: ["/", "/blog", "/blog/*", "/blog/category/*", "/blog/tag/*"],
+        disallow: ["/admin", "/api", "/_next", "/private"],
+      },
+      {
+        userAgent: "Googlebot",
+        allow: ["/", "/blog", "/blog/*", "/blog/category/*", "/blog/tag/*"],
+        disallow: ["/admin", "/api", "/_next", "/private"],
       },
     ],
-    sitemap: `${env.SITE_URL}/sitemap.xml`,
+    sitemap: [
+      `${canonicalDomain}/sitemap.xml`,
+      `${canonicalDomain}/blog/sitemap.xml`,
+    ],
+    host: currentDomain,
   };
 }

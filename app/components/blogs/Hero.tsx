@@ -1,15 +1,15 @@
 "use client";
-import type React from "react";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronsDown, Mail, Sparkles, X } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 
 const Hero = () => {
   const [email, setEmail] = useState("");

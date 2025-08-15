@@ -1,10 +1,28 @@
 import { notFound } from "next/navigation";
 import { getServiceBySlug } from "@/lib/api";
+import { getAllServices } from "@/lib/services";
 import { Metadata } from "next";
 import Image from "next/image";
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
+}
+
+// ISR: Revalidate every 6 hours
+export const revalidate = 21600; // 6 hours in seconds
+
+export async function generateStaticParams() {
+  try {
+    const services = await getAllServices();
+    return services.map((service) => ({
+      slug: service.slug as string,
+    }));
+  } catch (error) {
+    console.warn("Failed to fetch services for static generation:", error);
+    // Return empty array to prevent build failure
+    // Pages will be generated on-demand instead
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -89,11 +107,12 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
               {/* Image */}
               {service.image && (
-                <div className="relative">
+                <div className="relative w-full h-96">
                   <Image
                     src={service.image}
                     alt={service.title}
-                    className="w-full h-96 object-cover rounded-2xl shadow-2xl"
+                    fill
+                    className="object-cover rounded-2xl shadow-2xl"
                   />
                 </div>
               )}

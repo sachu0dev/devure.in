@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllBlogs, getAllCategories, getAllTags } from "@/lib/blog";
+import { getAllServices } from "@/lib/services";
 import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
 
 export const revalidate = 21600;
@@ -9,11 +10,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDomain = getCurrentDomain();
   const canonicalDomain = getCanonicalDomain();
 
-  // Get all blog data
-  const [blogs, categories, tags] = await Promise.all([
+  // Get all blog and service data
+  const [blogs, categories, tags, services] = await Promise.all([
     getAllBlogs(),
     getAllCategories(),
     getAllTags(),
+    getAllServices(),
   ]);
 
   // Base pages
@@ -56,5 +58,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...basePages, ...blogPages, ...categoryPages, ...tagPages];
+  // Service pages
+  const servicePages = services.map((service) => {
+    // Validate and parse date with fallback
+    let lastModified: Date;
+    try {
+      const dateValue = service.updatedAt || service.createdAt;
+      lastModified = dateValue ? new Date(dateValue) : new Date();
+    } catch {
+      lastModified = new Date();
+    }
+
+    return {
+      url: `${canonicalDomain}/service/${service.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    };
+  });
+
+  return [
+    ...basePages,
+    ...blogPages,
+    ...categoryPages,
+    ...tagPages,
+    ...servicePages,
+  ];
 }

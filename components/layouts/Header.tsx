@@ -23,10 +23,9 @@ const Header = () => {
         return "Blogs";
       case "/work":
         return "Work";
-      case "/services":
+      case "/service":
         return "Services";
-      case "/technology":
-        return "Technology";
+
       case "/experience":
         return "Experience";
       case "/contact":
@@ -231,7 +230,7 @@ const Header = () => {
                 Work
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
               </Link>
-              <Link href="/services" className="relative group py-2">
+              <Link href="/service" className="relative group py-2">
                 Services
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
               </Link>
@@ -239,10 +238,7 @@ const Header = () => {
                 Blogs
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
               </Link>
-              <Link href="/technology" className="relative group py-2">
-                Technology
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
-              </Link>
+
               <Link href="/experience" className="relative group py-2">
                 Experince
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
@@ -377,7 +373,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              href="/services"
+              href="/service"
               className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3"
             >
               Services

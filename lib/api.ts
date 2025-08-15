@@ -641,3 +641,183 @@ export const isApiSuccess = (response: unknown): boolean => {
 export const extractApiData = <T>(response: unknown): T => {
   return (response as { data?: { data?: T } })?.data?.data as T;
 };
+
+// =============================================================================
+// PROJECTS API FUNCTIONS
+// =============================================================================
+
+export interface Project {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  excerpt?: string;
+  coverImage: string;
+  images: string[];
+  tags: string[];
+  category: string;
+  client?: string;
+  duration?: string;
+  technologies: string[];
+  isActive: boolean;
+  isFeatured: boolean;
+  order: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  liveUrl?: string;
+  githubUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectsResponse {
+  projects: Project[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
+export interface ProjectFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: "all" | "active" | "inactive";
+}
+
+/**
+ * Get projects for admin panel with pagination and filters
+ */
+export async function getAdminProjects(
+  filters: ProjectFilters = {}
+): Promise<ProjectsResponse> {
+  try {
+    const params = new URLSearchParams();
+
+    if (filters.page) params.append("page", filters.page.toString());
+    if (filters.limit) params.append("limit", filters.limit.toString());
+    if (filters.search) params.append("search", filters.search);
+    if (filters.status) params.append("status", filters.status);
+
+    const response = await fetch(`/api/admin/projects?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching admin projects:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get a single project by slug for admin panel
+ */
+export async function getAdminProject(slug: string): Promise<Project> {
+  try {
+    const response = await fetch(`/api/admin/projects/${slug}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching admin project:", error);
+    throw error;
+  }
+}
+
+/**
+ * Create a new project
+ */
+export async function createProject(
+  projectData: Partial<Project>
+): Promise<Project> {
+  try {
+    const response = await fetch("/api/admin/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(projectData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error creating project:", error);
+    throw error;
+  }
+}
+
+/**
+ * Update an existing project
+ */
+export async function updateProject(
+  slug: string,
+  projectData: Partial<Project>
+): Promise<Project> {
+  try {
+    const response = await fetch(`/api/admin/projects/${slug}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(projectData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error updating project:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a project
+ */
+export async function deleteProject(projectId: string): Promise<void> {
+  try {
+    const response = await fetch(`/api/admin/projects/${projectId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    throw error;
+  }
+}

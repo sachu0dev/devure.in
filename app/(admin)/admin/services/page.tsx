@@ -149,7 +149,7 @@ export default function ServicesAdminPage() {
             Manage your services and header content
           </p>
         </div>
-        <Link href="/admin/services/create">
+        <Link href="/adminead/create">
           <Button>
             <Plus className="w-4 h-4 mr-2" />
             Create Service

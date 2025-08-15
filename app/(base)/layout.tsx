@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 import Header from "@/components/layouts/Header";
+import Footer from "@/components/layouts/Footer";
 
 export default function RootLayout({
   children,
@@ -33,6 +34,7 @@ export default function RootLayout({
           {/* <div className="fixed bottom-4 right-4 z-[1002]">
             <ModeToggle />
           </div> */}
+          <Footer />
         </main>
       </ScrollProvider>
     </ThemeProvider>

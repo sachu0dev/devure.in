@@ -70,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     return {
-      url: `${canonicalDomain}/service/${service.slug}`,
+      url: `${canonicalDomain}/services/${service.slug}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.7,

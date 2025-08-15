@@ -9,6 +9,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  Home,
 } from "lucide-react";
 
 const navigation = [
@@ -16,6 +17,20 @@ const navigation = [
     name: "Dashboard",
     href: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Content",
+    href: "/admin/content",
+    icon: Home,
+    children: [
+      { name: "Hero Section", href: "/admin/hero" },
+      { name: "Assets", href: "/admin/assets" },
+      { name: "Services", href: "/admin/services" },
+      { name: "Projects", href: "/admin/projects" },
+      { name: "Technologies", href: "/admin/technologies" },
+      { name: "About Me", href: "/admin/about" },
+      { name: "Experience", href: "/admin/experience" },
+    ],
   },
   {
     name: "Blogs",

@@ -245,6 +245,13 @@ export class S3Service {
   }
 
   /**
+   * Delete asset from S3
+   */
+  async deleteAsset(key: string): Promise<void> {
+    await this.deleteFile(key);
+  }
+
+  /**
    * Check if file exists in S3
    */
   async fileExists(key: string): Promise<boolean> {

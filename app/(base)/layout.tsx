@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ModeToggle } from "@/components/modeToggle";
+// import { ModeToggle } from "@/components/modeToggle";
 import { ScrollProvider } from "@/components/scrollProvider";
 import { ThemeProvider } from "@/components/themeProvider";
 
@@ -19,8 +19,8 @@ export default function RootLayout({
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="light"
+      // enableSystem
       disableTransitionOnChange
       storageKey="theme"
     >
@@ -30,9 +30,9 @@ export default function RootLayout({
         <main className="">
           <Header />
           {children}
-          <div className="fixed bottom-4 right-4 z-[1002]">
+          {/* <div className="fixed bottom-4 right-4 z-[1002]">
             <ModeToggle />
-          </div>
+          </div> */}
         </main>
       </ScrollProvider>
     </ThemeProvider>

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { s3Service } from "@/lib/s3";
+import dbConnect from "@/lib/mongodb";
+import Asset from "@/models/Asset";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,13 +12,10 @@ export async function POST(request: NextRequest) {
     }
 
     const formData = await request.formData();
-    const imageFile = formData.get("image") as File;
+    const imageFile = formData.get("file") as File;
 
     if (!imageFile) {
-      return NextResponse.json(
-        { error: "No image file provided" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
     // Validate file type
@@ -42,7 +41,7 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now();
     const randomString = Math.random().toString(36).substring(2, 15);
     const fileExtension = imageFile.name.split(".").pop();
-    const fileName = `blog-images/${timestamp}-${randomString}.${fileExtension}`;
+    const fileName = `assets/${timestamp}-${randomString}.${fileExtension}`;
 
     // Upload to S3 and get the URL
     const uploadResult = await s3Service.uploadImage(
@@ -51,8 +50,29 @@ export async function POST(request: NextRequest) {
       imageFile.type
     );
 
-    // Return the public URL from the S3 service
+    // Get the public URL from the S3 service
     const publicUrl = uploadResult.url;
+
+    // Create asset record in database
+    await dbConnect();
+
+    const assetData = {
+      name: imageFile.name,
+      url: publicUrl,
+      s3Key: fileName,
+      s3Bucket: fileName.split("/")[0], // Extract bucket from key
+      alt: imageFile.name,
+      description: `Uploaded via admin panel`,
+      tags: ["uploaded"],
+      category: "general",
+      fileSize: imageFile.size,
+      mimeType: imageFile.type,
+      isPublic: true,
+      uploadedBy: "admin", // You can get this from auth context later
+    };
+
+    const asset = new Asset(assetData);
+    await asset.save();
 
     return NextResponse.json({
       success: true,
@@ -61,6 +81,8 @@ export async function POST(request: NextRequest) {
         key: fileName,
         size: imageFile.size,
         type: imageFile.type,
+        assetId: asset._id,
+        asset: asset,
       },
     });
   } catch (error) {

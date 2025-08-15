@@ -10,7 +10,87 @@ import {
   BlogFrontmatter,
 } from "@/types/blog";
 
-// API Response types
+// Hero types
+export interface HeroContent {
+  _id: string;
+  title1: string;
+  title2: string;
+  description: string;
+  images: Array<{
+    url: string;
+    alt: string;
+    order: number;
+  }>;
+  links: Array<{
+    name: string;
+    url: string;
+    order: number;
+  }>;
+  showOnHome: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Asset types
+export interface Asset {
+  _id: string;
+  name: string;
+  url: string;
+  s3Key: string;
+  s3Bucket: string;
+  s3Region?: string;
+  alt: string;
+  description?: string;
+  tags: string[];
+  category: string;
+  fileSize: number;
+  mimeType: string;
+  dimensions?: {
+    width: number;
+    height: number;
+  };
+  isPublic: boolean;
+  uploadedBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssetSearchOptions {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  tags?: string[];
+}
+
+// Service types
+export interface Service {
+  _id: string;
+  serviceType: string;
+  title: string;
+  slug: string;
+  image: string;
+  content: string;
+  excerpt?: string;
+  isActive: boolean;
+  isFeatured: boolean;
+  order: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServicesHeader {
+  _id: string;
+  mainTitle: string;
+  services: string[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface ApiResponse<T> {
   success: boolean;
   data: T;
@@ -22,6 +102,20 @@ interface PaginatedResponse<T> {
   success: boolean;
   data: {
     blogs: T[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+      hasNext: boolean;
+      hasPrev: boolean;
+    };
+  };
+}
+
+interface AssetPaginatedResponse {
+  data: {
+    assets: Asset[];
     pagination: {
       page: number;
       limit: number;
@@ -220,6 +314,8 @@ export const uploadImage = async (
   key: string;
   size: number;
   type: string;
+  assetId: string;
+  asset: Asset;
 }> => {
   const response = await api.post<
     ApiResponse<{
@@ -227,6 +323,8 @@ export const uploadImage = async (
       key: string;
       size: number;
       type: string;
+      assetId: string;
+      asset: Asset;
     }>
   >("/admin/upload", formData, {
     headers: {
@@ -234,6 +332,250 @@ export const uploadImage = async (
     },
   });
 
+  return response.data.data;
+};
+
+// =============================================================================
+// HERO APIs
+// =============================================================================
+
+/**
+ * Get hero content for home page
+ */
+export const getHeroContent = async (): Promise<HeroContent> => {
+  const response = await api.get<ApiResponse<HeroContent>>("/hero");
+  return response.data.data;
+};
+
+/**
+ * Get hero content for admin
+ */
+export const getAdminHeroContent = async (): Promise<HeroContent> => {
+  const response = await api.get<ApiResponse<HeroContent>>("/admin/hero");
+  return response.data.data;
+};
+
+/**
+ * Update hero content
+ */
+export const updateHeroContent = async (
+  data: Partial<HeroContent>
+): Promise<HeroContent> => {
+  const response = await api.put<ApiResponse<HeroContent>>("/admin/hero", data);
+  return response.data.data;
+};
+
+// =============================================================================
+// ASSET APIs
+// =============================================================================
+
+/**
+ * Get assets with pagination and search
+ */
+export const getAssets = async (
+  options: AssetSearchOptions = {}
+): Promise<AssetPaginatedResponse["data"]> => {
+  const params = new URLSearchParams();
+
+  if (options.page) params.append("page", options.page.toString());
+  if (options.limit) params.append("limit", options.limit.toString());
+  if (options.search) params.append("search", options.search);
+  if (options.category) params.append("category", options.category);
+  if (options.tags?.length) params.append("tags", options.tags.join(","));
+
+  const response = await api.get<AssetPaginatedResponse>(
+    `/admin/assets?${params.toString()}`
+  );
+  return response.data.data;
+};
+
+/**
+ * Create new asset
+ */
+export const createAsset = async (data: Partial<Asset>): Promise<Asset> => {
+  const response = await api.post<ApiResponse<Asset>>("/admin/assets", data);
+  return response.data.data;
+};
+
+/**
+ * Update asset
+ */
+export const updateAsset = async (
+  id: string,
+  data: Partial<Asset>
+): Promise<Asset> => {
+  const response = await api.put<ApiResponse<Asset>>(
+    `/admin/assets/${id}`,
+    data
+  );
+  return response.data.data;
+};
+
+/**
+ * Delete asset
+ */
+export const deleteAsset = async (id: string): Promise<void> => {
+  await api.delete<ApiResponse<{ message: string }>>(`/admin/assets/${id}`);
+};
+
+/**
+ * Bulk delete assets
+ */
+export const bulkDeleteAssets = async (
+  assetIds: string[]
+): Promise<{
+  message: string;
+  results: {
+    total: number;
+    deleted: number;
+    s3Deleted: number;
+    errors: string[];
+  };
+}> => {
+  const response = await api.post<
+    ApiResponse<{
+      message: string;
+      results: {
+        total: number;
+        deleted: number;
+        s3Deleted: number;
+        errors: string[];
+      };
+    }>
+  >("/admin/assets/bulk-delete", { assetIds });
+  return response.data.data;
+};
+
+// =============================================================================
+// SERVICE APIs
+// =============================================================================
+
+/**
+ * Get all active services
+ */
+export const getServices = async (): Promise<Service[]> => {
+  const response = await api.get<ApiResponse<Service[]>>("/services");
+  return response.data.data;
+};
+
+/**
+ * Get services header
+ */
+export const getServicesHeader = async (): Promise<ServicesHeader> => {
+  const response = await api.get<ApiResponse<ServicesHeader>>(
+    "/services-header"
+  );
+  return response.data.data;
+};
+
+/**
+ * Get services header for admin (with fallback creation)
+ */
+export const getAdminServicesHeader = async (): Promise<ServicesHeader> => {
+  const response = await api.get<ApiResponse<ServicesHeader>>(
+    "/admin/services-header"
+  );
+  return response.data.data;
+};
+
+/**
+ * Get all services for admin (including inactive)
+ */
+export const getAdminServices = async (
+  params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: "all" | "active" | "inactive";
+  } = {}
+): Promise<{
+  services: Service[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}> => {
+  const queryParams = new URLSearchParams();
+
+  if (params.page) queryParams.append("page", params.page.toString());
+  if (params.limit) queryParams.append("limit", params.limit.toString());
+  if (params.search) queryParams.append("search", params.search);
+  if (params.status) queryParams.append("status", params.status);
+
+  const response = await api.get<{
+    data: {
+      services: Service[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+        hasNext: boolean;
+        hasPrev: boolean;
+      };
+    };
+  }>(`/admin/services?${queryParams.toString()}`);
+  return response.data.data;
+};
+
+/**
+ * Get a specific service for admin
+ */
+export const getAdminServiceBySlug = async (slug: string): Promise<Service> => {
+  const response = await api.get<ApiResponse<Service>>(
+    `/admin/services/${slug}`
+  );
+  return response.data.data;
+};
+
+/**
+ * Create a new service
+ */
+export const createService = async (
+  data: Partial<Service>
+): Promise<Service> => {
+  const response = await api.post<ApiResponse<Service>>(
+    "/admin/services",
+    data
+  );
+  return response.data.data;
+};
+
+/**
+ * Update an existing service
+ */
+export const updateService = async (
+  slug: string,
+  data: Partial<Service>
+): Promise<Service> => {
+  const response = await api.put<ApiResponse<Service>>(
+    `/admin/services/${slug}`,
+    data
+  );
+  return response.data.data;
+};
+
+/**
+ * Delete a service
+ */
+export const deleteService = async (slug: string): Promise<void> => {
+  await api.delete<ApiResponse<{ message: string }>>(`/admin/services/${slug}`);
+};
+
+/**
+ * Update services header
+ */
+export const updateServicesHeader = async (
+  data: Partial<ServicesHeader>
+): Promise<ServicesHeader> => {
+  const response = await api.put<ApiResponse<ServicesHeader>>(
+    "/admin/services-header",
+    data
+  );
   return response.data.data;
 };
 

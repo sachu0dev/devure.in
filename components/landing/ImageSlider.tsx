@@ -3,8 +3,35 @@
 import React from "react";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 
-export function AppleCardsCarouselDemo() {
-  const cards = data.map((card, index) => (
+interface Service {
+  _id: string;
+  serviceType: string;
+  title: string;
+  slug: string;
+  image: string;
+  excerpt?: string;
+  isFeatured: boolean;
+  order: number;
+}
+
+interface AppleCardsCarouselDemoProps {
+  services?: Service[];
+}
+
+export function AppleCardsCarouselDemo({
+  services,
+}: AppleCardsCarouselDemoProps) {
+  // Use services from props if available, otherwise fallback to hardcoded data
+  const displayData =
+    services && services.length > 0
+      ? services.map((service) => ({
+          category: service.serviceType,
+          title: service.title,
+          src: service.image,
+        }))
+      : data;
+
+  const cards = displayData.map((card, index) => (
     <Card key={card.src} card={card} index={index} />
   ));
 
@@ -14,7 +41,6 @@ export function AppleCardsCarouselDemo() {
     </div>
   );
 }
-
 
 const data = [
   {

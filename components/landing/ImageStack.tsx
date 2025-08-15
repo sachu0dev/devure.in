@@ -60,21 +60,41 @@ const images: ImageProps[] = [
   },
 ];
 
-export default function ImageStack() {
+interface ImageStackProps {
+  heroImages?: Array<{
+    url: string;
+    alt: string;
+    order: number;
+  }>;
+}
+
+export default function ImageStack({ heroImages }: ImageStackProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Use hero images if provided, otherwise fall back to placeholder images
+  const displayImages =
+    heroImages && heroImages.length > 0
+      ? heroImages.map((img, index) => ({
+          src: img.url,
+          alt: img.alt || `Image ${index + 1}`,
+          rotation: [-2, 0, 2, -5, 3, -1][index % 6],
+          offsetX: [120, 0, -120, 100, -100, 50][index % 6],
+          offsetY: [2, -2, 2, 5, -5, 10][index % 6],
+        }))
+      : images;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % displayImages.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [displayImages.length]);
 
   return (
     <div className="flex-1 flex justify-center items-center">
       <div className="relative aspect-[5/7] w-[200px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[500px]">
-        {images.map((image, index) => {
+        {displayImages.map((image, index) => {
           const isActive = index === currentIndex;
           const stackPosition =
             (index - currentIndex + images.length) % images.length;
@@ -145,7 +165,7 @@ export default function ImageStack() {
         })}
 
         <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {images.map((_, index) => (
+          {displayImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}

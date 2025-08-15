@@ -6,7 +6,12 @@ import { env } from "@/lib/env";
 import Projects from "@/components/landing/Projects";
 import Technologies from "@/components/landing/Technologies";
 import Blogs from "@/components/landing/Blogs";
-import { getBlogs } from "@/lib/api";
+import {
+  getBlogs,
+  getHeroContent,
+  getServices,
+  getServicesHeader,
+} from "@/lib/api";
 
 export const metadata: Metadata = {
   title: `${env.SITE_NAME} - Modern Web Development & Design Solutions`,
@@ -90,16 +95,50 @@ interface BlogPost {
   wordCount?: number;
 }
 
+interface Service {
+  _id: string;
+  serviceType: string;
+  title: string;
+  slug: string;
+  image: string;
+  excerpt?: string;
+  isFeatured: boolean;
+  order: number;
+}
+
+interface ServicesHeader {
+  _id: string;
+  mainTitle: string;
+  services: string[];
+  isActive: boolean;
+}
+
 const page = async () => {
-  // Fetch featured blogs on the server side
+  // Fetch featured blogs, hero content, and services data on the server side
   let featuredBlogs: BlogPost[] = [];
+  let heroContent = null;
+  let services: Service[] = [];
+  let servicesHeader: ServicesHeader | null = null;
 
   try {
-    const blogResults = await getBlogs({ featured: true, limit: 3 });
+    const [blogResults, heroData, servicesData, headerData] = await Promise.all(
+      [
+        getBlogs({ featured: true, limit: 3 }),
+        getHeroContent().catch(() => null), // Don't fail if hero content is missing
+        getServices().catch(() => []), // Don't fail if services are missing
+        getServicesHeader().catch(() => null), // Don't fail if header is missing
+      ]
+    );
     featuredBlogs = blogResults.posts || [];
+    heroContent = heroData;
+    services = servicesData || [];
+    servicesHeader = headerData;
   } catch (error) {
-    console.error("Error fetching featured blogs:", error);
+    console.error("Error fetching data:", error);
     featuredBlogs = [];
+    heroContent = null;
+    services = [];
+    servicesHeader = null;
   }
 
   // Structured data for SEO
@@ -155,14 +194,14 @@ const page = async () => {
           data-scroll-section
           aria-label="Hero Section"
         >
-          <Home />
+          <Home heroContent={heroContent || undefined} />
         </section>
         <section
           className="min-h-screen bg-background flex items-center justify-center text-4xl text-foreground"
           data-scroll-section
           aria-label="Selected Work"
         >
-          <Selected />
+          <Selected servicesHeader={servicesHeader} services={services} />
         </section>
         <section
           className="min-h-screen bg-foreground flex items-center justify-center text-4xl text-background"

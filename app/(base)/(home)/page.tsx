@@ -13,6 +13,8 @@ import {
   getServicesHeader,
 } from "@/lib/api";
 
+export const revalidate = 21600; // 6 hours in seconds
+
 export const metadata: Metadata = {
   title: `${env.SITE_NAME} - Modern Web Development & Design Solutions`,
   description:

@@ -459,6 +459,14 @@ export const getServices = async (): Promise<Service[]> => {
 };
 
 /**
+ * Get a specific service by slug (public)
+ */
+export const getServiceBySlug = async (slug: string): Promise<Service> => {
+  const response = await api.get<ApiResponse<Service>>(`/services/${slug}`);
+  return response.data.data;
+};
+
+/**
  * Get services header
  */
 export const getServicesHeader = async (): Promise<ServicesHeader> => {

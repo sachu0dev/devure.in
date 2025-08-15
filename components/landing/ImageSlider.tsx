@@ -28,6 +28,7 @@ export function AppleCardsCarouselDemo({
           category: service.serviceType,
           title: service.title,
           src: service.image,
+          slug: service.slug,
         }))
       : data;
 

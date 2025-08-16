@@ -14,7 +14,7 @@ import {
   updateHeroContent,
   handleApiError,
 } from "@/lib/api";
-import { HeroContent } from "@/lib/api";
+import { Hero as HeroContent } from "@/types";
 
 export default function HeroAdmin() {
   const [hero, setHero] = useState<HeroContent | null>(null);

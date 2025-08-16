@@ -1,51 +1,18 @@
 import dbConnect from "./mongodb";
 import Project from "@/models/Project";
 
-interface ProjectData {
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  excerpt?: string;
-  coverImage: string;
-  tags: string[];
-  category: string;
-  client?: string;
-  duration?: string;
-  technologies: string[];
-  isFeatured: boolean;
-  order: number;
-  liveUrl?: string;
-  githubUrl?: string;
-  content?: string;
-  metaDescription?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Import types from organized type files
+import { ProjectData } from "@/types";
 
-interface ProjectCategory {
-  name: string;
-  postCount: number;
-}
+// Import types from organized type files
+import { ProjectCategory, ProjectTag } from "@/types";
 
-interface ProjectTag {
-  name: string;
-  postCount: number;
-}
-
-// =============================================================================
-// SERVER-SIDE FUNCTIONS (MongoDB - Direct Access)
-// =============================================================================
-
-/**
- * Get all active projects from MongoDB (for sitemap and static generation)
- */
 export async function getAllProjects(): Promise<ProjectData[]> {
   try {
     await dbConnect();
     const projects = await Project.find({ isActive: true })
       .select(
-        "title slug description excerpt coverImage tags category client duration technologies isFeatured order createdAt updatedAt"
+        "title slug description content excerpt coverImage images tags category client duration technologies isActive isFeatured order createdAt updatedAt"
       )
       .sort({ order: 1, createdAt: -1 })
       .lean();
@@ -75,7 +42,7 @@ export async function getFeaturedProjects(limit: number = 6) {
     await dbConnect();
     const projects = await Project.find({ isActive: true, isFeatured: true })
       .select(
-        "title slug description excerpt coverImage tags category client duration technologies isFeatured order createdAt updatedAt"
+        "title slug description content excerpt coverImage images tags category client duration technologies isActive isFeatured order createdAt updatedAt"
       )
       .sort({ order: 1, createdAt: -1 })
       .limit(limit)

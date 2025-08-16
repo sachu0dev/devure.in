@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getAdminProjects, deleteProject, handleApiError } from "@/lib/api";
-import { Project } from "@/lib/api";
+import { Project } from "@/types";
 import Link from "next/link";
 
 export default function ProjectsAdminPage() {

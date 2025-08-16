@@ -23,7 +23,7 @@ export default function ProjectCTA() {
           <Button
             variant="outline"
             size="lg"
-            className="border-background text-background hover:bg-background hover:text-foreground"
+            className="border-background font-bold text-foreground hover:bg-background/80 hover:text-foreground"
             onClick={() => (window.location.href = "/work")}
           >
             View All Projects

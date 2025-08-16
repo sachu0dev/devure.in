@@ -1,13 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProjectBySlug, getAllProjects } from "@/lib/projects";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
 import Image from "next/image";
 import { Clock, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ProjectActions from "@/components/work/ProjectActions";
 import ProjectCTA from "@/components/work/ProjectCTA";
+import { SmoothCursorWrapper } from "@/components/ui/SmoothCursorWrapper";
 
 // ISR: Revalidate every 6 hours
 export const revalidate = 21600; // 6 hours in seconds
@@ -158,7 +158,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       />
 
       <main>
-        <SmoothCursor />
+        <SmoothCursorWrapper />
 
         {/* Hero Section */}
         <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-foreground">

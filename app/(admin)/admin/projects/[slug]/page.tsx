@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { BlogEditor } from "@/components/admin/BlogEditor";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createProject, handleApiError } from "@/lib/api";
+import { getAdminProject, updateProject, handleApiError } from "@/lib/api";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 
@@ -24,7 +24,7 @@ interface ProjectFormData {
   metaDescription: string;
 }
 
-export default function CreateProject() {
+export default function EditProject() {
   const [formData, setFormData] = useState<ProjectFormData>({
     category: "",
     title: "",
@@ -38,32 +38,67 @@ export default function CreateProject() {
     metaTitle: "",
     metaDescription: "",
   });
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const params = useParams();
 
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
+  useEffect(() => {
+    if (params.slug) {
+      loadProject(params.slug as string);
+    }
+  }, [params.slug]);
+
+  const loadProject = async (slug: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const project = await getAdminProject(slug);
+
+      setFormData({
+        category: project.category,
+        title: project.title,
+        slug: project.slug,
+        coverImage: project.coverImage,
+        content: project.content,
+        excerpt: project.excerpt || "",
+        isActive: project.isActive,
+        isFeatured: project.isFeatured,
+        order: project.order,
+        metaTitle: project.metaTitle || "",
+        metaDescription: project.metaDescription || "",
+      });
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setError(errorMessage);
+      console.error("Error loading project:", errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleTitleChange = (title: string) => {
     setFormData((prev) => ({
       ...prev,
       title,
-      slug: generateSlug(title),
+      slug: title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, ""),
     }));
   };
 
-  const handleSave = async (publish: boolean = false) => {
+  const handleSave = async () => {
     setSaving(true);
 
     try {
-      // Create project via API
-      await createProject({
+      setError(null);
+
+      // Update project via API
+      await updateProject(params.slug as string, {
         ...formData,
-        isActive: publish, // If publishing, set as active
         excerpt: formData.excerpt || formData.content.substring(0, 160) + "...",
       });
 
@@ -71,8 +106,8 @@ export default function CreateProject() {
       router.push("/admin/projects");
     } catch (error) {
       const errorMessage = handleApiError(error);
-      console.error("Error creating project:", errorMessage);
-      alert(`Failed to create project: ${errorMessage}`);
+      setError(errorMessage);
+      console.error("Error updating project:", errorMessage);
     } finally {
       setSaving(false);
     }
@@ -101,6 +136,30 @@ export default function CreateProject() {
     "Other",
   ];
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <div className="text-lg">Loading project...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+        <Link href="/admin/projects">
+          <Button variant="outline">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Projects
+          </Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -114,29 +173,17 @@ export default function CreateProject() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Create New Project
+              Edit Project: {formData.title}
             </h1>
             <p className="text-gray-600">
-              Create a new project with rich content and MDX support
-            </p>
-            <p className="text-sm text-gray-500 mt-1">
-              Use &ldquo;Save Draft&rdquo; to save your work, or
-              &ldquo;Publish&rdquo; to make it live immediately
+              Update your project content and settings
             </p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button
-            onClick={() => handleSave(false)}
-            disabled={saving}
-            variant="outline"
-          >
+          <Button onClick={handleSave} disabled={saving}>
             <Save className="w-4 h-4 mr-2" />
-            {saving ? "Saving..." : "Save Draft"}
-          </Button>
-          <Button onClick={() => handleSave(true)} disabled={saving}>
-            <Save className="w-4 h-4 mr-2" />
-            {saving ? "Publishing..." : "Publish"}
+            {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>

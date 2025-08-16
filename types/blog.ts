@@ -247,3 +247,28 @@ export type BlogErrorType =
   | "LOCAL_FILE_NOT_FOUND"
   | "PARSE_ERROR"
   | "VALIDATION_ERROR";
+
+export interface FooterContent {
+  _id: string;
+  title: string;
+  description: string;
+  quickLinks: Array<{
+    name: string;
+    url: string;
+    order: number;
+  }>;
+  servicesLinks: Array<{
+    name: string;
+    url: string;
+    order: number;
+  }>;
+  socialLinks: Array<{
+    name: string;
+    url: string;
+    icon: string;
+    order: number;
+  }>;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

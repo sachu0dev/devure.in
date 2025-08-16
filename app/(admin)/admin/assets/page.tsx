@@ -14,7 +14,7 @@ import {
   handleApiError,
   uploadImage,
 } from "@/lib/api";
-import { Asset, AssetSearchOptions } from "@/lib/api";
+import { Asset, AssetSearchOptions } from "@/types";
 import Image from "next/image";
 
 export default function AssetsAdmin() {
@@ -380,7 +380,7 @@ export default function AssetsAdmin() {
                 <div className="relative aspect-square overflow-hidden">
                   <Image
                     src={asset.url}
-                    alt={asset.alt}
+                    alt={asset.alt || asset.originalName}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"

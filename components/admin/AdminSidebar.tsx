@@ -30,6 +30,7 @@ const navigation = [
       { name: "Technologies", href: "/admin/technologies" },
       { name: "About Me", href: "/admin/about" },
       { name: "Experience", href: "/admin/experience" },
+      { name: "Footer", href: "/admin/footer" },
     ],
   },
   {

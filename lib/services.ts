@@ -2,29 +2,8 @@ import dbConnect from "./mongodb";
 import Service from "@/models/Service";
 import ServicesHeader from "@/models/ServicesHeader";
 
-interface ServiceData {
-  _id: string;
-  serviceType: string;
-  title: string;
-  slug: string;
-  image: string;
-  excerpt: string;
-  content: string;
-  isActive: boolean;
-  isFeatured: boolean;
-  order: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ServicesHeaderData {
-  _id: string;
-  mainTitle: string;
-  services: string[];
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+// Import types from organized type files
+import { ServiceData, ServicesHeaderData } from "@/types";
 
 // =============================================================================
 // SERVER-SIDE FUNCTIONS (MongoDB - Direct Access)

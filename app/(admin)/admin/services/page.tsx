@@ -14,7 +14,7 @@ import {
   getAdminServicesHeader,
   updateServicesHeader,
 } from "@/lib/api";
-import { Service, ServicesHeader } from "@/lib/api";
+import { Service, ServicesHeader } from "@/types";
 import Link from "next/link";
 
 export default function ServicesAdminPage() {

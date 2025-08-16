@@ -11,12 +11,21 @@ export const metadata: Metadata = {
 
 import Header from "@/components/layouts/Header";
 import Footer from "@/components/layouts/Footer";
+import { SmoothCursorWrapper } from "@/components/ui/SmoothCursorWrapper";
+import { getFooterContent } from "@/lib/api";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch footer content
+  let footerContent = null;
+  try {
+    footerContent = await getFooterContent();
+  } catch (error) {
+    console.error("Error fetching footer content:", error);
+  }
   return (
     <ThemeProvider
       attribute="class"
@@ -26,7 +35,7 @@ export default function RootLayout({
       storageKey="theme"
     >
       <ScrollProvider>
-        {/* <SmoothCursor /> */}
+        <SmoothCursorWrapper />
 
         <main className="">
           <Header />
@@ -34,7 +43,7 @@ export default function RootLayout({
           {/* <div className="fixed bottom-4 right-4 z-[1002]">
             <ModeToggle />
           </div> */}
-          <Footer />
+          <Footer footerContent={footerContent || undefined} />
         </main>
       </ScrollProvider>
     </ThemeProvider>

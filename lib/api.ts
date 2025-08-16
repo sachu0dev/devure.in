@@ -8,124 +8,21 @@ import {
   BlogTag,
   BlogStats,
   BlogFrontmatter,
+  FooterContent,
 } from "@/types/blog";
 
 // Hero types
-export interface HeroContent {
-  _id: string;
-  title1: string;
-  title2: string;
-  description: string;
-  images: Array<{
-    url: string;
-    alt: string;
-    order: number;
-  }>;
-  links: Array<{
-    name: string;
-    url: string;
-    order: number;
-  }>;
-  showOnHome: boolean;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+// Hero types - Imported from types/hero.ts
+import { Hero as HeroContent } from "@/types";
 
-// Asset types
-export interface Asset {
-  _id: string;
-  name: string;
-  url: string;
-  s3Key: string;
-  s3Bucket: string;
-  s3Region?: string;
-  alt: string;
-  description?: string;
-  tags: string[];
-  category: string;
-  fileSize: number;
-  mimeType: string;
-  dimensions?: {
-    width: number;
-    height: number;
-  };
-  isPublic: boolean;
-  uploadedBy?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Asset types - Imported from types/assets.ts
+import { Asset, AssetSearchOptions } from "@/types";
 
-export interface AssetSearchOptions {
-  page?: number;
-  limit?: number;
-  search?: string;
-  category?: string;
-  tags?: string[];
-}
+// Service types - Imported from types/services.ts
+import { Service, ServicesHeader } from "@/types";
 
-// Service types
-export interface Service {
-  _id: string;
-  serviceType: string;
-  title: string;
-  slug: string;
-  image: string;
-  content: string;
-  excerpt?: string;
-  isActive: boolean;
-  isFeatured: boolean;
-  order: number;
-  metaTitle?: string;
-  metaDescription?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ServicesHeader {
-  _id: string;
-  mainTitle: string;
-  services: string[];
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-  error?: string;
-}
-
-interface PaginatedResponse<T> {
-  success: boolean;
-  data: {
-    blogs: T[];
-    pagination: {
-      page: number;
-      limit: number;
-      total: number;
-      totalPages: number;
-      hasNext: boolean;
-      hasPrev: boolean;
-    };
-  };
-}
-
-interface AssetPaginatedResponse {
-  data: {
-    assets: Asset[];
-    pagination: {
-      page: number;
-      limit: number;
-      total: number;
-      totalPages: number;
-      hasNext: boolean;
-      hasPrev: boolean;
-    };
-  };
-}
+// Common interfaces - Imported from types/common.ts
+import { ApiResponse, PaginatedResponse } from "@/types";
 
 // =============================================================================
 // PUBLIC BLOG APIs
@@ -374,7 +271,17 @@ export const updateHeroContent = async (
  */
 export const getAssets = async (
   options: AssetSearchOptions = {}
-): Promise<AssetPaginatedResponse["data"]> => {
+): Promise<{
+  assets: Asset[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}> => {
   const params = new URLSearchParams();
 
   if (options.page) params.append("page", options.page.toString());
@@ -383,9 +290,19 @@ export const getAssets = async (
   if (options.category) params.append("category", options.category);
   if (options.tags?.length) params.append("tags", options.tags.join(","));
 
-  const response = await api.get<AssetPaginatedResponse>(
-    `/admin/assets?${params.toString()}`
-  );
+  const response = await api.get<
+    ApiResponse<{
+      assets: Asset[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+        hasNext: boolean;
+        hasPrev: boolean;
+      };
+    }>
+  >(`/admin/assets?${params.toString()}`);
   return response.data.data;
 };
 
@@ -646,48 +563,8 @@ export const extractApiData = <T>(response: unknown): T => {
 // PROJECTS API FUNCTIONS
 // =============================================================================
 
-export interface Project {
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  excerpt?: string;
-  coverImage: string;
-  images: string[];
-  tags: string[];
-  category: string;
-  client?: string;
-  duration?: string;
-  technologies: string[];
-  isActive: boolean;
-  isFeatured: boolean;
-  order: number;
-  metaTitle?: string;
-  metaDescription?: string;
-  liveUrl?: string;
-  githubUrl?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ProjectsResponse {
-  projects: Project[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}
-
-export interface ProjectFilters {
-  page?: number;
-  limit?: number;
-  search?: string;
-  status?: "all" | "active" | "inactive";
-}
+// Import types from organized type files
+import { Project, ProjectsResponse, ProjectFilters } from "@/types";
 
 /**
  * Get projects for admin panel with pagination and filters
@@ -703,19 +580,8 @@ export async function getAdminProjects(
     if (filters.search) params.append("search", filters.search);
     if (filters.status) params.append("status", filters.status);
 
-    const response = await fetch(`/api/admin/projects?${params.toString()}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.data;
+    const response = await api.get(`/admin/projects?${params.toString()}`);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching admin projects:", error);
     throw error;
@@ -727,19 +593,8 @@ export async function getAdminProjects(
  */
 export async function getAdminProject(slug: string): Promise<Project> {
   try {
-    const response = await fetch(`/api/admin/projects/${slug}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.data;
+    const response = await api.get(`/admin/projects/${slug}`);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching admin project:", error);
     throw error;
@@ -753,20 +608,8 @@ export async function createProject(
   projectData: Partial<Project>
 ): Promise<Project> {
   try {
-    const response = await fetch("/api/admin/projects", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(projectData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.data;
+    const response = await api.post("/admin/projects", projectData);
+    return response.data.data;
   } catch (error) {
     console.error("Error creating project:", error);
     throw error;
@@ -781,20 +624,8 @@ export async function updateProject(
   projectData: Partial<Project>
 ): Promise<Project> {
   try {
-    const response = await fetch(`/api/admin/projects/${slug}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(projectData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.data;
+    const response = await api.put(`/admin/projects/${slug}`, projectData);
+    return response.data.data;
   } catch (error) {
     console.error("Error updating project:", error);
     throw error;
@@ -806,18 +637,142 @@ export async function updateProject(
  */
 export async function deleteProject(projectId: string): Promise<void> {
   try {
-    const response = await fetch(`/api/admin/projects/${projectId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    await api.delete(`/admin/projects/${projectId}`);
   } catch (error) {
     console.error("Error deleting project:", error);
     throw error;
   }
 }
+
+/**
+ * Get active projects for frontend display
+ */
+export async function getProjects(): Promise<Project[]> {
+  try {
+    console.log("Fetching projects from /projects endpoint...");
+    const response = await api.get("/projects");
+    console.log("Projects response:", response.data);
+    return response.data.data;
+  } catch (error: unknown) {
+    console.error("Error fetching projects:", error);
+    if (error && typeof error === "object" && "response" in error) {
+      const axiosError = error as {
+        response: { status: number; data: unknown };
+      };
+      console.error("Response status:", axiosError.response.status);
+      console.error("Response data:", axiosError.response.data);
+    }
+    throw error;
+  }
+}
+
+// Footer API functions
+export const getFooterContent = async (): Promise<FooterContent | null> => {
+  try {
+    const response = await api.get(`/footer`);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching footer content:", error);
+    return null;
+  }
+};
+
+export const getAdminFooterContent = async (): Promise<FooterContent> => {
+  try {
+    const response = await api.get(`/admin/footer`);
+    return response.data.data;
+  } catch (error: unknown) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "response" in error &&
+      error.response &&
+      typeof error.response === "object" &&
+      "status" in error.response &&
+      error.response.status === 404
+    ) {
+      // Return a default footer structure without _id for creation
+      const defaultFooter: Omit<
+        FooterContent,
+        "_id" | "createdAt" | "updatedAt"
+      > = {
+        title: "Devure.in",
+        description:
+          "Building modern, scalable web applications with cutting-edge technologies. Let's turn your ideas into reality.",
+        quickLinks: [
+          { name: "Home", url: "/", order: 0 },
+          { name: "Blogs", url: "/blog", order: 1 },
+          { name: "Work", url: "/work", order: 2 },
+          { name: "Services", url: "/service", order: 3 },
+          { name: "About", url: "/about", order: 4 },
+          { name: "Contact", url: "/contact", order: 5 },
+        ],
+        servicesLinks: [
+          {
+            name: "Web Applications",
+            url: "/service/modern-scalable-web-apps",
+            order: 0,
+          },
+          {
+            name: "SaaS Platforms",
+            url: "/service/saas-platforms-robust-infrastructure",
+            order: 1,
+          },
+          {
+            name: "Custom Solutions",
+            url: "/service/productivity-tools-custom-solutions",
+            order: 2,
+          },
+        ],
+        socialLinks: [
+          {
+            name: "GitHub",
+            url: "https://github.com",
+            icon: "Github",
+            order: 0,
+          },
+          {
+            name: "LinkedIn",
+            url: "https://linkedin.com",
+            icon: "Linkedin",
+            order: 1,
+          },
+          {
+            name: "Twitter",
+            url: "https://twitter.com",
+            icon: "Twitter",
+            order: 2,
+          },
+          {
+            name: "Instagram",
+            url: "https://instagram.com",
+            icon: "Instagram",
+            order: 3,
+          },
+        ],
+        isActive: true,
+      };
+
+      // Create the footer in the database and return the created document
+      try {
+        const createResponse = await api.put(`/admin/footer`, defaultFooter);
+        return createResponse.data.data;
+      } catch (createError) {
+        console.error("Error creating default footer:", createError);
+        throw new Error("Failed to create default footer content");
+      }
+    }
+    throw error;
+  }
+};
+
+export const updateFooterContent = async (
+  footerData: FooterContent
+): Promise<FooterContent> => {
+  try {
+    const response = await api.put(`/admin/footer`, footerData);
+    return response.data.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};

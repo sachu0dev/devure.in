@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import { getAllServices, getServicesHeader } from "@/lib/services";
 import Hero from "@/components/services/Hero";
 import ServicesList from "@/components/services/ServicesList";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
-import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
+import { SmoothCursorWrapper } from "@/components/ui/SmoothCursorWrapper";
+import { getAllServices, getServicesHeader } from "@/lib/services";
+import { getCanonicalDomain, getCurrentDomain } from "@/lib/utils";
+import { Metadata } from "next";
 
 // ISR: Revalidate every 6 hours
 export const revalidate = 21600; // 6 hours in seconds
@@ -203,7 +203,7 @@ export default async function ServicesPage() {
       />
 
       <main>
-        <SmoothCursor />
+        <SmoothCursorWrapper />
 
         <section
           className="bg-foreground flex items-center justify-center text-4xl text-foreground"

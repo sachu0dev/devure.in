@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { IconArrowRight } from "@tabler/icons-react";
+import Link from "next/link";
 
 interface Blog {
   slug: string;
@@ -85,19 +86,24 @@ const Blogs = ({ featuredBlogs }: BlogsProps) => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl  text-foreground leading-tight mb-4 hover:underline ">
-                  {blog.title}
-                </h3>
+                <Link href={`/blog/${blog.slug}`}>
+                  <h3 className="text-xl  text-foreground leading-tight mb-4 hover:underline ">
+                    {blog.title}
+                  </h3>
+                </Link>
               </div>
             </div>
           ))}
         </div>
       </div>
       <div className="text-center px-3 md:px-18 mt-8 opacity-100">
-        <div className="inline-flex items-center gap-3 bg-primary text-[#242424] px-8 py-4 rounded-2xl font-semibold text-lg  transition-colors duration-300 cursor-pointer group font-figtree">
+        <Link
+          href={"/blog"}
+          className="inline-flex items-center gap-3 bg-primary text-[#242424] px-8 py-4 rounded-2xl font-semibold text-lg  transition-colors duration-300 cursor-pointer group font-figtree"
+        >
           <span>View More</span>
           <IconArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-        </div>
+        </Link>
       </div>
     </div>
   );

@@ -75,7 +75,7 @@ export default function AdminBlogs() {
         limit: 50,
         status: "all",
       });
-      setBlogs(response.data.blogs);
+      setBlogs(response.data);
     } catch (error) {
       const errorMessage = handleApiError(error);
       setError(errorMessage);

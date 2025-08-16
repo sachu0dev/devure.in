@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { ModeToggle } from "@/components/modeToggle";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { SmoothCursorWrapper } from "@/components/ui/SmoothCursorWrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <SmoothCursor />
+      <SmoothCursorWrapper />
 
       <main className="">
         <Header />

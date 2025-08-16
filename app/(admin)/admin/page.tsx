@@ -47,7 +47,7 @@ export default function AdminDashboard() {
       ]);
 
       setStats(statsData);
-      setRecentBlogs(blogsResponse.data.blogs);
+      setRecentBlogs(blogsResponse.data);
     } catch (error) {
       const errorMessage = handleApiError(error);
       setError(errorMessage);

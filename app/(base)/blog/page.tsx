@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import { getAllBlogs, getAllCategories, getAllTags } from "@/lib/blog";
 import Hero from "@/components/blogs/Hero";
 import Search from "@/components/blogs/Search";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
-import { getCurrentDomain, getCanonicalDomain } from "@/lib/utils";
+import { SmoothCursorWrapper } from "@/components/ui/SmoothCursorWrapper";
+import { getAllBlogs, getAllCategories, getAllTags } from "@/lib/blog";
+import { getCanonicalDomain, getCurrentDomain } from "@/lib/utils";
+import { Metadata } from "next";
 
 // ISR: Revalidate every 6 hours
 export const revalidate = 21600; // 6 hours in seconds
@@ -229,7 +229,7 @@ export default async function BlogPage() {
       />
 
       <main>
-        <SmoothCursor />
+        <SmoothCursorWrapper />
 
         <section
           className="bg-foreground flex items-center justify-center text-4xl text-foreground"

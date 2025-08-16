@@ -10,25 +10,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { env } from "@/lib/env";
 
-interface Project {
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  excerpt?: string;
-  coverImage: string;
-  tags: string[];
-  category: string;
-  client?: string;
-  duration?: string;
-  technologies: string[];
-  isFeatured: boolean;
-  order: number;
-  liveUrl?: string;
-  githubUrl?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Import types from organized type files
+import { Project } from "@/types";
 
 interface ProjectCategory {
   name: string;

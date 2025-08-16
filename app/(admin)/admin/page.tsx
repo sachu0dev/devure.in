@@ -1,11 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileText, Eye, TrendingUp, Calendar, Clock } from "lucide-react";
+import {
+  FileText,
+  Eye,
+  TrendingUp,
+  Calendar,
+  Clock,
+  LogOut,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getBlogStats, getAdminBlogs, handleApiError } from "@/lib/api";
+import {
+  getBlogStats,
+  getAdminBlogs,
+  handleApiError,
+  adminLogout,
+} from "@/lib/api";
 import { BlogPostSummary, BlogStats } from "@/types/blog";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<BlogStats>({
@@ -22,18 +36,20 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { isAuthenticated, loading: authLoading, logout } = useAuth();
 
   useEffect(() => {
     // Check authentication
-    const isAuthenticated = localStorage.getItem("adminAuthenticated");
-    if (isAuthenticated !== "true") {
+    if (!authLoading && !isAuthenticated) {
       router.push("/admin/login");
       return;
     }
 
-    // Load dashboard data
-    loadDashboardData();
-  }, [router]);
+    // Load dashboard data only if authenticated
+    if (isAuthenticated) {
+      loadDashboardData();
+    }
+  }, [isAuthenticated, authLoading, router]);
 
   const loadDashboardData = async () => {
     try {
@@ -47,15 +63,47 @@ export default function AdminDashboard() {
       ]);
 
       setStats(statsData);
-      setRecentBlogs(blogsResponse.data);
+
+      // Ensure we have the correct data structure
+      if (
+        blogsResponse &&
+        blogsResponse.data &&
+        Array.isArray(blogsResponse.data)
+      ) {
+        setRecentBlogs(blogsResponse.data);
+      } else {
+        console.warn("Unexpected blogs response structure:", blogsResponse);
+        setRecentBlogs([]);
+      }
     } catch (error) {
       const errorMessage = handleApiError(error);
       setError(errorMessage);
       console.error("Error loading dashboard data:", errorMessage);
+      setRecentBlogs([]);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      await adminLogout();
+      logout(); // Use the logout function from useAuth hook
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout failed");
+      // Fallback to local logout if API fails
+      logout();
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">Checking authentication...</div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -87,12 +135,18 @@ export default function AdminDashboard() {
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600">Welcome to the Devure admin panel</p>
         </div>
-        <Link href="/admin/blogs/create">
-          <Button>
-            <FileText className="w-4 h-4 mr-2" />
-            Create New Blog
+        <div className="flex items-center space-x-4">
+          <Link href="/admin/blogs/create">
+            <Button>
+              <FileText className="h-4 w-4 mr-2" />
+              Create New Blog
+            </Button>
+          </Link>
+          <Button variant="outline" onClick={handleLogout}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
           </Button>
-        </Link>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -160,53 +214,59 @@ export default function AdminDashboard() {
           <h2 className="text-lg font-semibold text-gray-900">Recent Blogs</h2>
         </div>
         <div className="divide-y divide-gray-200">
-          {recentBlogs.map((blog) => (
-            <div
-              key={blog.slug}
-              className="px-6 py-4 flex items-center justify-between"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      blog.featured ? "bg-green-400" : "bg-yellow-400"
-                    }`}
-                  />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {blog.title}
-                  </p>
-                  <div className="flex items-center space-x-4 text-xs text-gray-500">
-                    <span className="flex items-center">
-                      <Calendar className="w-3 h-3 mr-1" />
-                      {new Date(blog.date).toLocaleDateString()}
-                    </span>
-                    <span className="flex items-center">
-                      <Clock className="w-3 h-3 mr-1" />
-                      {blog.readTime}
-                    </span>
+          {Array.isArray(recentBlogs) && recentBlogs.length > 0 ? (
+            recentBlogs.map((blog) => (
+              <div
+                key={blog.slug}
+                className="px-6 py-4 flex items-center justify-between"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0">
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        blog.featured ? "bg-green-400" : "bg-yellow-400"
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {blog.title}
+                    </p>
+                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+                      <span className="flex items-center">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        {new Date(blog.date).toLocaleDateString()}
+                      </span>
+                      <span className="flex items-center">
+                        <Clock className="w-3 h-3 mr-1" />
+                        {blog.readTime}
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full ${
+                      blog.featured
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {blog.featured ? "Published" : "Draft"}
+                  </span>
+                  <Link href={`/admin/blogs/edit/${blog.slug}`}>
+                    <Button variant="outline" size="sm">
+                      Edit
+                    </Button>
+                  </Link>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`px-2 py-1 text-xs rounded-full ${
-                    blog.featured
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {blog.featured ? "Published" : "Draft"}
-                </span>
-                <Link href={`/admin/blogs/edit/${blog.slug}`}>
-                  <Button variant="outline" size="sm">
-                    Edit
-                  </Button>
-                </Link>
-              </div>
+            ))
+          ) : (
+            <div className="px-6 py-4 text-center text-gray-500">
+              No recent blogs found
             </div>
-          ))}
+          )}
         </div>
         <div className="px-6 py-4 border-t border-gray-200">
           <Link href="/admin/blogs">

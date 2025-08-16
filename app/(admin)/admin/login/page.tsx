@@ -3,33 +3,46 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { env } from "@/lib/env";
+import { adminLogin } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
-    // Simple authentication with hardcoded credentials
-    if (username === env.ADMIN_USERNAME && password === env.ADMIN_PASSWORD) {
-      // Store authentication in localStorage
-      localStorage.setItem("adminAuthenticated", "true");
-      localStorage.setItem("adminToken", "admin-token-" + Date.now());
+    try {
+      console.log("Attempting login with:", {
+        username,
+        password: password ? "***" : "undefined",
+      });
 
-      // Redirect to admin dashboard
-      router.push("/admin");
-    } else {
-      setError("Invalid username or password");
+      const response = await adminLogin({ username, password });
+      console.log("Login response:", response);
+
+      if (response.success) {
+        // Store authentication state in localStorage for client-side checks
+        localStorage.setItem("adminAuthenticated", "true");
+        localStorage.setItem("adminUsername", response.data.username);
+
+        toast.success("Login successful!");
+
+        // Redirect to admin dashboard
+        router.push("/admin");
+      } else {
+        toast.error(response.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -77,10 +90,6 @@ export default function AdminLogin() {
               />
             </div>
           </div>
-
-          {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
 
           <div>
             <Button

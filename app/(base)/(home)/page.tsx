@@ -6,12 +6,14 @@ import { env } from "@/lib/env";
 import Projects from "@/components/landing/Projects";
 import Technologies from "@/components/landing/Technologies";
 import Blogs from "@/components/landing/Blogs";
+import AboutUsSection from "@/components/landing/AboutUs";
 import {
   getBlogs,
   getHeroContent,
   getServices,
   getServicesHeader,
   getProjects,
+  getAboutUsContent,
 } from "@/lib/api";
 
 export const revalidate = 21600; // 6 hours in seconds
@@ -88,21 +90,30 @@ const page = async () => {
   let services: Service[] = [];
   let servicesHeader: ServicesHeader | null = null;
   let projects: Project[] = [];
+  let aboutUsContent = null;
 
   try {
-    const [blogResults, heroData, servicesData, headerData, projectsData] =
-      await Promise.all([
-        getBlogs({ featured: true, limit: 3 }),
-        getHeroContent().catch(() => null), // Don't fail if hero content is missing
-        getServices().catch(() => []), // Don't fail if services are missing
-        getServicesHeader().catch(() => null), // Don't fail if header is missing
-        getProjects().catch(() => []), // Don't fail if projects are missing
-      ]);
+    const [
+      blogResults,
+      heroData,
+      servicesData,
+      headerData,
+      projectsData,
+      aboutUsData,
+    ] = await Promise.all([
+      getBlogs({ featured: true, limit: 3 }),
+      getHeroContent().catch(() => null), // Don't fail if hero content is missing
+      getServices().catch(() => []), // Don't fail if services are missing
+      getServicesHeader().catch(() => null), // Don't fail if header is missing
+      getProjects().catch(() => []), // Don't fail if projects are missing
+      getAboutUsContent().catch(() => null), // Don't fail if about us content is missing
+    ]);
     featuredBlogs = blogResults.posts || [];
     heroContent = heroData;
     services = servicesData || [];
     servicesHeader = headerData;
     projects = projectsData || [];
+    aboutUsContent = aboutUsData;
   } catch (error) {
     console.error("Error fetching data:", error);
     featuredBlogs = [];
@@ -110,6 +121,7 @@ const page = async () => {
     services = [];
     servicesHeader = null;
     projects = [];
+    aboutUsContent = null;
   }
 
   // Structured data for SEO
@@ -191,9 +203,9 @@ const page = async () => {
         <section
           className="min-h-screen bg-foreground flex items-center justify-center text-4xl text-background"
           data-scroll-section
-          aria-label="Contact"
+          aria-label="About Us"
         >
-          <h1>Section 4</h1>
+          <AboutUsSection aboutUsContent={aboutUsContent} />
         </section>
         <section
           className="min-h-screen bg-background flex items-center justify-center text-4xl text-foreground"

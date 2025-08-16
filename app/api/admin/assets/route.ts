@@ -41,16 +41,14 @@ export async function GET(request: NextRequest) {
     const totalPages = Math.ceil(total / limit);
 
     return NextResponse.json({
-      data: {
-        assets,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages,
-          hasNext: page < totalPages,
-          hasPrev: page > 1,
-        },
+      data: assets,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
       },
     });
   } catch (error) {

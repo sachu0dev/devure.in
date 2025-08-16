@@ -22,7 +22,7 @@ const ServiceSchema = new Schema<IService>(
   {
     serviceType: { type: String, required: true },
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, required: true },
     image: { type: String, required: true },
     content: { type: String, required: true },
     excerpt: { type: String },
@@ -64,15 +64,22 @@ ServiceSchema.statics.findActive = function () {
 
 // Static method to find featured services
 ServiceSchema.statics.findFeatured = function () {
-  return this.find({ isFeatured: true, isActive: true }).sort({ order: 1, createdAt: -1 });
+  return this.find({ isFeatured: true, isActive: true }).sort({
+    order: 1,
+    createdAt: -1,
+  });
 };
 
 // Static method to find by service type
 ServiceSchema.statics.findByType = function (serviceType: string) {
-  return this.find({ serviceType, isActive: true }).sort({ order: 1, createdAt: -1 });
+  return this.find({ serviceType, isActive: true }).sort({
+    order: 1,
+    createdAt: -1,
+  });
 };
 
 // Check if model already exists to prevent overwrite
-const Service = mongoose.models.Service || mongoose.model<IService>("Service", ServiceSchema);
+const Service =
+  mongoose.models.Service || mongoose.model<IService>("Service", ServiceSchema);
 
 export default Service;

@@ -12,7 +12,8 @@ export const BlogContent = ({ content }: BlogContentProps) => {
   useEffect(() => {
     if (!contentRef.current) return;
 
-    const preElements = contentRef.current.querySelectorAll("pre");
+    const currentContentRef = contentRef.current; // Store ref value to avoid cleanup issues
+    const preElements = currentContentRef.querySelectorAll("pre");
 
     preElements.forEach((pre) => {
       const code = pre.querySelector("code");
@@ -86,7 +87,7 @@ export const BlogContent = ({ content }: BlogContentProps) => {
     });
 
     return () => {
-      const copyButtons = contentRef.current?.querySelectorAll(".copy-button");
+      const copyButtons = currentContentRef.querySelectorAll(".copy-button");
       copyButtons?.forEach((button) => button.remove());
     };
   }, [content]);

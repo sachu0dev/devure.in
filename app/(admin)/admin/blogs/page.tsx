@@ -75,11 +75,19 @@ export default function AdminBlogs() {
         limit: 50,
         status: "all",
       });
-      setBlogs(response.data);
+
+      // Ensure we have the correct data structure
+      if (response && response.data && Array.isArray(response.data)) {
+        setBlogs(response.data);
+      } else {
+        console.warn("Unexpected blogs response structure:", response);
+        setBlogs([]);
+      }
     } catch (error) {
       const errorMessage = handleApiError(error);
       setError(errorMessage);
       console.error("Error loading blogs:", errorMessage);
+      setBlogs([]);
     } finally {
       setLoading(false);
     }

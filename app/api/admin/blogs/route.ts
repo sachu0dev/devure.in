@@ -39,17 +39,14 @@ export async function GET(request: NextRequest) {
     const paginatedBlogs = filteredBlogs.slice(offset, offset + limit);
 
     return NextResponse.json({
-      success: true,
-      data: {
-        blogs: paginatedBlogs,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages,
-          hasNext: page < totalPages,
-          hasPrev: page > 1,
-        },
+      data: paginatedBlogs,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
       },
     });
   } catch (error) {

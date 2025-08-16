@@ -20,3 +20,5 @@ export * from "./admin";
 
 // Common Types
 export * from "./common";
+
+export * from "./aboutUs";

@@ -12,9 +12,9 @@ export const env = {
     "Explore insights, tutorials, and deep dives into technology",
 
   // Admin Configuration
-  ADMIN_USERNAME: process.env.NEXT_PUBLIC_ADMIN_USERNAME || "admin",
-  ADMIN_PASSWORD: process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "devure2024",
-  ADMIN_EMAIL: process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@devure.in",
+  ADMIN_USERNAME: process.env.ADMIN_USERNAME,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
 
   // Image Configuration
   IMAGE_DOMAINS: (() => {

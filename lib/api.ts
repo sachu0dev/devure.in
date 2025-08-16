@@ -13,7 +13,7 @@ import {
 
 // Hero types
 // Hero types - Imported from types/hero.ts
-import { Hero as HeroContent } from "@/types";
+import { Hero as HeroContent, AboutUs } from "@/types";
 
 // Asset types - Imported from types/assets.ts
 import { Asset, AssetSearchOptions } from "@/types";
@@ -772,6 +772,156 @@ export const updateFooterContent = async (
   try {
     const response = await api.put(`/admin/footer`, footerData);
     return response.data.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+// =============================================================================
+// ABOUT US APIs
+// =============================================================================
+
+/**
+ * Get About Us content for public display
+ */
+export const getAboutUsContent = async (): Promise<AboutUs | null> => {
+  try {
+    const response = await api.get<ApiResponse<AboutUs>>(`/about-us`);
+    return response.data.data;
+  } catch (error: unknown) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "response" in error &&
+      error.response &&
+      typeof error.response === "object" &&
+      "status" in error.response &&
+      error.response.status === 404
+    ) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+/**
+ * Get About Us content for admin panel
+ */
+export const getAdminAboutUsContent = async (): Promise<AboutUs> => {
+  try {
+    const response = await api.get<ApiResponse<AboutUs>>(`/admin/about-us`);
+    return response.data.data;
+  } catch (error: unknown) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "response" in error &&
+      error.response &&
+      typeof error.response === "object" &&
+      "status" in error.response &&
+      error.response.status === 404
+    ) {
+      // Return a default About Us structure without _id for creation
+      const defaultAboutUs: Omit<AboutUs, "_id" | "createdAt" | "updatedAt"> = {
+        title: "About Devure.in",
+        description:
+          "We are a passionate team of developers, designers, and innovators dedicated to creating exceptional digital experiences. With years of experience in web development, mobile apps, and custom software solutions, we help businesses transform their ideas into powerful, scalable applications that drive growth and success.",
+        learnMoreButton: {
+          text: "Learn More",
+          url: "/about",
+        },
+        imageUrl: "/images/about-us-hero.jpg",
+        isActive: true,
+      };
+
+      // Create the About Us in the database and return the created document
+      try {
+        const createResponse = await api.put(`/admin/about-us`, defaultAboutUs);
+        return createResponse.data.data;
+      } catch (createError) {
+        console.error("Error creating default About Us:", createError);
+        throw new Error("Failed to create default About Us content");
+      }
+    }
+    throw error;
+  }
+};
+
+/**
+ * Update About Us content
+ */
+export const updateAboutUsContent = async (
+  aboutUsData: AboutUs
+): Promise<AboutUs> => {
+  try {
+    const response = await api.put(`/admin/about-us`, aboutUsData);
+    return response.data.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+// =============================================================================
+// ADMIN AUTHENTICATION APIs
+// =============================================================================
+
+export interface AdminLoginData {
+  username: string;
+  password: string;
+}
+
+export interface AdminLoginResponse {
+  success: boolean;
+  message: string;
+  data: {
+    username: string;
+    sessionToken: string;
+  };
+}
+
+export interface AdminAuthCheckResponse {
+  success: boolean;
+  message: string;
+  data: {
+    authenticated: boolean;
+  };
+}
+
+/**
+ * Admin login
+ */
+export const adminLogin = async (
+  credentials: AdminLoginData
+): Promise<AdminLoginResponse> => {
+  try {
+    const response = await api.post<AdminLoginResponse>(
+      "/admin/login",
+      credentials
+    );
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+/**
+ * Check if admin is authenticated
+ */
+export const checkAdminAuth = async (): Promise<AdminAuthCheckResponse> => {
+  try {
+    const response = await api.get<AdminAuthCheckResponse>("/admin/login");
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+/**
+ * Admin logout
+ */
+export const adminLogout = async (): Promise<void> => {
+  try {
+    await api.delete("/admin/login");
   } catch (error) {
     throw handleApiError(error);
   }

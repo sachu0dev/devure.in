@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Figtree } from "next/font/google";
@@ -295,7 +295,9 @@ const Projects = ({ projects = [] }: ProjectsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Ensure projects is always an array and only show first 4 projects
-  const displayProjects = Array.isArray(projects) ? projects.slice(0, 4) : [];
+  const displayProjects = useMemo(() => {
+    return Array.isArray(projects) ? projects.slice(0, 4) : [];
+  }, [projects]);
 
   useEffect(() => {
     if (displayProjects.length === 0) return;

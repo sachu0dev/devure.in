@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Home,
+  LogOut,
 } from "lucide-react";
 
 const navigation = [
@@ -29,6 +30,7 @@ const navigation = [
       { name: "Projects", href: "/admin/projects" },
       { name: "Technologies", href: "/admin/technologies" },
       { name: "About Me", href: "/admin/about" },
+      { name: "About Us", href: "/admin/about-us" },
       { name: "Experience", href: "/admin/experience" },
       { name: "Footer", href: "/admin/footer" },
     ],
@@ -162,10 +164,23 @@ export function AdminSidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 space-y-3">
           {!collapsed && (
             <div className="text-sm text-gray-500">Admin Panel v1.0</div>
           )}
+          <button
+            onClick={() => {
+              localStorage.removeItem("adminAuthenticated");
+              localStorage.removeItem("adminUsername");
+              window.location.href = "/admin/login";
+            }}
+            className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors text-red-600 hover:bg-red-50 ${
+              collapsed ? "justify-center" : ""
+            }`}
+          >
+            <LogOut className="w-5 h-5" />
+            {!collapsed && <span>Logout</span>}
+          </button>
         </div>
       </div>
     </div>

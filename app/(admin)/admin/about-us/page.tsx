@@ -19,8 +19,10 @@ export default function AboutUsAdminPage() {
   const [creating, setCreating] = useState(false);
 
   const [formData, setFormData] = useState({
+    subtitle: "",
     title: "",
     description: "",
+    additionalDescription: "",
     learnMoreButton: {
       text: "",
       url: "",
@@ -39,8 +41,10 @@ export default function AboutUsAdminPage() {
       const content = await getAdminAboutUsContent();
       setAboutUs(content);
       setFormData({
+        subtitle: content.subtitle || "",
         title: content.title,
         description: content.description,
+        additionalDescription: content.additionalDescription || "",
         learnMoreButton: content.learnMoreButton,
         imageUrl: content.imageUrl,
         isActive: content.isActive,
@@ -136,6 +140,17 @@ export default function AboutUsAdminPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Subtitle */}
+            <div className="space-y-2">
+              <Label htmlFor="subtitle">Subtitle (Optional)</Label>
+              <Input
+                id="subtitle"
+                value={formData.subtitle}
+                onChange={(e) => handleInputChange("subtitle", e.target.value)}
+                placeholder="Enter a subtitle (e.g., SUSTAINABILITY)"
+              />
+            </div>
+
             {/* Title */}
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
@@ -157,9 +172,25 @@ export default function AboutUsAdminPage() {
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
                 }
-                placeholder="Enter the description for the About Us section"
+                placeholder="Enter the main description for the About Us section"
                 rows={4}
                 required
+              />
+            </div>
+
+            {/* Additional Description */}
+            <div className="space-y-2">
+              <Label htmlFor="additionalDescription">
+                Additional Description (Optional)
+              </Label>
+              <Textarea
+                id="additionalDescription"
+                value={formData.additionalDescription}
+                onChange={(e) =>
+                  handleInputChange("additionalDescription", e.target.value)
+                }
+                placeholder="Enter additional description text (optional)"
+                rows={4}
               />
             </div>
 

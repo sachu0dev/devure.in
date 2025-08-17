@@ -413,17 +413,7 @@ export const getAdminServices = async (
     search?: string;
     status?: "all" | "active" | "inactive";
   } = {}
-): Promise<{
-  services: Service[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}> => {
+): Promise<PaginatedResponse<Service>> => {
   const queryParams = new URLSearchParams();
 
   if (params.page) queryParams.append("page", params.page.toString());
@@ -431,20 +421,10 @@ export const getAdminServices = async (
   if (params.search) queryParams.append("search", params.search);
   if (params.status) queryParams.append("status", params.status);
 
-  const response = await api.get<{
-    data: {
-      services: Service[];
-      pagination: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-        hasNext: boolean;
-        hasPrev: boolean;
-      };
-    };
-  }>(`/admin/services?${queryParams.toString()}`);
-  return response.data.data;
+  const response = await api.get<PaginatedResponse<Service>>(
+    `/admin/services?${queryParams.toString()}`
+  );
+  return response.data;
 };
 
 /**
@@ -564,14 +544,14 @@ export const extractApiData = <T>(response: unknown): T => {
 // =============================================================================
 
 // Import types from organized type files
-import { Project, ProjectsResponse, ProjectFilters } from "@/types";
+import { Project, ProjectFilters } from "@/types";
 
 /**
  * Get projects for admin panel with pagination and filters
  */
 export async function getAdminProjects(
   filters: ProjectFilters = {}
-): Promise<ProjectsResponse> {
+): Promise<PaginatedResponse<Project>> {
   try {
     const params = new URLSearchParams();
 
@@ -580,8 +560,10 @@ export async function getAdminProjects(
     if (filters.search) params.append("search", filters.search);
     if (filters.status) params.append("status", filters.status);
 
-    const response = await api.get(`/admin/projects?${params.toString()}`);
-    return response.data.data;
+    const response = await api.get<PaginatedResponse<Project>>(
+      `/admin/projects?${params.toString()}`
+    );
+    return response.data;
   } catch (error) {
     console.error("Error fetching admin projects:", error);
     throw error;
@@ -823,9 +805,12 @@ export const getAdminAboutUsContent = async (): Promise<AboutUs> => {
     ) {
       // Return a default About Us structure without _id for creation
       const defaultAboutUs: Omit<AboutUs, "_id" | "createdAt" | "updatedAt"> = {
+        subtitle: "ABOUT US",
         title: "About Devure.in",
         description:
           "We are a passionate team of developers, designers, and innovators dedicated to creating exceptional digital experiences. With years of experience in web development, mobile apps, and custom software solutions, we help businesses transform their ideas into powerful, scalable applications that drive growth and success.",
+        additionalDescription:
+          "Our commitment to excellence extends beyond just coding. We believe in building lasting partnerships with our clients, understanding their unique challenges, and delivering solutions that not only meet their immediate needs but also position them for long-term success in an ever-evolving digital landscape.",
         learnMoreButton: {
           text: "Learn More",
           url: "/about",

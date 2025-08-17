@@ -43,17 +43,24 @@ export default function ServicesAdminPage() {
         getAdminServicesHeader(),
       ]);
 
-      setServices(servicesResponse.services);
+      setServices(servicesResponse.data);
 
       setHeader(headerResponse);
       setHeaderForm({
-        mainTitle: headerResponse.mainTitle,
-        services: headerResponse.services,
+        mainTitle: headerResponse.mainTitle || "",
+        services: headerResponse.services || [],
       });
     } catch (error) {
       const errorMessage = handleApiError(error);
       setError(errorMessage);
       console.error("Error loading data:", errorMessage);
+      // Set default values on error
+      setServices([]);
+      setHeader(null);
+      setHeaderForm({
+        mainTitle: "",
+        services: [],
+      });
     } finally {
       setLoading(false);
     }
@@ -82,11 +89,12 @@ export default function ServicesAdminPage() {
         status,
       });
 
-      setServices(response.services);
+      setServices(response.data);
     } catch (error) {
       const errorMessage = handleApiError(error);
       setError(errorMessage);
       console.error("Error searching services:", errorMessage);
+      setServices([]);
     } finally {
       setLoading(false);
     }
@@ -209,24 +217,26 @@ export default function ServicesAdminPage() {
                   Rotating Services
                 </label>
                 <div className="space-y-2">
-                  {headerForm.services.map((service, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={service}
-                        onChange={(e) =>
-                          updateServiceItem(index, e.target.value)
-                        }
-                        placeholder="Service name"
-                      />
-                      <Button
-                        onClick={() => removeServiceItem(index)}
-                        variant="outline"
-                        size="sm"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
+                  {headerForm.services &&
+                    Array.isArray(headerForm.services) &&
+                    headerForm.services.map((service, index) => (
+                      <div key={index} className="flex gap-2">
+                        <Input
+                          value={service}
+                          onChange={(e) =>
+                            updateServiceItem(index, e.target.value)
+                          }
+                          placeholder="Service name"
+                        />
+                        <Button
+                          onClick={() => removeServiceItem(index)}
+                          variant="outline"
+                          size="sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
                   <Button onClick={addServiceItem} variant="outline" size="sm">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Service
@@ -247,11 +257,13 @@ export default function ServicesAdminPage() {
                   Rotating Services:
                 </span>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {header?.services.map((service, index) => (
-                    <Badge key={index} variant="secondary">
-                      {service}
-                    </Badge>
-                  ))}
+                  {header?.services &&
+                    Array.isArray(header.services) &&
+                    header.services.map((service, index) => (
+                      <Badge key={index} variant="secondary">
+                        {service}
+                      </Badge>
+                    ))}
                 </div>
               </div>
             </div>
@@ -303,59 +315,65 @@ export default function ServicesAdminPage() {
 
       {/* Services List */}
       <div className="space-y-4">
-        {services.map((service) => (
-          <Card key={service._id} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold">{service.title}</h3>
-                    <Badge variant="outline">{service.serviceType}</Badge>
-                    {service.isFeatured && (
+        {Array.isArray(services) &&
+          services.map((service) => (
+            <Card
+              key={service._id}
+              className="hover:shadow-md transition-shadow"
+            >
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-semibold">{service.title}</h3>
+                      <Badge variant="outline">{service.serviceType}</Badge>
+                      {service.isFeatured && (
+                        <Badge
+                          variant="default"
+                          className="bg-yellow-100 text-yellow-800"
+                        >
+                          <Star className="w-3 h-3 mr-1" />
+                          Featured
+                        </Badge>
+                      )}
                       <Badge
-                        variant="default"
-                        className="bg-yellow-100 text-yellow-800"
+                        variant={service.isActive ? "default" : "secondary"}
                       >
-                        <Star className="w-3 h-3 mr-1" />
-                        Featured
+                        {service.isActive ? "Active" : "Inactive"}
                       </Badge>
+                    </div>
+                    {service.excerpt && (
+                      <p className="text-gray-600 mb-3">{service.excerpt}</p>
                     )}
-                    <Badge variant={service.isActive ? "default" : "secondary"}>
-                      {service.isActive ? "Active" : "Inactive"}
-                    </Badge>
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <span>Order: {service.order}</span>
+                      <span>•</span>
+                      <span>
+                        Created:{" "}
+                        {new Date(service.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-                  {service.excerpt && (
-                    <p className="text-gray-600 mb-3">{service.excerpt}</p>
-                  )}
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <span>Order: {service.order}</span>
-                    <span>•</span>
-                    <span>
-                      Created:{" "}
-                      {new Date(service.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Link href={`/admin/services/${service.slug}`}>
-                    <Button variant="outline" size="sm">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit
+                  <div className="flex items-center gap-2">
+                    <Link href={`/admin/services/${service.slug}`}>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDelete(service.slug)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </Button>
-                  </Link>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(service.slug)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
       </div>
 
       {/* Loading indicator */}
@@ -366,7 +384,7 @@ export default function ServicesAdminPage() {
       )}
 
       {/* No services message */}
-      {!loading && services.length === 0 && (
+      {!loading && Array.isArray(services) && services.length === 0 && (
         <div className="text-center py-12">
           <div className="text-gray-500 text-lg mb-4">No services found</div>
           <Link href="/admin/services/create">

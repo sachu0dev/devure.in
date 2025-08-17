@@ -1,8 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IAboutUs extends Document {
+  subtitle?: string;
   title: string;
   description: string;
+  additionalDescription?: string;
   learnMoreButton: {
     text: string;
     url: string;
@@ -15,6 +17,11 @@ export interface IAboutUs extends Document {
 
 const AboutUsSchema = new Schema<IAboutUs>(
   {
+    subtitle: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     title: {
       type: String,
       required: true,
@@ -23,6 +30,11 @@ const AboutUsSchema = new Schema<IAboutUs>(
     description: {
       type: String,
       required: true,
+      trim: true,
+    },
+    additionalDescription: {
+      type: String,
+      required: false,
       trim: true,
     },
     learnMoreButton: {

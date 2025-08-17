@@ -1,7 +1,9 @@
 export interface AboutUs {
   _id: string;
+  subtitle?: string;
   title: string;
   description: string;
+  additionalDescription?: string;
   learnMoreButton: {
     text: string;
     url: string;
@@ -13,8 +15,10 @@ export interface AboutUs {
 }
 
 export interface AboutUsData {
+  subtitle?: string;
   title: string;
   description: string;
+  additionalDescription?: string;
   learnMoreButton: {
     text: string;
     url: string;
@@ -24,8 +28,10 @@ export interface AboutUsData {
 }
 
 export interface AboutUsFormData {
+  subtitle?: string;
   title: string;
   description: string;
+  additionalDescription?: string;
   learnMoreButton: {
     text: string;
     url: string;

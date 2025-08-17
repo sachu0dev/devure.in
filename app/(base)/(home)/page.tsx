@@ -81,7 +81,13 @@ export const metadata: Metadata = {
 };
 
 // Import types from organized type files
-import { BlogPostSummary, Project, Service, ServicesHeader } from "@/types";
+import {
+  BlogPostSummary,
+  Project,
+  Service,
+  ServicesHeader,
+  AboutUs,
+} from "@/types";
 
 const page = async () => {
   // Fetch featured blogs, hero content, services data, and projects on the server side
@@ -106,7 +112,27 @@ const page = async () => {
       getServices().catch(() => []), // Don't fail if services are missing
       getServicesHeader().catch(() => null), // Don't fail if header is missing
       getProjects().catch(() => []), // Don't fail if projects are missing
-      getAboutUsContent().catch(() => null), // Don't fail if about us content is missing
+      getAboutUsContent().catch((error) => {
+        console.error("Error fetching AboutUs content:", error);
+        // Return fallback content instead of null
+        return {
+          _id: "fallback",
+          subtitle: "ABOUT US",
+          title: "About Devure.in",
+          description:
+            "We are a passionate team of developers, designers, and innovators dedicated to creating exceptional digital experiences.",
+          additionalDescription:
+            "Our commitment to excellence extends beyond just coding. We believe in building lasting partnerships with our clients.",
+          learnMoreButton: {
+            text: "Learn More",
+            url: "/about",
+          },
+          imageUrl: "/images/about-us-hero.jpg",
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        } as AboutUs;
+      }), // Don't fail if about us content is missing
     ]);
     featuredBlogs = blogResults.posts || [];
     heroContent = heroData;

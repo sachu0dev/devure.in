@@ -54,6 +54,13 @@ export default function AssetsAdmin() {
 
         const response = await getAssets(options);
 
+        // Add null checking to prevent undefined errors
+        if (!response || !response.assets || !response.pagination) {
+          console.error("Invalid response structure:", response);
+          setError("Invalid response from server");
+          return;
+        }
+
         if (reset) {
           setAssets(response.assets);
           setPage(1);
@@ -99,6 +106,11 @@ export default function AssetsAdmin() {
       formData.append("file", file);
 
       const uploadResponse = await uploadImage(formData);
+
+      // Add safety checks for upload response
+      if (!uploadResponse || !uploadResponse.asset) {
+        throw new Error("Invalid upload response");
+      }
 
       // Update asset with form data if provided
       if (
@@ -367,92 +379,99 @@ export default function AssetsAdmin() {
       )}
 
       {/* Assets Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {assets.map((asset, index) => (
-          <div
-            key={asset._id}
-            ref={index === assets.length - 1 ? lastAssetElementRef : null}
-            className="group relative"
-          >
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-              <CardContent className="p-0">
-                {/* Image */}
-                <div className="relative aspect-square overflow-hidden">
-                  <Image
-                    src={asset.url}
-                    alt={asset.alt || asset.originalName}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                  />
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        {Array.isArray(assets) &&
+          assets.map((asset, index) => (
+            <div
+              key={asset._id}
+              ref={index === assets.length - 1 ? lastAssetElementRef : null}
+              className="group relative"
+            >
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow p-0">
+                <CardContent className="p-0">
+                  {/* Image */}
+                  <div className="relative aspect-[3/2] overflow-hidden">
+                    <Image
+                      src={asset.url}
+                      alt={asset.alt || asset.originalName}
+                      fill
+                      className="object-cover   transititon-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                    />
 
-                  {/* Delete button on hover */}
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      onClick={() => handleDelete(asset._id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Asset Info */}
-                <div className="p-3">
-                  <h3
-                    className="font-medium text-sm truncate"
-                    title={asset.name}
-                  >
-                    {asset.name}
-                  </h3>
-
-                  {/* URL with copy button */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <Input value={asset.url} readOnly className="text-xs h-8" />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => copyToClipboard(asset.url)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Copy className="w-3 h-3" />
-                    </Button>
-                  </div>
-
-                  {/* Asset details */}
-                  <div className="mt-2 text-xs text-gray-500 space-y-1">
-                    <div>
-                      Size:{" "}
-                      {asset.fileSize < 1024 * 1024
-                        ? `${(asset.fileSize / 1024).toFixed(1)} KB`
-                        : `${(asset.fileSize / (1024 * 1024)).toFixed(1)} MB`}
+                    {/* Delete button on hover */}
+                    <div className="absolute inset-0  group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        onClick={() => handleDelete(asset._id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
-                    <div>Category: {asset.category}</div>
-                    {asset.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {asset.tags.slice(0, 3).map((tag, i) => (
-                          <span
-                            key={i}
-                            className="px-2 py-1 bg-gray-100 rounded text-xs"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {asset.tags.length > 3 && (
-                          <span className="px-2 py-1 bg-gray-100 rounded text-xs">
-                            +{asset.tags.length - 3}
-                          </span>
-                        )}
-                      </div>
-                    )}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
+
+                  {/* Asset Info */}
+                  <div className="p-3">
+                    <h3
+                      className="font-medium text-sm truncate"
+                      title={asset.name}
+                    >
+                      {asset.name}
+                    </h3>
+
+                    {/* URL with copy button */}
+                    <div className="flex items-center gap-2 mt-2">
+                      <Input
+                        value={asset.url}
+                        readOnly
+                        className="text-xs h-8"
+                      />
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => copyToClipboard(asset.url)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Copy className="w-3 h-3" />
+                      </Button>
+                    </div>
+
+                    {/* Asset details */}
+                    <div className="mt-2 text-xs text-gray-500 space-y-1">
+                      <div>
+                        Size:{" "}
+                        {asset.fileSize && asset.fileSize < 1024 * 1024
+                          ? `${(asset.fileSize / 1024).toFixed(1)} KB`
+                          : asset.fileSize
+                          ? `${(asset.fileSize / (1024 * 1024)).toFixed(1)} MB`
+                          : "Unknown"}
+                      </div>
+                      <div>Category: {asset.category || "Uncategorized"}</div>
+                      {asset.tags && asset.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {asset.tags.slice(0, 3).map((tag, i) => (
+                            <span
+                              key={i}
+                              className="px-2 py-1 bg-gray-100 rounded text-xs"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {asset.tags.length > 3 && (
+                            <span className="px-2 py-1 bg-gray-100 rounded text-xs">
+                              +{asset.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
       </div>
 
       {/* Loading indicator */}

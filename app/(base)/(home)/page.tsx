@@ -108,13 +108,12 @@ const page = async () => {
       aboutUsData,
     ] = await Promise.all([
       getBlogs({ featured: true, limit: 3 }),
-      getHeroContent().catch(() => null), // Don't fail if hero content is missing
-      getServices().catch(() => []), // Don't fail if services are missing
-      getServicesHeader().catch(() => null), // Don't fail if header is missing
-      getProjects().catch(() => []), // Don't fail if projects are missing
+      getHeroContent().catch(() => null),
+      getServices().catch(() => []),
+      getServicesHeader().catch(() => null),
+      getProjects().catch(() => []),
       getAboutUsContent().catch((error) => {
         console.error("Error fetching AboutUs content:", error);
-        // Return fallback content instead of null
         return {
           _id: "fallback",
           subtitle: "ABOUT US",

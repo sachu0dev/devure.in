@@ -27,7 +27,7 @@ const Header = () => {
         return "Services";
 
       case "/about-us":
-        return "About Us";
+        return "About";
       case "/contact":
         return "Contact";
       default:
@@ -240,7 +240,7 @@ const Header = () => {
               </Link>
 
               <Link href="/about-us" className="relative group py-2">
-                About Us
+                About
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
               </Link>
             </nav>

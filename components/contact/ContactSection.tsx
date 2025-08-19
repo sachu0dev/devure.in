@@ -36,8 +36,8 @@ const defaultForm: ContactFormData = {
   website: "",
   projectType: "new_project",
   serviceType: "web_app",
-  budget: "1k_3k",
-  timeline: "1_3_months",
+  budget: "",
+  timeline: "",
   message: "",
   requestedCall: false,
 };
@@ -66,6 +66,11 @@ export default function ContactSection() {
 
   function validateForm(): boolean {
     const errors: Record<string, string> = {};
+    console.log("Validating form:", {
+      form,
+      recaptchaToken,
+      hasRecaptchaKey: !!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+    });
 
     if (!form.fullName.trim()) {
       errors.fullName = "Full name is required";
@@ -90,29 +95,36 @@ export default function ContactSection() {
       errors.honeypot = "Invalid submission";
     }
 
+    console.log("Validation errors:", errors);
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    console.log("Form submitted!", { form, recaptchaToken });
 
     if (!validateForm()) {
+      console.log("Validation failed:", fieldErrors);
       return;
     }
 
+    console.log("Validation passed, submitting form...");
     setIsSubmitting(true);
     setStatus(null);
 
     try {
+      const requestBody = {
+        ...form,
+        recaptchaToken,
+        honeypot: honeypotRef.current?.value || "",
+      };
+      console.log("Sending request to API:", requestBody);
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          recaptchaToken,
-          honeypot: honeypotRef.current?.value || "",
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -440,13 +452,47 @@ export default function ContactSection() {
 
                 {status && (
                   <div
-                    className={
+                    className={`p-4 rounded-xl font-figtree text-center ${
                       status.ok
-                        ? "text-green-500 font-figtree"
-                        : "text-red-500 font-figtree"
-                    }
+                        ? "bg-green-500/10 border border-green-500/20 text-green-600"
+                        : "bg-red-500/10 border border-red-500/20 text-red-600"
+                    }`}
                   >
-                    {status.message}
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      {status.ok ? (
+                        <svg
+                          className="w-6 h-6 text-green-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2.5}
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-6 h-6 text-red-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2.5}
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      )}
+                      <span className="font-semibold">
+                        {status.ok ? "Success!" : "Error"}
+                      </span>
+                    </div>
+                    <p className="text-sm">{status.message}</p>
                   </div>
                 )}
 
@@ -462,7 +508,7 @@ export default function ContactSection() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex items-center justify-center gap-3 bg-white text-foreground px-8 py-4 rounded-2xl font-bold text-lg  transition-colors font-figtree w-full disabled:opacity-70"
+                    className="inline-flex items-center justify-center gap-3 bg-transparent border-2 border-[#ff9c94] text-background px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#ff9c94]/10 transition-colors font-figtree w-full disabled:opacity-70"
                     onClick={() => update("requestedCall", true)}
                   >
                     {isSubmitting ? "Requesting..." : "Submit & request a call"}

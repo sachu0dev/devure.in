@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Home,
   LogOut,
+  Mail,
 } from "lucide-react";
 
 const navigation = [
@@ -41,6 +42,11 @@ const navigation = [
       { name: "All Blogs", href: "/admin/blogs" },
       { name: "Create New", href: "/admin/blogs/create" },
     ],
+  },
+  {
+    name: "Contacts",
+    href: "/admin/contacts",
+    icon: Mail,
   },
   {
     name: "Users",

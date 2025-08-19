@@ -367,6 +367,7 @@ const Header = () => {
             <Link
               href="/work"
               className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3"
+              onClick={() => setMobileNavOpen(false)}
             >
               Work
             </Link>
@@ -375,6 +376,7 @@ const Header = () => {
             <Link
               href="/service"
               className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3"
+              onClick={() => setMobileNavOpen(false)}
             >
               Services
             </Link>
@@ -383,30 +385,25 @@ const Header = () => {
             <Link
               href="/blog"
               className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3"
+              onClick={() => setMobileNavOpen(false)}
             >
               Blogs
             </Link>
           </li>
           <li>
             <Link
-              href="/technology"
+              href="/about-us"
               className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3"
+              onClick={() => setMobileNavOpen(false)}
             >
-              Technology
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/experience"
-              className="text-3xl border-b-[1px] border-background font-bold block w-full text-left py-3"
-            >
-              Experince
+              About
             </Link>
           </li>
           <li>
             <Link
               href="/contact"
               className="text-3xl text-center border-background font-bold block w-full  py-3 text-primary"
+              onClick={() => setMobileNavOpen(false)}
             >
               Let&apos;s talk →
             </Link>

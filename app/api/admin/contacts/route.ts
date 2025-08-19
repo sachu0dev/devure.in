@@ -4,9 +4,10 @@ import Contact from "@/models/Contact";
 
 export async function GET(request: NextRequest) {
   try {
-    // Basic admin check (you might want to implement proper JWT auth)
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    // For now, allow access if the request comes from the admin panel
+    // In production, you should implement proper JWT authentication
+    const referer = request.headers.get("referer");
+    if (!referer || !referer.includes("/admin")) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 

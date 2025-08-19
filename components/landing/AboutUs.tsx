@@ -27,10 +27,10 @@ export default function AboutUsSection({ aboutUsContent }: AboutUsProps) {
 
   return (
     <div
-      className={`w-full min-h-screen flex items-start ${figtree.variable} px-3 md:px-6 pb-8 lg:pb-16 pt-[6rem] relative`}
+      className={`w-full min-h-screen ${figtree.variable} px-3 md:px-6 pb-8 lg:pb-16 pt-[6rem] relative max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0 items-start`}
     >
       {/* Left Column - Content */}
-      <div className="w-full lg:w-1/2 px-6 md:px-12 lg:px-18 xl:px-24 py-20 lg:py-0 lg:sticky lg:top-24">
+      <div className="px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 2xl:px-20 py-12 md:py-16 lg:py-0 lg:sticky lg:top-24">
         <div className="max-w-2xl">
           {/* Subtitle - Hidden on /about-us page */}
           {!isAboutUsPage && (
@@ -40,7 +40,7 @@ export default function AboutUsSection({ aboutUsContent }: AboutUsProps) {
           )}
 
           {/* Main Title */}
-          <h1 className="text-[2rem] md:text-[3rem] lg:text-[4rem] xl:text-[5rem] font-black text-background leading-[0.9] mb-8 font-figtree">
+          <h1 className="text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[4rem] xl:text-[5rem] 2xl:text-[6rem] font-black text-background leading-[0.9] mb-8 font-figtree">
             {aboutUsContent.title || "About Devure.in"}
           </h1>
 
@@ -61,7 +61,7 @@ export default function AboutUsSection({ aboutUsContent }: AboutUsProps) {
           {!isAboutUsPage && (
             <div className="pt-4">
               <Link href={aboutUsContent.learnMoreButton?.url || "/about-us"}>
-                <button className="learn-more-btn inline-flex items-center gap-4 bg-[#ff9c94] text-background px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#ff8a80] hover:scale-105 transition-all duration-300 font-figtree shadow-lg hover:shadow-xl">
+                <button className="learn-more-btn inline-flex items-center justify-center gap-4 bg-[#ff9c94] text-background px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#ff8a80] hover:scale-105 transition-all duration-300 font-figtree shadow-lg hover:shadow-xl w-full sm:w-auto">
                   <span>
                     {aboutUsContent.learnMoreButton?.text || "Learn More"}
                   </span>
@@ -86,7 +86,7 @@ export default function AboutUsSection({ aboutUsContent }: AboutUsProps) {
       </div>
 
       {/* Right Column - Sticky Image */}
-      <div className="hidden lg:block w-1/2 h-screen sticky top-0">
+      <div className="hidden lg:block h-screen sticky top-0">
         <div className="w-full h-full relative">
           <Image
             src={aboutUsContent.imageUrl || "/images/about-us-hero.jpg"}
@@ -94,7 +94,7 @@ export default function AboutUsSection({ aboutUsContent }: AboutUsProps) {
             fill
             className="object-cover"
             priority
-            sizes="50vw"
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-background/20 via-transparent to-transparent"></div>
@@ -102,7 +102,7 @@ export default function AboutUsSection({ aboutUsContent }: AboutUsProps) {
       </div>
 
       {/* Mobile Image - Full Width Below Content */}
-      <div className="lg:hidden w-full h-96 relative mt-8">
+      <div className="lg:hidden w-full relative mt-8 aspect-[2/3]">
         <Image
           src={aboutUsContent.imageUrl || "/images/about-us-hero.jpg"}
           alt={aboutUsContent.title || "About Us"}

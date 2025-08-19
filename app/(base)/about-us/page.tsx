@@ -10,9 +10,9 @@ import Script from "next/script";
 export const revalidate = 21600; // 6 hours in seconds
 
 export const metadata: Metadata = {
-  title: "Sushil Kumar - Full Stack Developer & Founder | Devure.in",
+  title: "Sushil Kumar - Full Stack Developer & Creator | Devure.in",
   description:
-    "Sushil Kumar is a passionate Full Stack Developer and Founder of Devure.in, specializing in JavaScript, TypeScript, React.js, Next.js, and Node.js. Expert in real-time applications, cloud architecture, and scalable SaaS platforms. View portfolio, projects, and connect.",
+    "Sushil Kumar is a passionate Full Stack Developer and Creator of Devure.in, specializing in JavaScript, TypeScript, React.js, Next.js, and Node.js. Expert in real-time applications, cloud architecture, and scalable SaaS platforms. View portfolio, projects, and connect.",
   keywords: [
     "Sushil Kumar",
     "Full Stack Developer",
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(env.SITE_URL),
   openGraph: {
-    title: "Sushil Kumar - Full Stack Developer & Founder | Devure.in",
+    title: "Sushil Kumar - Full Stack Developer & Creator | Devure.in",
     description:
-      "Meet Sushil Kumar, a passionate Full Stack Developer and Founder of Devure.in. Expert in modern web technologies, real-time applications, and scalable SaaS platforms. View portfolio and connect.",
+      "Meet Sushil Kumar, a passionate Full Stack Developer and Creator of Devure.in. Expert in modern web technologies, real-time applications, and scalable SaaS platforms. View portfolio and connect.",
     url: `${env.SITE_URL}/about-us`,
     siteName: "Devure.in",
     images: [
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
         url: `${env.SITE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "Sushil Kumar - Full Stack Developer and Founder of Devure.in",
+        alt: "Sushil Kumar - Full Stack Developer and Creator of Devure.in",
       },
     ],
     locale: "en_US",
@@ -71,11 +71,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sushil Kumar - Full Stack Developer & Founder | Devure.in",
+    title: "Sushil Kumar - Full Stack Developer & Creator | Devure.in",
     description:
-      "Meet Sushil Kumar, a passionate Full Stack Developer and Founder of Devure.in. Expert in modern web technologies and scalable SaaS platforms.",
+      "Meet Sushil Kumar, a passionate Full Stack Developer and Creator of Devure.in. Expert in modern web technologies and scalable SaaS platforms.",
     images: [`${env.SITE_URL}/og-image.jpg`],
-    creator: "@devure",
+    creator: "@sachu0dev",
     site: "@devure",
   },
   alternates: {
@@ -109,7 +109,7 @@ export default async function AboutPage() {
     "@type": "Person",
     name: "Sushil Kumar",
     alternateName: ["Devure", "DevBySushil"],
-    jobTitle: "Full Stack Developer & Founder",
+    jobTitle: "Full Stack Developer & Creator",
     worksFor: {
       "@type": "Organization",
       name: "Devure.in",
@@ -119,9 +119,9 @@ export default async function AboutPage() {
       "Full Stack Developer specializing in JavaScript, TypeScript, React.js, Next.js, and Node.js. Expert in real-time applications, cloud architecture, and scalable SaaS platforms.",
     url: "https://devure.in",
     sameAs: [
-      "https://github.com/your-github", // Add your GitHub
-      "https://linkedin.com/in/your-linkedin", // Add your LinkedIn
-      "https://twitter.com/devure", // Add your Twitter
+      "https://github.com/sachu0dev", // Add your GitHub
+      "https://www.linkedin.com/in/sachu0dev", // Add your LinkedIn
+      "https://x.com/sachu0dev", // Add your Twitter
       "https://devbysushil.com",
       "https://pgconnect.site",
     ],
@@ -157,8 +157,7 @@ export default async function AboutPage() {
       addressCountry: "IN",
     },
     image: `${env.SITE_URL}/profile.png`,
-    telephone: "+91-XXXXXXXXXX", // Add your phone if public
-    email: "hello@devure.in", // Add your email if public
+    email: "sushil.dev.in@gmail.com", // Add your email if public
   };
 
   return (

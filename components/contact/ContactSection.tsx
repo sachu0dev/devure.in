@@ -90,8 +90,10 @@ export default function ContactSection() {
       errors.recaptcha = "Please complete the reCAPTCHA";
     }
 
-    // Check honeypot
-    if (honeypotRef.current?.value) {
+    // Check honeypot - only trigger if there's actual content
+    const honeypotValue = honeypotRef.current?.value || "";
+    if (honeypotValue && honeypotValue.trim() !== "") {
+      console.log("Honeypot triggered with value:", honeypotValue);
       errors.honeypot = "Invalid submission";
     }
 
@@ -117,7 +119,7 @@ export default function ContactSection() {
       const requestBody = {
         ...form,
         recaptchaToken,
-        honeypot: honeypotRef.current?.value || "",
+        honeypot: "", // Always send empty string for honeypot
       };
       console.log("Sending request to API:", requestBody);
 
@@ -191,21 +193,14 @@ export default function ContactSection() {
                 connectdevure@gmail.com
               </Link>
             </div>
-            <div className="bg-background/5 rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div>
-                <p className="text-sm text-background/60 font-figtree">
-                  Prefer to talk?
-                </p>
-                <p className="font-semibold text-background font-figtree">
-                  Request a quick discovery call
-                </p>
-              </div>
-              <Link
-                href="/book-a-call"
-                className="inline-flex items-center justify-center gap-2 bg-[#ff9c94] text-background px-6 py-3 rounded-xl font-bold font-figtree hover:bg-[#ff8a80] transition-colors w-full sm:w-auto"
-              >
-                Request a call
-              </Link>
+            <div className="bg-background/5 rounded-2xl p-4 md:p-5">
+              <p className="text-sm text-background/60 font-figtree mb-2">
+                Need immediate assistance?
+              </p>
+              <p className="font-semibold text-background font-figtree">
+                Use the form to request a callback - we&apos;ll get back to you
+                within 1-2 business days
+              </p>
             </div>
           </div>
         </div>
@@ -223,6 +218,7 @@ export default function ContactSection() {
                     name="website_confirm"
                     tabIndex={-1}
                     autoComplete="off"
+                    defaultValue=""
                   />
                 </div>
 

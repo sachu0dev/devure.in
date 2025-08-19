@@ -20,7 +20,7 @@ const Footer = ({ footerContent }: FooterProps) => {
     { name: "Blogs", url: "/blog", order: 1 },
     { name: "Work", url: "/work", order: 2 },
     { name: "Services", url: "/service", order: 3 },
-    { name: "About", url: "/about", order: 4 },
+    { name: "About", url: "/about-us", order: 4 },
     { name: "Contact", url: "/contact", order: 5 },
   ];
 
@@ -43,19 +43,23 @@ const Footer = ({ footerContent }: FooterProps) => {
   ];
 
   const socialLinksData = footerContent?.socialLinks || [
-    { name: "GitHub", url: "https://github.com", icon: "Github", order: 0 },
+    {
+      name: "GitHub",
+      url: "https://github.com/sachu0dev",
+      icon: "Github",
+      order: 0,
+    },
     {
       name: "LinkedIn",
-      url: "https://linkedin.com",
+      url: "https://www.linkedin.com/in/sachu0dev",
       icon: "Linkedin",
       order: 1,
     },
-    { name: "Twitter", url: "https://twitter.com", icon: "Twitter", order: 2 },
     {
-      name: "Instagram",
-      url: "https://instagram.com",
-      icon: "Instagram",
-      order: 3,
+      name: "Twitter",
+      url: "https://x.com/sachu0dev",
+      icon: "Twitter",
+      order: 2,
     },
   ];
 

@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   FileText,
   Users,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -30,7 +29,6 @@ const navigation = [
       { name: "Services", href: "/admin/services" },
       { name: "Projects", href: "/admin/projects" },
       { name: "About Us", href: "/admin/about-us" },
-      // { name: "Experience", href: "/admin/experience" },
       { name: "Footer", href: "/admin/footer" },
     ],
   },
@@ -52,11 +50,6 @@ const navigation = [
     name: "Users",
     href: "/admin/users",
     icon: Users,
-  },
-  {
-    name: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
   },
 ];
 

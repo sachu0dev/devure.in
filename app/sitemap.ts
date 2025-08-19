@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllProjects(),
   ]);
 
-  // Base pages
+  // Base pages - Main navigation pages
   const basePages = [
     {
       url: currentDomain,
@@ -51,6 +51,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "daily" as const,
       priority: 0.9,
+    },
+    {
+      url: `${currentDomain}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+  ];
+
+  // Legal pages
+  const legalPages = [
+    {
+      url: `${currentDomain}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+    {
+      url: `${currentDomain}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
     },
   ];
 
@@ -118,6 +140,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...basePages,
+    ...legalPages,
     ...blogPages,
     ...categoryPages,
     ...tagPages,

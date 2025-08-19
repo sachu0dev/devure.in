@@ -81,7 +81,7 @@ export default function ContactSection() {
       errors.message = "Message is required";
     }
 
-    if (!recaptchaToken) {
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !recaptchaToken) {
       errors.recaptcha = "Please complete the reCAPTCHA";
     }
 
@@ -422,19 +422,21 @@ export default function ContactSection() {
                 </div>
 
                 {/* reCAPTCHA */}
-                <div className="flex flex-col gap-2">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
-                    onChange={handleRecaptchaChange}
-                    theme="dark"
-                  />
-                  {fieldErrors.recaptcha && (
-                    <span className="text-red-500 text-sm">
-                      {fieldErrors.recaptcha}
-                    </span>
-                  )}
-                </div>
+                {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
+                  <div className="flex flex-col gap-2">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                      onChange={handleRecaptchaChange}
+                      theme="dark"
+                    />
+                    {fieldErrors.recaptcha && (
+                      <span className="text-red-500 text-sm">
+                        {fieldErrors.recaptcha}
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 {status && (
                   <div

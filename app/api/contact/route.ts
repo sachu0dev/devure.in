@@ -26,21 +26,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true }); // Don't reveal it's spam
     }
 
-    // Validate reCAPTCHA
-    if (!payload.recaptchaToken) {
-      return NextResponse.json(
-        { message: "reCAPTCHA verification required" },
-        { status: 400 }
-      );
-    }
+    // Validate reCAPTCHA (only if configured)
+    if (
+      process.env.RECAPTCHA_SECRET_KEY ||
+      process.env.GOOGLE_RECAPTCHA_SECRET_KEY
+    ) {
+      if (!payload.recaptchaToken) {
+        return NextResponse.json(
+          { message: "reCAPTCHA verification required" },
+          { status: 400 }
+        );
+      }
 
-    // Verify reCAPTCHA with Google
-    const recaptchaValid = await validateRecaptcha(payload.recaptchaToken);
-    if (!recaptchaValid) {
-      return NextResponse.json(
-        { message: "reCAPTCHA verification failed" },
-        { status: 400 }
-      );
+      // Verify reCAPTCHA with Google
+      const recaptchaValid = await validateRecaptcha(payload.recaptchaToken);
+      if (!recaptchaValid) {
+        return NextResponse.json(
+          { message: "reCAPTCHA verification failed" },
+          { status: 400 }
+        );
+      }
+    } else {
+      console.warn("reCAPTCHA not configured - skipping validation");
     }
 
     // Server-side validation

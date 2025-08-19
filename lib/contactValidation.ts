@@ -120,12 +120,35 @@ export async function validateRecaptcha(token: string): Promise<boolean> {
   if (!token) return false;
 
   try {
+    const secretKey =
+      process.env.RECAPTCHA_SECRET_KEY ||
+      process.env.GOOGLE_RECAPTCHA_SECRET_KEY;
+    if (!secretKey) {
+      console.error("RECAPTCHA_SECRET_KEY not configured");
+      return false;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append("secret", secretKey);
+    formData.append("response", token);
+
     const response = await fetch(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-      { method: "POST" }
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
     );
 
     const data = await response.json();
+
+    if (!data.success) {
+      console.error("reCAPTCHA validation failed:", data);
+    }
+
     return data.success === true;
   } catch (error) {
     console.error("reCAPTCHA validation error:", error);

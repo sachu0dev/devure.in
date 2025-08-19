@@ -8,7 +8,6 @@ import {
   validateContactForm,
   sanitizeContactData,
   validateRecaptcha,
-  checkHoneypot,
 } from "@/lib/contactValidation";
 import dbConnect from "@/lib/mongodb";
 import Contact from "@/models/Contact";
@@ -17,13 +16,7 @@ export async function POST(request: NextRequest) {
   try {
     const payload = (await request.json()) as Partial<ContactFormData> & {
       recaptchaToken?: string;
-      honeypot?: string;
     };
-
-    // Check honeypot first
-    if (!checkHoneypot(payload.honeypot || "")) {
-      return NextResponse.json({ ok: true }); // Don't reveal it's spam
-    }
 
     // Validate reCAPTCHA (only if configured)
     if (

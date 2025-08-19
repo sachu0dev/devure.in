@@ -51,7 +51,6 @@ export default function ContactSection() {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const honeypotRef = useRef<HTMLInputElement>(null);
 
   function update<K extends keyof ContactFormData>(
     key: K,
@@ -90,13 +89,6 @@ export default function ContactSection() {
       errors.recaptcha = "Please complete the reCAPTCHA";
     }
 
-    // Check honeypot - only trigger if there's actual content
-    const honeypotValue = honeypotRef.current?.value || "";
-    if (honeypotValue && honeypotValue.trim() !== "") {
-      console.log("Honeypot triggered with value:", honeypotValue);
-      errors.honeypot = "Invalid submission";
-    }
-
     console.log("Validation errors:", errors);
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -119,7 +111,6 @@ export default function ContactSection() {
       const requestBody = {
         ...form,
         recaptchaToken,
-        honeypot: "", // Always send empty string for honeypot
       };
       console.log("Sending request to API:", requestBody);
 
@@ -210,18 +201,6 @@ export default function ContactSection() {
           <Card className="bg-transparent border-background/10">
             <CardContent className="p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Honeypot field - hidden from users */}
-                <div className="absolute -left-[9999px] opacity-0 pointer-events-none">
-                  <input
-                    ref={honeypotRef}
-                    type="text"
-                    name="website_confirm"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    defaultValue=""
-                  />
-                </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
                     <Label className="text-background/70 font-figtree">

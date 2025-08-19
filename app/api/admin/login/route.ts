@@ -21,25 +21,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { username, password } = body;
 
-    // Debug logging (remove in production)
-    console.log("Login attempt:", {
-      username,
-      password: password ? "***" : "undefined",
-    });
-    console.log("Environment variables:", {
-      ADMIN_USERNAME: env.ADMIN_USERNAME,
-      ADMIN_PASSWORD: env.ADMIN_PASSWORD ? "***" : "undefined",
-    });
-
-    // Also check process.env directly
-    console.log("Direct process.env:", {
-      ADMIN_USERNAME: process.env.ADMIN_USERNAME,
-      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ? "***" : "undefined",
-    });
-
     // Validate input
     if (!username || !password) {
-      console.log("Missing credentials");
       return NextResponse.json(
         {
           success: false,
@@ -51,7 +34,6 @@ export async function POST(request: NextRequest) {
 
     // Verify credentials against server-side environment variables
     if (username === env.ADMIN_USERNAME && password === env.ADMIN_PASSWORD) {
-      console.log("Login successful for user:", username);
       // Generate a simple session token (in production, use JWT)
       const sessionToken = `admin-session-${Date.now()}-${Math.random()
         .toString(36)
@@ -78,15 +60,6 @@ export async function POST(request: NextRequest) {
 
       return response;
     } else {
-      console.log("Login failed - invalid credentials");
-      console.log("Expected:", {
-        username: env.ADMIN_USERNAME,
-        password: env.ADMIN_PASSWORD ? "***" : "undefined",
-      });
-      console.log("Received:", {
-        username,
-        password: password ? "***" : "undefined",
-      });
       return NextResponse.json(
         {
           success: false,

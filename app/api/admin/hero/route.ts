@@ -60,7 +60,6 @@ export async function GET() {
       });
 
       hero = await defaultHero.save();
-      console.log("✅ Created default hero content");
     }
 
     return NextResponse.json({ data: hero });

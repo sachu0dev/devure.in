@@ -3,6 +3,7 @@ import { getServiceBySlug } from "@/lib/api";
 import { getAllServices } from "@/lib/services";
 import { Metadata } from "next";
 import Image from "next/image";
+import { BlogContent } from "@/components/BlogContent";
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -125,10 +126,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
               {service.content ? (
-                <div
-                  className="text-foreground"
-                  dangerouslySetInnerHTML={{ __html: service.content }}
-                />
+                <BlogContent content={service.content} />
               ) : (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground text-lg">

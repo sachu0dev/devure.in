@@ -37,6 +37,7 @@ api.interceptors.response.use(
       // Unauthorized - redirect to login
       if (typeof window !== "undefined") {
         localStorage.removeItem("adminAuthenticated");
+        localStorage.removeItem("adminUsername");
         localStorage.removeItem("adminToken");
         window.location.href = "/admin/login";
       }

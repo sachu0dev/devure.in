@@ -21,6 +21,7 @@ export function useAuth() {
             // Server says not authenticated, clear local state
             localStorage.removeItem("adminAuthenticated");
             localStorage.removeItem("adminUsername");
+            localStorage.removeItem("adminToken");
             setIsAuthenticated(false);
             router.push("/admin/login");
           }
@@ -30,6 +31,7 @@ export function useAuth() {
         setIsAuthenticated(false);
         localStorage.removeItem("adminAuthenticated");
         localStorage.removeItem("adminUsername");
+        localStorage.removeItem("adminToken");
       } finally {
         setLoading(false);
       }
@@ -41,6 +43,7 @@ export function useAuth() {
   const logout = () => {
     localStorage.removeItem("adminAuthenticated");
     localStorage.removeItem("adminUsername");
+    localStorage.removeItem("adminToken");
     setIsAuthenticated(false);
     router.push("/admin/login");
   };

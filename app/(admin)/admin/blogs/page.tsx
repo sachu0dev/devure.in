@@ -98,10 +98,8 @@ export default function AdminBlogs() {
       try {
         await deleteBlog(blogId);
         setBlogs(blogs.filter((blog) => blog.slug !== blogId));
-        console.log("Blog deleted:", blogId);
       } catch (error) {
         const errorMessage = handleApiError(error);
-        console.error("Error deleting blog:", errorMessage);
         alert(`Failed to delete blog: ${errorMessage}`);
       }
     }
@@ -111,10 +109,8 @@ export default function AdminBlogs() {
     try {
       const updatedBlog = await toggleBlogDraftStatus(blog.slug);
       setBlogs(blogs.map((b) => (b.slug === blog.slug ? updatedBlog : b)));
-      console.log("Blog status toggled:", blog.slug);
     } catch (error) {
       const errorMessage = handleApiError(error);
-      console.error("Error toggling blog status:", errorMessage);
       alert(`Failed to toggle blog status: ${errorMessage}`);
     }
   };

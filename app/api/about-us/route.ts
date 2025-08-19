@@ -4,19 +4,14 @@ import AboutUs from "@/models/AboutUs";
 
 export async function GET() {
   try {
-    console.log("🔄 AboutUs API: Starting database connection...");
     await dbConnect();
-    console.log("✅ AboutUs API: Database connected successfully");
 
     let aboutUs = await AboutUs.findOne({ isActive: true }).sort({
       createdAt: -1,
     });
 
-    console.log("🔍 AboutUs API: Found content:", aboutUs ? "Yes" : "No");
-
     // If no AboutUs content exists, create default content
     if (!aboutUs) {
-      console.log("📝 AboutUs API: Creating default content...");
       const defaultAboutUs = new AboutUs({
         subtitle: "ABOUT US",
         title: "About Devure.in",
@@ -33,12 +28,10 @@ export async function GET() {
       });
 
       aboutUs = await defaultAboutUs.save();
-      console.log("✅ Created default About Us content for public API");
     }
 
     // Convert Mongoose document to plain object
     const aboutUsData = aboutUs.toObject();
-    console.log("📤 AboutUs API: Sending response with data");
 
     return NextResponse.json({
       success: true,

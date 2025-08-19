@@ -22,7 +22,6 @@ export async function DELETE(
     let s3Deleted = false;
     try {
       await s3Service.deleteAsset(asset.s3Key);
-      console.log(`✅ Deleted asset from S3: ${asset.s3Key}`);
       s3Deleted = true;
     } catch (s3Error) {
       console.error(

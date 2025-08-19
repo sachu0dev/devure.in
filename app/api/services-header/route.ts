@@ -29,7 +29,6 @@ export async function GET() {
       });
 
       header = await defaultHeader.save();
-      console.log("✅ Created default services header from public API");
     }
 
     return NextResponse.json({ data: header });

@@ -18,7 +18,6 @@ const Hero = () => {
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Subscribing:", email);
     setEmail("");
     setIsPopoverOpen(false);
   };

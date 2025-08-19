@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import ProjectActions from "@/components/work/ProjectActions";
 import ProjectCTA from "@/components/work/ProjectCTA";
 import { SmoothCursorWrapper } from "@/components/ui/SmoothCursorWrapper";
+import { BlogContent } from "@/components/BlogContent";
 
 // ISR: Revalidate every 6 hours
 export const revalidate = 21600; // 6 hours in seconds
@@ -249,10 +250,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
               {project.content ? (
-                <div
-                  className="text-foreground"
-                  dangerouslySetInnerHTML={{ __html: project.content }}
-                />
+                <BlogContent content={project.content} />
               ) : (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground text-lg">

@@ -22,6 +22,13 @@ interface ProjectFormData {
   order: number;
   metaTitle: string;
   metaDescription: string;
+  liveUrl: string;
+  githubUrl: string;
+  client: string;
+  duration: string;
+  technologies: string[];
+  tags: string[];
+  description: string;
 }
 
 export default function CreateProject() {
@@ -37,6 +44,13 @@ export default function CreateProject() {
     order: 0,
     metaTitle: "",
     metaDescription: "",
+    liveUrl: "",
+    githubUrl: "",
+    client: "",
+    duration: "",
+    technologies: [],
+    tags: [],
+    description: "",
   });
   const [saving, setSaving] = useState(false);
   const router = useRouter();
@@ -219,6 +233,27 @@ export default function CreateProject() {
             </p>
           </div>
 
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Description
+            </label>
+            <Textarea
+              value={formData.description}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+              placeholder="Detailed description of your project"
+              rows={4}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              A comprehensive overview of the project
+            </p>
+          </div>
+
           {/* Content Editor */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -313,6 +348,134 @@ export default function CreateProject() {
               placeholder="Upload image for your project"
               required
             />
+          </div>
+
+          {/* Project URLs */}
+          <div className="bg-white p-4 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Project URLs
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Live URL
+                </label>
+                <Input
+                  type="url"
+                  value={formData.liveUrl}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      liveUrl: e.target.value,
+                    }))
+                  }
+                  placeholder="https://example.com"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Link to the live project
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  GitHub Repository
+                </label>
+                <Input
+                  type="url"
+                  value={formData.githubUrl}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      githubUrl: e.target.value,
+                    }))
+                  }
+                  placeholder="https://github.com/username/repo"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Link to the source code
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Project Details */}
+          <div className="bg-white p-4 rounded-lg border border-gray-200">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Project Details
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Client
+                </label>
+                <Input
+                  value={formData.client}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      client: e.target.value,
+                    }))
+                  }
+                  placeholder="Client name or company"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Duration
+                </label>
+                <Input
+                  value={formData.duration}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      duration: e.target.value,
+                    }))
+                  }
+                  placeholder="e.g., 3 months, 6 weeks"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technologies
+                </label>
+                <Input
+                  value={formData.technologies.join(", ")}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      technologies: e.target.value
+                        .split(",")
+                        .map((tech) => tech.trim())
+                        .filter(Boolean),
+                    }))
+                  }
+                  placeholder="React, Node.js, MongoDB (comma-separated)"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Separate multiple technologies with commas
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tags
+                </label>
+                <Input
+                  value={formData.tags.join(", ")}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      tags: e.target.value
+                        .split(",")
+                        .map((tag) => tag.trim())
+                        .filter(Boolean),
+                    }))
+                  }
+                  placeholder="web-app, responsive, modern (comma-separated)"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Separate multiple tags with commas
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* SEO */}

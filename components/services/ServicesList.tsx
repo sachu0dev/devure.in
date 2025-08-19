@@ -50,7 +50,6 @@ const ServicesList = ({ services }: ServicesListProps) => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
   };
 
   const containerVariants = {

@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
         try {
           await s3Service.deleteAsset(asset.s3Key);
           results.s3Deleted++;
-          console.log(`✅ Deleted asset from S3: ${asset.s3Key}`);
         } catch (s3Error) {
           console.error(
             `⚠️ Failed to delete asset from S3: ${asset.s3Key}`,
@@ -55,7 +54,6 @@ export async function POST(request: NextRequest) {
         // Delete from database
         await Asset.findByIdAndDelete(asset._id);
         results.deleted++;
-        console.log(`✅ Deleted asset from database: ${asset.name}`);
       } catch (error) {
         console.error(`❌ Failed to delete asset: ${asset.name}`, error);
         results.errors.push(

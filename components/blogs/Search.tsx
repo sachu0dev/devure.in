@@ -33,7 +33,6 @@ const Search = ({ blogs, categories, tags }: SearchProps) => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
   };
 
   const handleCategoryChange = (category: string, checked: boolean) => {

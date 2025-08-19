@@ -7,15 +7,20 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication
     const authHeader = request.headers.get("authorization");
+
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const formData = await request.formData();
-    const imageFile = formData.get("file") as File;
+
+    const imageFile = formData.get("image") as File;
 
     if (!imageFile) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return NextResponse.json(
+        { error: "No image file provided" },
+        { status: 400 }
+      );
     }
 
     // Validate file type

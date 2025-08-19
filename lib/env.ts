@@ -15,6 +15,7 @@ export const env = {
   ADMIN_USERNAME: process.env.ADMIN_USERNAME,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+  CC_EMAIL: process.env.CC_EMAIL,
 
   // Image Configuration
   IMAGE_DOMAINS: (() => {
@@ -86,6 +87,8 @@ export const env = {
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
   FROM_EMAIL: process.env.FROM_EMAIL || "noreply@devure.in",
+  // Contact Form Email Recipients
+  // CC_EMAIL: Secondary email that will be CC'd on all admin notifications
 
   // Content Management
   CONTENT_BLOGS_DIR: process.env.CONTENT_BLOGS_DIR || "content/blogs",

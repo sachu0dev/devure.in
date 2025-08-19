@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
 
     // Check honeypot first
     if (!checkHoneypot(payload.honeypot || "")) {
-      console.log("Honeypot triggered - potential spam");
       return NextResponse.json({ ok: true }); // Don't reveal it's spam
     }
 
@@ -83,7 +82,8 @@ export async function POST(request: NextRequest) {
     // Send emails via Resend
     const resend = new Resend(process.env.RESEND_API_KEY);
     const from = "Devure <noreply@devure.in>";
-    const adminEmail = "connnectdevure@gmail.com";
+    const adminEmail = process.env.ADMIN_EMAIL || "connectdevure@gmail.com";
+    const ccEmail = process.env.CC_EMAIL || "sushil.dev.in@gmail.com";
 
     const userHtml = await render(
       ContactUserReceiptEmail({ fullName: sanitizedData.fullName })
@@ -103,22 +103,39 @@ export async function POST(request: NextRequest) {
       })
     );
 
-    await Promise.all([
-      resend.emails.send({
+    // Send emails via Resend with better error handling
+    console.log("Sending emails...");
+    console.log("From:", from);
+    console.log("To user:", sanitizedData.email);
+    console.log("To admin:", adminEmail);
+    console.log("CC to:", ccEmail);
+    console.log("Admin email from env:", process.env.ADMIN_EMAIL);
+    console.log("CC email from env:", process.env.CC_EMAIL);
+    console.log("Resend API key configured:", !!process.env.RESEND_API_KEY);
+
+    try {
+      const userEmailResult = await resend.emails.send({
         from,
         to: sanitizedData.email,
         subject: "We received your message — Devure",
         html: userHtml,
-      }),
-      resend.emails.send({
+      });
+      console.log("User email sent successfully:", userEmailResult);
+
+      const adminEmailResult = await resend.emails.send({
         from,
         to: adminEmail,
+        cc: ccEmail,
         subject: sanitizedData.requestedCall
           ? "New callback request — Devure"
           : "New contact message — Devure",
         html: adminHtml,
-      }),
-    ]);
+      });
+      console.log("Admin email sent successfully:", adminEmailResult);
+    } catch (emailError) {
+      console.error("Email sending error:", emailError);
+      // Continue with the response even if emails fail
+    }
 
     return NextResponse.json({
       ok: true,

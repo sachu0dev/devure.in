@@ -64,7 +64,6 @@ const ProjectsList = ({ projects, categories }: ProjectsListProps) => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
   };
 
   const containerVariants = {

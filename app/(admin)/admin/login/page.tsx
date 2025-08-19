@@ -17,18 +17,13 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      console.log("Attempting login with:", {
-        username,
-        password: password ? "***" : "undefined",
-      });
-
       const response = await adminLogin({ username, password });
-      console.log("Login response:", response);
 
       if (response.success) {
         // Store authentication state in localStorage for client-side checks
         localStorage.setItem("adminAuthenticated", "true");
         localStorage.setItem("adminUsername", response.data.username);
+        localStorage.setItem("adminToken", response.data.sessionToken);
 
         toast.success("Login successful!");
 

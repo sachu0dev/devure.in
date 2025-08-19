@@ -12,7 +12,6 @@ interface FeaturedProps {
 }
 
 const Featured = ({ blogs }: FeaturedProps) => {
-  console.log(blogs);
   return (
     <section className="w-full">
       <div className="mb-8">

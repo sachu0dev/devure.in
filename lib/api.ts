@@ -67,9 +67,10 @@ export const getBlogBySlug = async (slug: string): Promise<BlogPost> => {
  * Get all categories
  */
 export const getCategories = async (): Promise<BlogCategory[]> => {
-  const response = await api.get<ApiResponse<{ categories: BlogCategory[] }>>(
-    "/blogs/categories"
-  );
+  const response =
+    await api.get<ApiResponse<{ categories: BlogCategory[] }>>(
+      "/blogs/categories"
+    );
   return response.data.data.categories;
 };
 
@@ -77,9 +78,8 @@ export const getCategories = async (): Promise<BlogCategory[]> => {
  * Get all tags
  */
 export const getTags = async (): Promise<BlogTag[]> => {
-  const response = await api.get<ApiResponse<{ tags: BlogTag[] }>>(
-    "/blogs/tags"
-  );
+  const response =
+    await api.get<ApiResponse<{ tags: BlogTag[] }>>("/blogs/tags");
   return response.data.data.tags;
 };
 
@@ -191,9 +191,8 @@ export const toggleBlogFeaturedStatus = async (
  * Get blog statistics
  */
 export const getBlogStats = async (): Promise<BlogStats> => {
-  const response = await api.get<ApiResponse<{ stats: BlogStats }>>(
-    "/admin/stats"
-  );
+  const response =
+    await api.get<ApiResponse<{ stats: BlogStats }>>("/admin/stats");
   return response.data.data.stats;
 };
 
@@ -214,22 +213,36 @@ export const uploadImage = async (
   assetId: string;
   asset: Asset;
 }> => {
-  const response = await api.post<
-    ApiResponse<{
-      url: string;
-      key: string;
-      size: number;
-      type: string;
-      assetId: string;
-      asset: Asset;
-    }>
-  >("/admin/upload", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  // Get admin token from localStorage
+  let authHeader = {};
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("adminToken");
+    if (token) {
+      authHeader = { Authorization: `Bearer ${token}` };
+    }
+  }
 
-  return response.data.data;
+  // For FormData, we need to let the browser set Content-Type with boundary
+  // So we'll use a direct axios call instead of the api instance to avoid interceptor conflicts
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api"}/admin/upload`,
+    {
+      method: "POST",
+      headers: {
+        ...authHeader,
+        // Don't set Content-Type - let browser handle it for FormData
+      },
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to upload image");
+  }
+
+  const responseData = await response.json();
+  return responseData.data;
 };
 
 // =============================================================================
@@ -387,9 +400,8 @@ export const getServiceBySlug = async (slug: string): Promise<Service> => {
  * Get services header
  */
 export const getServicesHeader = async (): Promise<ServicesHeader> => {
-  const response = await api.get<ApiResponse<ServicesHeader>>(
-    "/services-header"
-  );
+  const response =
+    await api.get<ApiResponse<ServicesHeader>>("/services-header");
   return response.data.data;
 };
 
@@ -631,9 +643,7 @@ export async function deleteProject(projectId: string): Promise<void> {
  */
 export async function getProjects(): Promise<Project[]> {
   try {
-    console.log("Fetching projects from /projects endpoint...");
     const response = await api.get("/projects");
-    console.log("Projects response:", response.data);
     return response.data.data;
   } catch (error: unknown) {
     console.error("Error fetching projects:", error);

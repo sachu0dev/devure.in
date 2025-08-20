@@ -493,7 +493,7 @@ const Projects = ({ projects = [] }: ProjectsProps) => {
                 </div>
 
                 {/* Right Column - Abstract Graphic */}
-                <div className="card-graphic relative flex justify-center items-center pt-12 hidden lg:flex">
+                <div className="card-graphic relative  justify-center items-center pt-12 hidden lg:flex">
                   <div className="relative w-full aspect-[2/1]">
                     {/* Abstract Graphic Container */}
                     <div className="w-full h-full bg-background/10 rounded-3xl border border-background/20 relative overflow-hidden">

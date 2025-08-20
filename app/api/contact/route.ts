@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
       recaptchaToken?: string;
     };
 
-    // Validate reCAPTCHA (only if configured)
     if (
       process.env.RECAPTCHA_SECRET_KEY ||
       process.env.GOOGLE_RECAPTCHA_SECRET_KEY

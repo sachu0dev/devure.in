@@ -3,13 +3,13 @@ import { Github, Linkedin, Twitter, Instagram } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FooterContent } from "@/types/blog";
+import { SubscriptionTrigger } from "@/components/ui/subscription-trigger";
 
 interface FooterProps {
   footerContent?: FooterContent;
 }
 
 const Footer = ({ footerContent }: FooterProps) => {
-  // Default values if no footer content is provided
   const title = footerContent?.title || "Devure.in";
   const description =
     footerContent?.description ||
@@ -84,11 +84,9 @@ const Footer = ({ footerContent }: FooterProps) => {
             <p className="text-background text-sm leading-relaxed">
               {description}
             </p>
-            <Link href="/contact">
-              <Button variant="outline" className="w-full">
-                Subscribe to Updates
-              </Button>
-            </Link>
+            <SubscriptionTrigger className="w-full">
+              Subscribe to Updates
+            </SubscriptionTrigger>
           </div>
 
           {/* Quick Links */}
@@ -126,9 +124,11 @@ const Footer = ({ footerContent }: FooterProps) => {
           {/* Contact & Social */}
           <div className="space-y-4">
             <h4 className="font-semibold text-[#cce561]">Let&apos;s Connect</h4>
-            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-              Let&apos;s Talk
-            </Button>
+            <Link href="/contact">
+              <Button className="w-full cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90">
+                Let&apos;s Talk
+              </Button>
+            </Link>
 
             <div className="space-y-3">
               <h5 className="text-sm font-medium text-[#cce561]">Follow Us</h5>

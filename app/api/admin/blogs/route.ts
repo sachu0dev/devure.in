@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { blogService } from "@/lib/blogService";
+import { sendBlogUpdateEmails } from "@/lib/emailService";
 
 // GET /api/admin/blogs - Get all blogs (including drafts)
 export async function GET(request: NextRequest) {
@@ -102,6 +103,24 @@ export async function POST(request: NextRequest) {
 
     // Create the blog
     const blog = await blogService.createBlog(frontmatter, content, excerpt);
+
+    if (!frontmatter.draft) {
+      try {
+        const emailResult = await sendBlogUpdateEmails({
+          title: frontmatter.title,
+          excerpt: excerpt || frontmatter.description,
+          slug: frontmatter.slug,
+          image: frontmatter.coverImage,
+          authorName: frontmatter.author.name,
+          publishDate: frontmatter.date,
+        });
+
+        console.log("Blog update emails sent:", emailResult);
+      } catch (emailError) {
+        console.error("Failed to send blog update emails:", emailError);
+        // Don't fail the blog creation if email sending fails
+      }
+    }
 
     return NextResponse.json(
       {

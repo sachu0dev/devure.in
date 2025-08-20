@@ -11,6 +11,7 @@ import {
   Home,
   LogOut,
   Mail,
+  Bell,
 } from "lucide-react";
 
 const navigation = [
@@ -45,6 +46,11 @@ const navigation = [
     name: "Contacts",
     href: "/admin/contacts",
     icon: Mail,
+  },
+  {
+    name: "Subscriptions",
+    href: "/admin/subscriptions",
+    icon: Bell,
   },
   {
     name: "Users",

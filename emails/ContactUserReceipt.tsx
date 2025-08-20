@@ -33,7 +33,10 @@ export default function ContactUserReceiptEmail({ fullName }: Props) {
               days.
             </Text>
             <Text style={styles.p}>
-              If you have more details to share, feel free to reply to this
+              If you have more details to share, feel free to reply to{" "}
+              <Link href="mailto:connnectdevure@gmail.com">
+                connnectdevure@gmail.com
+              </Link>
               email.
             </Text>
           </Section>

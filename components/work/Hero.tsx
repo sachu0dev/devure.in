@@ -11,17 +11,17 @@ const Hero = () => {
       <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
         {/* Left Side - Text Content */}
         <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex-1 text-center lg:text-left"
         >
           <div className="space-y-6">
             {/* Main Title */}
             <motion.h1
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-background leading-tight"
             >
               Our Portfolio
@@ -29,9 +29,9 @@ const Hero = () => {
 
             {/* Subtitle */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
               className="min-h-[4rem] md:min-h-[5rem] lg:min-h-[6rem] flex items-center justify-center lg:justify-start"
             >
               <span className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary">
@@ -41,9 +41,9 @@ const Hero = () => {
 
             {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
               className="text-lg md:text-xl lg:text-2xl text-background/80 max-w-2xl mx-auto lg:mx-0"
             >
               Discover our collection of cutting-edge projects that showcase our
@@ -52,9 +52,9 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
               <Button
@@ -90,42 +90,41 @@ const Hero = () => {
 
         {/* Right Side - Visual Element */}
         <motion.div
-          initial={{ opacity: 0, x: 60, y: 60 }}
-          animate={{ opacity: 1, x: 0, y: 0 }}
-          transition={{ duration: 1, delay: 1.0, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
           className="flex-1 flex justify-center lg:justify-end"
         >
           <div className="relative">
-            {/* Animated background elements */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 border-2 border-primary/20 rounded-full"
-            />
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-4 border-2 border-secondary/30 rounded-full"
-            />
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-8 border-2 border-accent/40 rounded-full"
-            />
+            {/* Modern abstract visual element */}
+            <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 relative">
+              {/* Outer ring */}
+              <div className="absolute inset-0 border-2 border-primary/20 rounded-full"></div>
 
-            {/* Center icon or text */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="text-6xl md:text-7xl lg:text-8xl text-primary/60"
-              >
-                🚀
-              </motion.div>
+              {/* Inner geometric shapes */}
+              <div className="absolute inset-8 flex items-center justify-center">
+                <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48">
+                  {/* Central hexagon */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10 clip-path-hexagon transform rotate-45"></div>
+
+                  {/* Floating elements */}
+                  <div className="absolute -top-2 -left-2 w-4 h-4 bg-secondary/40 rounded-full"></div>
+                  <div className="absolute -bottom-2 -right-2 w-3 h-3 bg-accent/50 rounded-full"></div>
+                  <div className="absolute top-1/2 -right-3 w-2 h-2 bg-primary/60 rounded-full"></div>
+                  <div className="absolute top-1/2 -left-3 w-2 h-2 bg-secondary/60 rounded-full"></div>
+
+                  {/* Central dot */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 bg-primary/80 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Corner accents */}
+              <div className="absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 border-primary/40 rounded-tl-lg"></div>
+              <div className="absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 border-primary/40 rounded-tr-lg"></div>
+              <div className="absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 border-primary/40 rounded-bl-lg"></div>
+              <div className="absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 border-primary/40 rounded-br-lg"></div>
             </div>
           </div>
         </motion.div>
@@ -135,7 +134,7 @@ const Hero = () => {
       <motion.a
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
+        transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
         className="mt-8 flex justify-center"
         href="#projects"
         onClick={(e) => {
@@ -153,17 +152,9 @@ const Hero = () => {
           <span className="text-2xl md:text-3xl font-bold text-background hover:text-primary/90 transition-colors duration-300">
             Explore Projects
           </span>
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{
-              duration: 1.5,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-            className="text-primary"
-          >
+          <div className="text-primary">
             <ChevronsDown className="w-6 h-6" />
-          </motion.div>
+          </div>
         </div>
       </motion.a>
     </div>

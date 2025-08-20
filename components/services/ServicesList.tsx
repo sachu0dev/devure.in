@@ -73,9 +73,9 @@ const ServicesList = ({ services }: ServicesListProps) => {
       <div className="w-full flex flex-col lg:flex-row gap-6 mb-8">
         {/* Left Side - Text */}
         <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex-1"
         >
           <div className="space-y-2">
@@ -91,9 +91,9 @@ const ServicesList = ({ services }: ServicesListProps) => {
 
         {/* Right Side - Search */}
         <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="lg:w-80"
         >
           <form onSubmit={handleSearch} className="w-full">
@@ -137,7 +137,7 @@ const ServicesList = ({ services }: ServicesListProps) => {
               layout
               className="group"
             >
-              <Link href={`/service/${service.slug}`}>
+              <Link href={`/services/${service.slug}`}>
                 <Card className="h-full bg-background/50 backdrop-blur-sm border-foreground/10 hover:border-primary/30 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 group-hover:scale-[1.02] cursor-pointer overflow-hidden">
                   <CardHeader className="p-0">
                     {/* Service Image */}
@@ -207,7 +207,7 @@ const ServicesList = ({ services }: ServicesListProps) => {
           className="text-center py-12"
         >
           <p className="text-foreground/60 text-lg mb-4">
-            No services found matching &quot;{searchQuery}&quot;
+            No services found matching your search
           </p>
           <Button
             variant="outline"
@@ -221,9 +221,9 @@ const ServicesList = ({ services }: ServicesListProps) => {
 
       {/* Get in Contact Section */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="text-center py-12 border-t border-foreground/10"
       >
         <div className="max-w-2xl mx-auto space-y-6">
@@ -231,9 +231,8 @@ const ServicesList = ({ services }: ServicesListProps) => {
             Ready to Get Started?
           </h3>
           <p className="text-foreground/70 text-lg">
-            Can&apos;t find exactly what you&apos;re looking for? Let&apos;s
-            discuss your project requirements and create a custom solution
-            together.
+            Let&apos;s discuss how our services can help transform your business
+            and achieve your goals.
           </p>
           <Button
             size="lg"

@@ -87,9 +87,9 @@ const ProjectsList = ({ projects, categories }: ProjectsListProps) => {
       <div className="w-full flex flex-col lg:flex-row gap-6 mb-8">
         {/* Left Side - Text */}
         <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex-1"
         >
           <div className="space-y-2">
@@ -105,9 +105,9 @@ const ProjectsList = ({ projects, categories }: ProjectsListProps) => {
 
         {/* Right Side - Search */}
         <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="lg:w-80"
         >
           <form onSubmit={handleSearch} className="w-full">
@@ -140,7 +140,7 @@ const ProjectsList = ({ projects, categories }: ProjectsListProps) => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="mb-8"
       >
         <div className="flex flex-wrap gap-3">
@@ -308,9 +308,9 @@ const ProjectsList = ({ projects, categories }: ProjectsListProps) => {
 
       {/* Get in Contact Section */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="text-center py-12 border-t border-foreground/10"
       >
         <div className="max-w-2xl mx-auto space-y-6">
